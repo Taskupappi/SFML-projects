@@ -1,20 +1,17 @@
 #include "ChessPiece.h"
 
-ChessPiece::ChessPiece(ChessPieceType const _type, bool _player1)
+ChessPiece::ChessPiece(ChessPieceType const _type, int const _player)
 {
+	player = _player;
 
-	player1 = _player1;
-
-	texture.loadFromFile("ChessPieceSprite");
+	texture.loadFromFile("ChessPieceSprite.png");
 	sprite.setTexture(texture);
-	sprite.setOrigin(333.0f / 2.0f, 333.0f / 2.0f);
-
 
 	switch (_type)
 	{
 		case pawn:
 		{
-			if (player1)
+			if (player == 1)
 			{
 				sprite.setTextureRect(sf::IntRect(1667, 667, 333, 333));
 				
@@ -22,12 +19,12 @@ ChessPiece::ChessPiece(ChessPieceType const _type, bool _player1)
 			else
 			{
 				sprite.setTextureRect(sf::IntRect(1667, 333, 333, 333));
-			}
+			}			
 			break;
 		}			
 		case knight:
 		{
-			if (player1)
+			if (player == 1)
 			{
 				sprite.setTextureRect(sf::IntRect(1000, 667, 333, 333));
 			}
@@ -37,10 +34,9 @@ ChessPiece::ChessPiece(ChessPieceType const _type, bool _player1)
 			}
 			break;
 		}
-			break;
 		case rook:	
 		{
-			if (player1)
+			if (player == 1)
 			{
 				sprite.setTextureRect(sf::IntRect(1333, 667, 333, 333));
 			}
@@ -52,7 +48,7 @@ ChessPiece::ChessPiece(ChessPieceType const _type, bool _player1)
 		}
 		case bishop:
 		{
-			if (player1)
+			if (player == 1)
 			{
 				sprite.setTextureRect(sf::IntRect(667, 667, 333, 333));
 			}
@@ -64,7 +60,7 @@ ChessPiece::ChessPiece(ChessPieceType const _type, bool _player1)
 		}
 		case queen:
 		{
-			if (player1)
+			if (player == 1)
 			{
 				sprite.setTextureRect(sf::IntRect(333, 667, 333, 333));
 			}
@@ -76,7 +72,7 @@ ChessPiece::ChessPiece(ChessPieceType const _type, bool _player1)
 		}
 		case king:
 		{
-			if (player1)
+			if (player == 1)
 			{
 				sprite.setTextureRect(sf::IntRect(0, 667, 333, 333));
 			}
@@ -89,6 +85,9 @@ ChessPiece::ChessPiece(ChessPieceType const _type, bool _player1)
 		default:
 			break;
 	}
+
+	sprite.setOrigin(166.5f, 166.5f);
+	type = _type;
 }
 
 ChessPiece::~ChessPiece()
@@ -96,3 +95,17 @@ ChessPiece::~ChessPiece()
 
 }
 
+
+const char* ChessPiece::GetChessPieceType()
+{
+	switch (type)
+	{
+	case pawn: return "pawn";
+	case knight: return "knight";
+	case rook: return "rook";
+	case bishop: return "bishop";
+	case queen: return "queen";
+	case king: return "king";
+	default: return "";
+	}
+}
