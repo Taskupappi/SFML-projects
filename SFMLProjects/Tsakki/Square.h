@@ -8,10 +8,13 @@ class Square
 public:
 	Square(bool isWhite);
 	~Square();
-private:
+
 	sf::Sprite sprite;
-	sf::Texture texture;
 	bool isWhite;
+private:
+
+	sf::Texture texture;
+
 };
 
 #endif

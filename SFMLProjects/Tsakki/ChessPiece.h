@@ -31,11 +31,10 @@ public:
 	int player;
 	ChessPieceType type;
 private:
-
 	std::vector<int> tablePosition;
 	sf::Texture texture;
 	sf::Sprite sprite;
-
+	
 };
 
 #endif
