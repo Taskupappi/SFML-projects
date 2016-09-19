@@ -4,283 +4,359 @@
 
 Game::Game()
 {
-	screenResolution = new sf::Vector2f(800.0f, 600.0f);
-
-	bool firstWhite = false;
-
-	//create chess table
-	for (int i = 0; i < 64; i++)
-	{			
-		if (i % 8 == 0)
-		{
-			bool white = table[i - 1]->isWhite;
-			table[i] = new Square(white);
-			firstWhite = white;
-		}
-		else
-		{
-			if (firstWhite)
-			{
-				//white squares
-				if (i % 2 == 0)
-					table[i] = new Square(true);
-				//black squares
-				else
-					table[i] = new Square(false);
-			}
-			else
-			{
-				//white squares
-				if (i % 2 == 0)
-					table[i] = new Square(false);
-				//black squares
-				else
-					table[i] = new Square(true);
-			}
-		}
-	}	
-
-
-
-	//create chess pieces
-	for (int i = 32; i > 0; i--)
+	screenResolution = new sf::Vector2u(800, 600);
+		
+	for (int y = 0; y < 8; y++)
 	{
-
-		if ( 7 < i && i < 24)
+		for (int x = 0; x < 8; x++)
 		{
-			//player 1 pawns
-			if (i > 15)
+			//check the end of the last row
+			
+			//if y - 1 is not below zero we have more than one row
+			if (y - 1 > -1)
 			{
-				ChessPiece piece(ChessPieceType::pawn, 1);
-				pieces.push_back(piece);
-				continue;
+				bool lastIsWhite = table[7][y - 1]->isWhite;
+				if (lastIsWhite)
+				{
+					//white squares
+					if (x % 2 == 0)
+						table[x][y] = new Square(true);
+					//black squares
+					else
+						table[x][y] = new Square(false);
+				}
+				else
+				{
+					//white squares
+					if (x % 2 == 0)
+						table[x][y] = new Square(false);
+					//black squares
+					else
+						table[x][y] = new Square(true);
+				}
 			}
-			//player 2 pawns
+			//first row
 			else
 			{
-				ChessPiece piece(ChessPieceType::pawn, 2);
-				pieces.push_back(piece);
-			}
-		}
-
-		//rooks
-		if (i > 12)
-		{
-			//player 1 rooks
-			if (i > 14)
-			{
-				ChessPiece piece(ChessPieceType::rook, 1);
-				pieces.push_back(piece);
-			}
-			//player 2 rook
-			else
-			{
-				ChessPiece piece(ChessPieceType::rook, 2);
-				pieces.push_back(piece);
-			}
-		}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		//pawns
-		if (i > 16)
-		{
-			//player 1 pawns
-			if (i > 24)
-			{
-				ChessPiece piece(ChessPieceType::pawn, 1);
-				pieces.push_back(piece);
-			}
-			//player 2 pawns
-			else
-			{
-				ChessPiece piece(ChessPieceType::pawn, 2);
-				pieces.push_back(piece);
-			}
-		}
-		//rooks
-		else if (i > 12)
-		{
-			//player 1 rooks
-			if (i > 14 )
-			{
-				ChessPiece piece(ChessPieceType::rook, 1);
-				pieces.push_back(piece);
-			}
-			//player 2 rook
-			else
-			{
-				ChessPiece piece(ChessPieceType::rook, 2);
-				pieces.push_back(piece);
-			}
-		}
-		//knights
-		else if (i > 8)
-		{
-			//player 1 knights
-			if (i > 10)
-			{
-				ChessPiece piece(ChessPieceType::knight, 1);
-				pieces.push_back(piece);
-			}
-			//player 2 knights
-			else
-			{
-				ChessPiece piece(ChessPieceType::knight, 2);
-				pieces.push_back(piece);
-			}
-		}
-		//bishops
-		else if (i > 4)
-		{
-			//player 1 bishops
-			if (i > 6)
-			{
-				ChessPiece piece(ChessPieceType::bishop, 1);
-				pieces.push_back(piece);
-			}
-			//player 2 bishops
-			else
-			{
-				ChessPiece piece(ChessPieceType::bishop, 2);
-				pieces.push_back(piece);
-			}
-		}
-		//queens
-		else if (i > 2)
-		{
-			//player 1 queens
-			if (i > 3)
-			{
-				ChessPiece piece(ChessPieceType::queen, 1);
-				pieces.push_back(piece);
-			}
-			//player 2 queens
-			else
-			{
-				ChessPiece piece(ChessPieceType::queen, 2);
-				pieces.push_back(piece);
-			}
-		}
-		//kings
-		else
-		{
-			//player 1 kings
-			if (i > 1)
-			{
-				ChessPiece piece(ChessPieceType::king, 1);
-				pieces.push_back(piece);
-			}
-			//player 2 kings
-			else
-			{
-				ChessPiece piece(ChessPieceType::king, 2);
-				pieces.push_back(piece);
+				//white squares
+				if (x % 2 == 0)
+					table[x][y] = new Square(true);
+				//black squares
+				else
+					table[x][y] = new Square(false);
 			}
 		}
 	}
 
+	//bool firstWhite = false;
 
-	//for each (ChessPiece piece in pieces)
+	////create chess table
+	//for (int i = 0; i < 64; i++)
+	//{			
+	//	if (i % 8 == 0)
+	//	{
+	//		bool white = table[i - 1]->isWhite;
+	//		table[i] = new Square(white);
+	//		firstWhite = white;
+	//	}
+	//	else
+	//	{
+	//		if (firstWhite)
+	//		{
+	//			//white squares
+	//			if (i % 2 == 0)
+	//				table[i] = new Square(true);
+	//			//black squares
+	//			else
+	//				table[i] = new Square(false);
+	//		}
+	//		else
+	//		{
+	//			//white squares
+	//			if (i % 2 == 0)
+	//				table[i] = new Square(false);
+	//			//black squares
+	//			else
+	//				table[i] = new Square(true);
+	//		}
+	//	}
+	//}	
+	
+	//player 1
+	for (int i = 0; i < 16; i++)
+	{
+		if (i < 8)
+		{
+			//rooks
+			if (i == 0 || 7)
+			{
+				pieces[0][i] = new ChessPiece(ChessPieceType::rook, 1, sf::Vector2i(i, 0));
+			}
+			//knights
+			else if (i == 1 || i == 6)
+			{
+				pieces[0][i] = new ChessPiece(ChessPieceType::knight, 1, sf::Vector2i(i, 0));
+			}
+			//bishops
+			else if (i == 2 || i == 5)
+			{
+				pieces[0][i] = new ChessPiece(ChessPieceType::bishop, 1, sf::Vector2i(i, 0));
+			}
+			//Queen
+			else if (i == 3)
+			{
+				pieces[0][i] = new ChessPiece(ChessPieceType::queen, 1, sf::Vector2i(i, 0));
+			}
+			//King
+			else if (i == 4)
+			{
+				pieces[0][i] = new ChessPiece(ChessPieceType::king, 1, sf::Vector2i(i, 0));
+			}
+		}	
+		//pawns
+		else
+		{
+			pieces[0][i] = new ChessPiece(ChessPieceType::pawn, 1, sf::Vector2i(i, 1));
+		}
+	}
+
+	//player 2
+	for (int i = 0; i < 16; i++)
+	{
+		if (i < 8)
+		{
+			//rooks
+			if (i == 0 || 7)
+			{
+				pieces[1][i] = new ChessPiece(ChessPieceType::rook, 2, sf::Vector2i(i, 6));
+			}
+			//knights
+			else if (i == 1 || i == 6)
+			{
+				pieces[1][i] = new ChessPiece(ChessPieceType::knight, 2, sf::Vector2i(i, 6));
+			}
+			//bishops
+			else if (i == 2 || i == 5)
+			{
+				pieces[1][i] = new ChessPiece(ChessPieceType::bishop, 2, sf::Vector2i(i, 6));
+			}
+			//Queen
+			else if (i == 3)
+			{
+				pieces[1][i] = new ChessPiece(ChessPieceType::queen, 2, sf::Vector2i(i, 6));
+			}
+			//King
+			else if (i == 4)
+			{
+				pieces[1][i] = new ChessPiece(ChessPieceType::king, 2, sf::Vector2i(i, 6));
+			}
+		}
+		//pawns
+		else
+		{
+			pieces[1][i] = new ChessPiece(ChessPieceType::pawn, 2, sf::Vector2i(i, 7));
+		}
+	}
+
+
+	/*
+	////create chess pieces
+	//for (int i = 32; i > 0; i--)
 	//{
-	//	std::cout << piece.GetChessPieceType() << std::endl;
-	//	std::cout << piece.player << std::endl;
+	//	////pawns
+	//	//if (i > 16)
+	//	//{
+	//	//	//player 1 pawns
+	//	//	if (i > 24)
+	//	//	{
+	//	//		ChessPiece* piece = new ChessPiece(ChessPieceType::pawn, 1);
+	//	//		pieces[0][i] = piece;
+	//	//	}
+	//	//	//player 2 pawns
+	//	//	else
+	//	//	{
+	//	//		ChessPiece* piece = new ChessPiece(ChessPieceType::pawn, 2);
+	//	//		pieces[i][] = piece;
+	//	//	}
+	//	//}
+
+	//	//player 1
+
+	//	//player 2
+
+
+
+	//	//if ( 7 < i && i < 24)
+	//	//{
+	//	//	//player 1 pawns
+	//	//	if (i > 15)
+	//	//	{
+	//	//		ChessPiece piece(ChessPieceType::pawn, 1);
+	//	//		pieces.push_back(piece);
+	//	//		continue;
+	//	//	}
+	//	//	//player 2 pawns
+	//	//	else
+	//	//	{
+	//	//		ChessPiece piece(ChessPieceType::pawn, 2);
+	//	//		pieces.push_back(piece);
+	//	//	}
+	//	//}
+
+	//	////rooks
+	//	//if (i > 12)
+	//	//{
+	//	//	//player 1 rooks
+	//	//	if (i > 14)
+	//	//	{
+	//	//		ChessPiece piece(ChessPieceType::rook, 1);
+	//	//		pieces.push_back(piece);
+	//	//	}
+	//	//	//player 2 rook
+	//	//	else
+	//	//	{
+	//	//		ChessPiece piece(ChessPieceType::rook, 2);
+	//	//		pieces.push_back(piece);
+	//	//	}
+	//	//}
+
+	//	//pawns
+	//	if (i > 16)
+	//	{
+	//		//player 1 pawns
+	//		if (i > 24)
+	//		{
+	//			ChessPiece* piece = new ChessPiece(ChessPieceType::pawn, 1);
+	//			pieces[i] = piece;
+	//		}
+	//		//player 2 pawns
+	//		else
+	//		{
+	//			ChessPiece* piece = new ChessPiece(ChessPieceType::pawn, 2);
+	//			pieces[i] = piece;
+	//		}
+	//	}
+	//	//rooks
+	//	else if (i > 12)
+	//	{
+	//		//player 1 rooks
+	//		if (i > 14 )
+	//		{
+	//			ChessPiece* piece = new ChessPiece(ChessPieceType::rook, 1);
+	//			pieces[i] = piece;
+	//		}
+	//		//player 2 rook
+	//		else
+	//		{
+	//			ChessPiece* piece = new ChessPiece(ChessPieceType::rook, 2);
+	//			pieces[i] = piece;
+	//		}
+	//	}
+	//	//knights
+	//	else if (i > 8)
+	//	{
+	//		//player 1 knights
+	//		if (i > 10)
+	//		{
+	//			ChessPiece* piece = new ChessPiece(ChessPieceType::knight, 1);
+	//			pieces[i] = piece;
+	//		}
+	//		//player 2 knights
+	//		else
+	//		{
+	//			ChessPiece* piece = new ChessPiece(ChessPieceType::knight, 2);
+	//			pieces[i] = piece;
+	//		}
+	//	}
+	//	//bishops
+	//	else if (i > 4)
+	//	{
+	//		//player 1 bishops
+	//		if (i > 6)
+	//		{
+	//			ChessPiece* piece = new ChessPiece(ChessPieceType::bishop, 1);
+	//			pieces[i] = piece;
+	//		}
+	//		//player 2 bishops
+	//		else
+	//		{
+	//			ChessPiece* piece = new ChessPiece(ChessPieceType::bishop, 2);
+	//			pieces[i] = piece;
+	//		}
+	//	}
+	//	//queens
+	//	else if (i > 2)
+	//	{
+	//		//player 1 queens
+	//		if (i > 3)
+	//		{
+	//			ChessPiece* piece = new ChessPiece(ChessPieceType::queen, 1);
+	//			pieces[i] = piece;
+	//		}
+	//		//player 2 queens
+	//		else
+	//		{
+	//			ChessPiece* piece = new ChessPiece(ChessPieceType::queen, 2);
+	//			pieces[i] = piece;
+	//		}
+	//	}
+	//	//kings
+	//	else
+	//	{
+	//		//player 1 kings
+	//		if (i > 1)
+	//		{
+	//			ChessPiece* piece = new ChessPiece(ChessPieceType::king, 1);
+	//			pieces[i] = piece;
+	//		}
+	//		//player 2 kings
+	//		else
+	//		{
+	//			ChessPiece* piece = new ChessPiece(ChessPieceType::king, 2);
+	//			pieces[i] = piece;
+	//		}
+	//	}
 	//}
-
-
-window = new sf::RenderWindow(sf::VideoMode(screenResolution->x, screenResolution->y), "Tsakki");
+*/
+	
+	window = new sf::RenderWindow(sf::VideoMode(screenResolution->x, screenResolution->y), "Tsakki");
 }
 
 Game::~Game()
 {
 	delete window;
-	for (int i = 63; i >= 0; i--)
-	{
-		delete table[i];
-	}
+
+	//for each (ChessPiece* piece in pieces)
+	//{
+	//	delete piece;
+	//}
 }
 
 void Game::Initialize()
 {
-	int counter = 0;
-
-	bool _break = false;
 	//place all table pieces
 	for (int y = 0; y < 8; y++)
 	{
 		for (int x = 0; x < 8; x++)
 		{
-			if (_break)
-				break;
-			//std::cout << table[(1 + x) * (1 + y)]->sprite.getGlobalBounds().width * x << " " << table[(1 + x) * (1 + y)]->sprite.getGlobalBounds().height * y << std::endl;
-			table[counter]->sprite.setPosition((table[counter]->sprite.getGlobalBounds().width * x) + 100.0f, (table[counter]->sprite.getGlobalBounds().height * y) +100.0f );
-			std::cout << table[counter]->sprite.getPosition().x << " " << table[counter]->sprite.getPosition().y << std::endl;
-			counter++;
-			
-			if (x == 8)
-			_break = true;
-			//table[(1 + x) * (1 + y)]
-			
+			table[x][y]->sprite.setPosition((table[x][y]->sprite.getGlobalBounds().width * x) + 100.0f, (table[x][y]->sprite.getGlobalBounds().height * y) + 100.0f);
+			std::cout << table[x][y]->sprite.getPosition().x << " " << table[x][y]->sprite.getPosition().y << std::endl;
 		}
 	}
 
-	//place all chess pieces
-	for (int i = 0; i < pieces.size(); i++)
+	//place all pieces
+	for (int x = 0; x < 2; x++)
 	{
+		for (int y = 0; y < 10; y++)
+		{
 
+
+			//pieces[x][y]->GetSprite().setPosition((table[x][y]->sprite.getGlobalBounds().width * x) + 100.0f, (table[x][y]->sprite.getGlobalBounds().height * y) + 100.0f);
+			//piece->GetSprite().setPosition(sf::Vector2f(table[piece->tablePosition.x][piece->tablePosition.y]->sprite.getPosition().x, table[piece->tablePosition.x][piece->tablePosition.y]->sprite.getPosition().x)); // = table[x][y]->sprite.getPosition();
+			//pieces[i][y]->GetSprite().setPosition(sf::Vector2f(table[pieces[i][y]->tablePosition.x][pieces[i][y]->tablePosition.y]->sprite.getPosition().x, table[pieces[i][y]->tablePosition.x][pieces[i][y]->tablePosition.y]->sprite.getPosition().y));
+		}
 	}
-
-	////place all the chess board pieces
-	//for (int y = 0; y < 8; y++)
-	//{
-	//	for (int x = 0; x < 8; x++)
-	//	{
-	//		//std::cout << table[(1 + x) * (1 + y)]->sprite.getGlobalBounds().width * x << " " << table[(1 + x) * (1 + y)]->sprite.getGlobalBounds().height * y << std::endl;
-
-	//		table[(1 + x) * (1 + y)]->sprite.setPosition(table[(1 + x) * (1 + y)]->sprite.getGlobalBounds().width * x, table[(1 + x) * (1 + y)]->sprite.getGlobalBounds().height * y);
-	//	}		
-	//}
-
-
-	for (int i = 0; i < 64; i++)
-	{
-		//std::cout << table[i]->sprite.getPosition().x << " " << table[i]->sprite.getPosition().y << std::endl;
-	}
-
-	//for each (Square* square in table)
-	//{
-	//
-
-	//	//char pos[10];
-	//	//sprintf_s(pos, "%f", square->sprite.getPosition().x);
-	//	//sprintf_s(pos, "%f", square->sprite.getPosition().y);
-	//	//printf("\n");
-	//}
-	//place chess pieces to their correct positions
 	
-
-
 }
 
 void Game::Loop()
@@ -303,6 +379,23 @@ void Game::Loop()
 
 void Game::Uninitialize()
 {
+	//delete all table pieces
+	for (int x = 1; x > -1; x--)
+	{
+		for (int y = 7; y > -1; y--)
+		{
+			delete pieces[x][y];
+		}
+	}
+
+	for (int y = 0; y < 8; y++)
+	{
+		for (int x = 0; x < 8; x++)
+		{
+			delete table[x][y];
+		}
+	}
+
 
 }
 
@@ -310,13 +403,21 @@ void Game::Draw()
 {	
 	window->clear(sf::Color(0, 0, 150, 255));
 
+	//draw all chess table squares
 	for each (Square* square in table)
 	{
 		window->draw(square->sprite);
 	}
 
-	//for each (ChessPiece piece in pieces)
-	//{
-	//	window->draw(piece.GetSprite());
-	//}
+	//highlight all the squares the chess piece could move to
+	/*for each()
+	{
+
+	}*/
+
+	//draw all the pieces on the chess table
+	for each (ChessPiece* piece in pieces)
+	{
+		window->draw(piece->GetSprite());
+	}
 }

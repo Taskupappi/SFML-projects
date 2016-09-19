@@ -27,10 +27,9 @@ public:
 
 private:
 
-	sf::Vector2f* screenResolution;
-	Square* table [64];
-	std::vector<ChessPiece> pieces;
-	//std::vector<Square> table;
+	sf::Vector2u* screenResolution;
+	Square* table [8][8];
+	ChessPiece* pieces[2][16];
 	std::list<GameState> state;
 
 	bool playerOneTurn = true;

@@ -1,17 +1,16 @@
-﻿Build started 19.9.2016 9:50:42.
-     1>Project "C:\Users\Taskupappi\Documents\GitHub\SFML-projects\SFMLProjects\Tsakki\Tsakki.vcxproj" on node 2 (Build target(s)).
+﻿Build started 19.9.2016 15:33:41.
+     1>Project "C:\Users\Aleksiluo1\Desktop\SFML-projects\SFMLProjects\Tsakki\Tsakki.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Users\Taskupappi\Documents\GitHub\SFML-projects\SFMLProjects\Dependencies\include" /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D SFML_STATIC /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Game.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Users\Aleksiluo1\Desktop\SFML-projects\SFMLProjects\Dependencies\include" /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D SFML_STATIC /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Game.cpp
          Game.cpp
-     1>c:\users\taskupappi\documents\github\sfml-projects\sfmlprojects\tsakki\game.cpp(153): warning C4244: 'argument' : conversion from 'float' to 'unsigned int', possible loss of data
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Taskupappi\Documents\GitHub\SFML-projects\SFMLProjects\Debug\Tsakki.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Users\Taskupappi\Documents\GitHub\SFML-projects\SFMLProjects\Dependencies\lib" "sfml-graphics-s-d.lib" "sfml-window-s-d.lib" "sfml-system-s-d.lib" opengl32.lib freetype.lib jpeg.lib winmm.lib gdi32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Taskupappi\Documents\GitHub\SFML-projects\SFMLProjects\Debug\Tsakki.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Taskupappi\Documents\GitHub\SFML-projects\SFMLProjects\Debug\Tsakki.lib" /MACHINE:X86 Debug\Chesspiece.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Aleksiluo1\Desktop\SFML-projects\SFMLProjects\Debug\Tsakki.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Users\Aleksiluo1\Desktop\SFML-projects\SFMLProjects\Dependencies\lib" "sfml-graphics-s-d.lib" "sfml-window-s-d.lib" "sfml-system-s-d.lib" opengl32.lib freetype.lib jpeg.lib winmm.lib gdi32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Aleksiluo1\Desktop\SFML-projects\SFMLProjects\Debug\Tsakki.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Aleksiluo1\Desktop\SFML-projects\SFMLProjects\Debug\Tsakki.lib" /MACHINE:X86 Debug\Chesspiece.obj
          Debug\Game.obj
          Debug\main.obj
          Debug\Square.obj
-         Tsakki.vcxproj -> C:\Users\Taskupappi\Documents\GitHub\SFML-projects\SFMLProjects\Debug\Tsakki.exe
-     1>Done Building Project "C:\Users\Taskupappi\Documents\GitHub\SFML-projects\SFMLProjects\Tsakki\Tsakki.vcxproj" (Build target(s)).
+         Tsakki.vcxproj -> C:\Users\Aleksiluo1\Desktop\SFML-projects\SFMLProjects\Debug\Tsakki.exe
+     1>Done Building Project "C:\Users\Aleksiluo1\Desktop\SFML-projects\SFMLProjects\Tsakki\Tsakki.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:01.02
+Time Elapsed 00:00:00.64

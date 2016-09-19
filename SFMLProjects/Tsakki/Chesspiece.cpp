@@ -1,9 +1,8 @@
 #include "ChessPiece.h"
 
-ChessPiece::ChessPiece(ChessPieceType const _type, int const _player)
+ChessPiece::ChessPiece(ChessPieceType const _type, int const _player, sf::Vector2i _tablePosition)
 {
-	player = _player;
-
+	//Sprite stuff
 	texture.loadFromFile("ChessPieceSprite.png");
 	sprite.setTexture(texture);
 
@@ -88,6 +87,12 @@ ChessPiece::ChessPiece(ChessPieceType const _type, int const _player)
 
 	sprite.setOrigin(166.5f, 166.5f);
 	type = _type;
+
+	//owner
+	player = _player;
+
+	//table position
+	tablePosition = _tablePosition;
 }
 
 ChessPiece::~ChessPiece()

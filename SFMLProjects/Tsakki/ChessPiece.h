@@ -19,22 +19,22 @@ enum ChessPieceType
 class ChessPiece
 {
 public:
-	ChessPiece(ChessPieceType const type, int const player);
+	ChessPiece(ChessPieceType const type, int const player, sf::Vector2i tablePosition);
 	~ChessPiece();
 
-	void GetTablePosition();
-	void SetTablePosition();
+	//void GetTablePosition();
+	// void SetTablePosition();
 	const char* GetChessPieceType();
 
 	sf::Sprite GetSprite(){ return sprite; };
 
 	int player;
 	ChessPieceType type;
+	sf::Vector2i tablePosition;
 private:
-	std::vector<int> tablePosition;
+
 	sf::Texture texture;
-	sf::Sprite sprite;
-	
+	sf::Sprite sprite;	
 };
 
 #endif
