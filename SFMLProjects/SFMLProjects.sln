@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tsakki", "Tsakki\Tsakki.vcxproj", "{2F7E7AB8-E7A5-46A1-A278-B29C5765A6D5}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Behemoth", "Behemoth\Behemoth.vcxproj", "{703A1461-C46E-403D-95D2-110E8DDF3FC9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -15,6 +17,10 @@ Global
 		{2F7E7AB8-E7A5-46A1-A278-B29C5765A6D5}.Debug|Win32.Build.0 = Debug|Win32
 		{2F7E7AB8-E7A5-46A1-A278-B29C5765A6D5}.Release|Win32.ActiveCfg = Release|Win32
 		{2F7E7AB8-E7A5-46A1-A278-B29C5765A6D5}.Release|Win32.Build.0 = Release|Win32
+		{703A1461-C46E-403D-95D2-110E8DDF3FC9}.Debug|Win32.ActiveCfg = Debug|Win32
+		{703A1461-C46E-403D-95D2-110E8DDF3FC9}.Debug|Win32.Build.0 = Debug|Win32
+		{703A1461-C46E-403D-95D2-110E8DDF3FC9}.Release|Win32.ActiveCfg = Release|Win32
+		{703A1461-C46E-403D-95D2-110E8DDF3FC9}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

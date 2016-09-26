@@ -9,7 +9,6 @@ int main()
 	game.Initialize();
 	game.Loop();
 	game.Uninitialize();
-
-	
+		
 	return 0;
 }

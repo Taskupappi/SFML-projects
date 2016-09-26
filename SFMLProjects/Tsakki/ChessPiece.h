@@ -3,6 +3,8 @@
 
 #include <SFML\Graphics.hpp>
 
+
+#include <list>
 #include <vector>
 #include <string>
 
@@ -26,15 +28,14 @@ public:
 	// void SetTablePosition();
 	const char* GetChessPieceType();
 
-	sf::Sprite GetSprite(){ return sprite; };
+	sf::Sprite& GetSprite(){ return sprite; };
 
 	int player;
 	ChessPieceType type;
 	sf::Vector2i tablePosition;
 private:
-
+	sf::Sprite sprite;
 	sf::Texture texture;
-	sf::Sprite sprite;	
 };
 
 #endif

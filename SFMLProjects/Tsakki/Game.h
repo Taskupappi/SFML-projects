@@ -2,7 +2,7 @@
 #define GAME_H
 
 #include "ChessPiece.h"
-#include "Square.h"
+#include "Table.h"
 #include <vector>
 #include <list>
 
@@ -23,17 +23,17 @@ public:
 	void Loop();
 	void Uninitialize();
 	void Draw();
-
+	void HandleInput();
 
 private:
-
-	sf::Vector2u* screenResolution;
-	Square* table [8][8];
-	ChessPiece* pieces[2][16];
+	sf::Vector2u* screenResolution;	
 	std::list<GameState> state;
-
 	bool playerOneTurn = true;
-	sf::RenderWindow *window;
+	sf::RenderWindow* window;
+	Table table;
+
+	//input
+	sf::Vector2f mousePosition;
 };
 
 #endif
