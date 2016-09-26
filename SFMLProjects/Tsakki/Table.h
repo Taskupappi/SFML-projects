@@ -28,7 +28,7 @@ private:
 	Square* board[8][8];
 	ChessPiece* pieces[2][16];
 
-	std::list<int, int> allMoves;
+	std::list<int[1][1]> allMoves;
 };
 
 #endif
