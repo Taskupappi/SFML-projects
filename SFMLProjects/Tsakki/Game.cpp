@@ -195,6 +195,7 @@ void Game::Loop()
 				window->close();
 
 			HandleInput();
+			table.ShowAccessibleSquares();
 		}
 
 		window->clear();

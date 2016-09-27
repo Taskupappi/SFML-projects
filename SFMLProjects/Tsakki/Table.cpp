@@ -266,6 +266,35 @@ void Table::ShowAccessibleSquares()
 					//check if there is a piece in front of the pawn
 					//if yes, don't allow movement
 					bool allowMovementForward = true;
+					
+					if (activePiece->tablePosition.y - 1 < 0)
+					{
+						for (int i = 0; i < 16; i++)
+						{
+							if ((pieces[0][i]->tablePosition.x == activePiece->tablePosition.x) && (pieces[0][i]->tablePosition.y == activePiece->tablePosition.y - 1))
+							{
+								allowMovementForward = false;
+							}
+							if ((pieces[1][i]->tablePosition.x == activePiece->tablePosition.x) && (pieces[1][i]->tablePosition.y == activePiece->tablePosition.y - 1))
+							{
+								allowMovementForward = false;
+							}
+						}
+					}
+
+					if (allowMovementForward)
+					{
+						//board[activePiece->tablePosition.x][activePiece->tablePosition.y - 1]->sprite.setColor(sf::Color(0, 255, 0, 255)
+						coloredSquares.push_back(board[activePiece->tablePosition.x][activePiece->tablePosition.y - 1]);						
+					}
+
+					
+				}
+				else if (activePiece->player == 2)
+				{
+					//check if there is a piece in front of the pawn
+					//if yes, don't allow movement
+					bool allowMovementForward = true;
 
 					for (int i = 0; i < 16; i++)
 					{
@@ -279,11 +308,13 @@ void Table::ShowAccessibleSquares()
 						}
 					}
 
-					if (activePiece->tablePosition.y + 1 < 8)
+					if (activePiece->tablePosition.y + 1 < 8 && allowMovementForward)
 					{
-						
+						//highlight the available square
+
 					}
 				}
+
 				break;
 			}
 			case ChessPieceType::knight:

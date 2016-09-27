@@ -23,8 +23,9 @@ public:
 	
 	ChessPiece* GetActivePiece(){ return activePiece; };
 private:
-
+	std::list<Square*> coloredSquares;
 	ChessPiece* activePiece;
+	ChessPiece* lastActivePiece;
 	Square* board[8][8];
 	ChessPiece* pieces[2][16];
 
