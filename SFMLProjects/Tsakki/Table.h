@@ -20,10 +20,12 @@ public:
 
 	void ShowAccessibleSquares();
 	void HighlightSquare(const int x, const int y);
-	
+	void HighlightSquares();
+
 	ChessPiece* GetActivePiece(){ return activePiece; };
 private:
-	std::list<Square*> coloredSquares;
+	std::list<Square*> highlightedSquares;
+	std::list<Square*> squaresToBeHighlighted;
 	ChessPiece* activePiece;
 	ChessPiece* lastActivePiece;
 	Square* board[8][8];

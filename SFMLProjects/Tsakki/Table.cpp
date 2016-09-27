@@ -117,6 +117,8 @@ Table::Table()
 	}
 
 	activePiece = nullptr;
+	lastActivePiece = nullptr;
+	//highlightedSquares = new std::list<Square*>();
 }
 
 Table::~Table()
@@ -228,7 +230,6 @@ void Table::Draw(sf::RenderWindow* window)
 
 void Table::HandleInput(sf::Vector2f mousePosition)
 {
-
 	//if mouse pressed, check if any of the chess pieces were selected
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 	{
@@ -240,6 +241,7 @@ void Table::HandleInput(sf::Vector2f mousePosition)
 				{
 					if (pieces[x][y]->player == 1)
 					{
+						lastActivePiece = activePiece;
 						activePiece = pieces[x][y];
 					}
 				}
@@ -285,7 +287,7 @@ void Table::ShowAccessibleSquares()
 					if (allowMovementForward)
 					{
 						//board[activePiece->tablePosition.x][activePiece->tablePosition.y - 1]->sprite.setColor(sf::Color(0, 255, 0, 255)
-						coloredSquares.push_back(board[activePiece->tablePosition.x][activePiece->tablePosition.y - 1]);						
+						squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][activePiece->tablePosition.y - 1]);
 					}
 
 					
@@ -361,10 +363,50 @@ void Table::ShowAccessibleSquares()
 				break;
 		}
 	}
+
+	HighlightSquares();
 }
 
 
 void Table::HighlightSquare(const int x, const int y)
 {
 
+}
+
+void Table::HighlightSquares()
+{
+	if (activePiece == lastActivePiece)
+	{
+		return;
+	}
+	else
+	{
+		//reset all the highlighted squares
+		std::list<Square*>::iterator highlightedSquaresIt = highlightedSquares.begin();
+
+		while (highlightedSquaresIt != this->highlightedSquares.end())
+		{			
+			(*highlightedSquaresIt)->sprite.setColor(sf::Color(255, 255, 255, 255));
+			highlightedSquaresIt++;
+		}
+
+		highlightedSquares.clear();
+
+		//add the new highlighted squares and highlight them
+		std::list<Square*>::iterator squaresToHightlightIt = squaresToBeHighlighted.begin();
+
+		while (squaresToHightlightIt != this->squaresToBeHighlighted.end())
+		{
+			(*squaresToHightlightIt)->sprite.setColor(sf::Color(255, 0, 255, 255));
+			squaresToHightlightIt++;
+		}
+
+		for each (Square* square in squaresToBeHighlighted)
+		{
+			highlightedSquares.push_back(square);
+		}
+
+		//empty the squaresToBeHighlighted so it won't hold any unnecessary squares
+		squaresToBeHighlighted.clear();	
+	}
 }
