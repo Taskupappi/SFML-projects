@@ -1,10 +1,13 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "ChessPiece.h"
-#include "Table.h"
 #include <vector>
 #include <list>
+#include <queue>
+
+#include "ChessPiece.h"
+#include "Table.h"
+
 
 enum GameState
 {
@@ -23,7 +26,12 @@ public:
 	void Loop();
 	void Uninitialize();
 	void Draw();
-	void HandleInput();
+
+	bool HandleInput();
+	bool Move();
+
+	void HandleTurn();
+	void EndTurn();
 
 private:
 	sf::Vector2u* screenResolution;	
@@ -32,8 +40,13 @@ private:
 	sf::RenderWindow* window;
 	Table table;
 
+	//players
+
+
 	//input
 	sf::Vector2f mousePosition;
+
+	std::queue<int> turnOrder;
 };
 
 #endif

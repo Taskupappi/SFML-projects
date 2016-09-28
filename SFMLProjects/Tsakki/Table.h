@@ -16,16 +16,26 @@ public:
 
 	void Initialize();
 	void Uninitialize();
-	void HandleInput(sf::Vector2f mousePosition);
+
+	bool HandleInput(sf::Vector2f mousePosition);
 
 	void ShowAccessibleSquares();
 	void HighlightSquare(const int x, const int y);
 	void HighlightSquares();
 
 	ChessPiece* GetActivePiece(){ return activePiece; };
+
+	//
+	bool Move();
+
+	//stuff for ending the turn
+	void ClearHighlights();
+
+
 private:
 	std::list<Square*> highlightedSquares;
 	std::list<Square*> squaresToBeHighlighted;
+	
 	ChessPiece* activePiece;
 	ChessPiece* lastActivePiece;
 	Square* board[8][8];

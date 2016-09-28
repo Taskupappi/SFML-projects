@@ -207,13 +207,25 @@ void Table::Draw(sf::RenderWindow* window)
 	{
 
 	}*/
-
-	for each (ChessPiece* piece in pieces)
+	
+	/*for each (ChessPiece* piece in pieces)
 	{
 		if (piece != activePiece)
 		{
 			piece->GetSprite().setColor(sf::Color(255, 255, 255, 255));
 		}
+	}*/
+
+	
+
+	if (activePiece)
+	{
+		if (lastActivePiece != activePiece)
+		{
+			lastActivePiece->GetSprite().setColor(sf::Color(255, 255, 255, 255));
+		}
+
+		activePiece->GetSprite().setColor(sf::Color(128, 128, 128, 255));
 	}
 
 	//draw all the pieces on the chess table
@@ -221,14 +233,9 @@ void Table::Draw(sf::RenderWindow* window)
 	{
 		window->draw(piece->GetSprite());
 	}
-
-	if (activePiece)
-	{
-		activePiece->GetSprite().setColor(sf::Color(128, 128, 128, 255));
-	}
 }
 
-void Table::HandleInput(sf::Vector2f mousePosition)
+bool Table::HandleInput(sf::Vector2f mousePosition)
 {
 	//if mouse pressed, check if any of the chess pieces were selected
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
@@ -367,7 +374,6 @@ void Table::ShowAccessibleSquares()
 	HighlightSquares();
 }
 
-
 void Table::HighlightSquare(const int x, const int y)
 {
 
@@ -409,4 +415,19 @@ void Table::HighlightSquares()
 		//empty the squaresToBeHighlighted so it won't hold any unnecessary squares
 		squaresToBeHighlighted.clear();	
 	}
+}
+
+void Table::ClearHighlights()
+{
+	//make sure everything is back to normal
+	for each (Square* square in highlightedSquares)
+	{
+		square->sprite.setColor(sf::Color(255, 255, 255, 255));
+	}
+
+	highlightedSquares.clear();
+
+	//no need to highlight these, so they can be just cleared from the lsit
+	squaresToBeHighlighted.clear();
+
 }
