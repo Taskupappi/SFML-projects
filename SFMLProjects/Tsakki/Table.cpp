@@ -260,6 +260,8 @@ bool Table::HandleInput(sf::Vector2f mousePosition)
 	{
 		activePiece = nullptr;
 	}
+
+	return true;
 }
 
 void Table::ShowAccessibleSquares()

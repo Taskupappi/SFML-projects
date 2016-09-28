@@ -5,16 +5,9 @@
 #include <list>
 #include <queue>
 
+#include "GameStateManager.h"
 #include "ChessPiece.h"
 #include "Table.h"
-
-
-enum GameState
-{
-	PAUSE,
-	MAINMENU,
-	RUNNING
-};
 
 class Game
 {
@@ -35,7 +28,9 @@ public:
 
 private:
 	sf::Vector2u* screenResolution;	
-	std::list<GameState> state;
+
+	GameStateManager stateManager;
+
 	bool playerOneTurn = true;
 	sf::RenderWindow* window;
 	Table table;
