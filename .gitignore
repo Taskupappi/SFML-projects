@@ -47,12 +47,12 @@ Temporary Items
 .apdisk
 
 #stuff
-.exe
-.ilk
-.pdb
-.sdf
-.suo
-.obj
-.tlog
-.idb
-.pdb
+*.exe
+*.ilk
+*.pdb
+*.sdf
+*.suo
+*.obj
+*.tlog
+*.idb
+*.pdb
