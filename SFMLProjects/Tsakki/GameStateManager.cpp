@@ -3,8 +3,6 @@
 GameStateManager::GameStateManager()
 {
 	states.push_back((GameState*)(new InGame()));
-
-	printf("kisse");
 }
 
 GameStateManager::~GameStateManager()
@@ -25,4 +23,14 @@ void GameStateManager::AddState(GameState* _state)
 void GameStateManager::PopState()
 {
 	states.pop_front();
+}
+
+void GameStateManager::Uninitialize()
+{
+	states.front()->Uninitialize();
+}
+
+void GameStateManager::Initialize()
+{
+	states.front()->Initialize();
 }

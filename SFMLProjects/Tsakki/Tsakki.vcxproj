@@ -74,6 +74,8 @@
   <ItemGroup>
     <ClCompile Include="Chesspiece.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameStateManager.cpp" />
+    <ClCompile Include="InGame.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Square.cpp" />
     <ClCompile Include="Table.cpp" />
@@ -81,6 +83,10 @@
   <ItemGroup>
     <ClInclude Include="ChessPiece.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameState.h" />
+    <ClInclude Include="GameStateManager.h" />
+    <ClInclude Include="InGame.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="Square.h" />
     <ClInclude Include="Table.h" />
   </ItemGroup>
