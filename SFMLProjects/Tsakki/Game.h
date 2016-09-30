@@ -1,8 +1,6 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "SFML\Graphics.hpp"
-
 #include "GameStateManager.h"
 
 class Game
@@ -12,7 +10,7 @@ public:
 	~Game();
 
 	void Initialize();
-	void Loop(sf::RenderWindow* window);
+	void Loop();
 	void Uninitialize();
 
 private:

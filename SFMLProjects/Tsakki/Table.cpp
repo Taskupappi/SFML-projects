@@ -214,9 +214,7 @@ void Table::Draw(sf::RenderWindow* window)
 		{
 			piece->GetSprite().setColor(sf::Color(255, 255, 255, 255));
 		}
-	}*/
-
-	
+	}*/	
 
 	if (activePiece)
 	{
@@ -235,7 +233,7 @@ void Table::Draw(sf::RenderWindow* window)
 	}
 }
 
-bool Table::HandleInput(sf::Vector2f mousePosition)
+bool Table::SelectActivePiece(const sf::Vector2f mousePosition)
 {
 	//if mouse pressed, check if any of the chess pieces were selected
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
@@ -246,22 +244,19 @@ bool Table::HandleInput(sf::Vector2f mousePosition)
 			{
 				if (pieces[x][y]->GetSprite().getGlobalBounds().contains(mousePosition))
 				{
-					if (pieces[x][y]->player == 1)
-					{
 						lastActivePiece = activePiece;
 						activePiece = pieces[x][y];
-					}
+						return true;					
 				}
 			}
 		}
 	}
-
-	if (activePiece && sf::Mouse::isButtonPressed(sf::Mouse::Right))
+	else if (activePiece && sf::Mouse::isButtonPressed(sf::Mouse::Right))
 	{
 		activePiece = nullptr;
 	}
 
-	return true;
+	return false;
 }
 
 void Table::ShowAccessibleSquares()
@@ -298,8 +293,6 @@ void Table::ShowAccessibleSquares()
 						//board[activePiece->tablePosition.x][activePiece->tablePosition.y - 1]->sprite.setColor(sf::Color(0, 255, 0, 255)
 						squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][activePiece->tablePosition.y - 1]);
 					}
-
-					
 				}
 				else if (activePiece->player == 2)
 				{
@@ -390,7 +383,7 @@ void Table::HighlightSquares()
 	else
 	{
 		//reset all the highlighted squares
-		std::list<Square*>::iterator highlightedSquaresIt = highlightedSquares.begin();
+		std::vector<Square*>::iterator highlightedSquaresIt = highlightedSquares.begin();
 
 		while (highlightedSquaresIt != this->highlightedSquares.end())
 		{			
@@ -401,7 +394,7 @@ void Table::HighlightSquares()
 		highlightedSquares.clear();
 
 		//add the new highlighted squares and highlight them
-		std::list<Square*>::iterator squaresToHightlightIt = squaresToBeHighlighted.begin();
+		std::vector<Square*>::iterator squaresToHightlightIt = squaresToBeHighlighted.begin();
 
 		while (squaresToHightlightIt != this->squaresToBeHighlighted.end())
 		{
@@ -432,4 +425,21 @@ void Table::ClearHighlights()
 	//no need to highlight these, so they can be just cleared from the lsit
 	squaresToBeHighlighted.clear();
 
+}
+
+std::array<int, 2> Table::MousePositionToTablePosition(sf::Vector2f mousePosition)
+{
+	for (int x = 0; x < 8; x++)
+	{
+		for (int y = 0; y < 8; y++)
+		{
+			if (board[x][y]->sprite.getGlobalBounds().contains(mousePosition))
+			{
+				mouseToTablePosition[1] = x;
+				mouseToTablePosition[2] = y;
+				printf("mouse to table x: %f y: %f ", mouseToTablePosition[1], mouseToTablePosition[1]);
+				return mouseToTablePosition;
+			}
+		}
+	}
 }

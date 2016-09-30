@@ -13,23 +13,24 @@ public:
 
 	//InGame state core
 	void Initialize();
-	void Loop(sf::RenderWindow* window);
+	void Loop(sf::RenderWindow* window, const sf::Vector2f mousePosition);
 	void Uninitialize();
-	void Draw(sf::RenderWindow* _window);
-	void HandleInput();
+	void Draw(sf::RenderWindow* window);
+
+	bool Move(const int player, sf::RenderWindow* window, const sf::Vector2f mousePosition);
 
 	//
-	void HandleTurn();
+	bool HandleTurn(sf::RenderWindow* window, const sf::Vector2f mousePosition);
 	void EndTurn();
 
 	//bool HandleInput();
-	bool Move(int player);
+	//bool Move(int player, sf::RenderWindow* _window, const sf::Vector2f mousePosition);
+
 private:
 
 	Table board;
 	bool playerOneTurn = true;
-
-
+	bool turnCompleted = false;
 };
 #endif
 

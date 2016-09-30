@@ -26,11 +26,26 @@ void Game::Uninitialize()
 	stateManager.Uninitialize();
 }
 
-void Game::Loop(sf::RenderWindow* window)
+void Game::Loop()
 {
 	while (stateManager.GetState() != nullptr)
 	{
-		stateManager.GetState()->Loop(window);
+		//calculate mouse position
+		mousePosition = window->mapPixelToCoords(sf::Mouse::getPosition(*window));
+
+		sf::Event event;
+		while (window->pollEvent(event))
+		{
+			if (event.type == sf::Event::Closed)
+				window->close();
+		}
+
+		//for debugging
+		system("cls");
+		printf("f%", mousePosition.x, " f% \n", mousePosition.y);
+
+		//run state main loop
+		stateManager.GetState()->Loop(window, mousePosition);
 	}
 }
 
@@ -41,7 +56,7 @@ void Game::Loop(sf::RenderWindow* window)
 //
 //	turnOrder.push(1);
 //}
-//
+
 //void Game::Loop()
 //{
 //	while (window->isOpen())
@@ -59,7 +74,7 @@ void Game::Loop(sf::RenderWindow* window)
 //{
 //	table.Uninitialize();
 //}
-//
+
 //void Game::Draw()
 //{	
 //	window->clear(sf::Color(0, 0, 150, 255));
@@ -109,12 +124,12 @@ void Game::Loop(sf::RenderWindow* window)
 //		break;
 //	}
 //}
-//
+
 //void Game::EndTurn()
 //{
 //	table.ClearHighlights();
 //}
-//
+
 //bool Game::Move()
 //{
 //	bool movementDone = false;
@@ -130,7 +145,7 @@ void Game::Loop(sf::RenderWindow* window)
 //
 //	return movementDone;
 //}
-//
+
 //bool Game::HandleInput()
 //{
 //	//mouse position

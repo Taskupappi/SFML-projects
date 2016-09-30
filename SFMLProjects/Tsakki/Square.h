@@ -14,7 +14,6 @@ public:
 private:
 
 	sf::Texture texture;
-
 };
 
 #endif
