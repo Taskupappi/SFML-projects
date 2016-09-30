@@ -28,6 +28,7 @@ void Game::Uninitialize()
 
 void Game::Loop()
 {
+	//state ei välttämättä vaihu
 	while (stateManager.GetState() != nullptr)
 	{
 		//calculate mouse position
@@ -42,7 +43,7 @@ void Game::Loop()
 
 		//for debugging
 		system("cls");
-		printf("f%", mousePosition.x, " f% \n", mousePosition.y);
+		printf("x: %f \ny: %f \n", mousePosition.x, mousePosition.y);
 
 		//run state main loop
 		stateManager.GetState()->Loop(window, mousePosition);

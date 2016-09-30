@@ -196,29 +196,20 @@ void Table::Uninitialize()
 
 void Table::Draw(sf::RenderWindow* window)
 {
-	//draw all chess table squares
+	for each (Square* square in highlightedSquares)
+	{
+		square->sprite.setColor(sf::Color(128, 128, 128, 255));
+	}
+
+	//draw all squares of the table
 	for each (Square* square in board)
 	{
 		window->draw(square->sprite);
 	}
 
-	//highlight all the squares the chess piece could move to
-	/*for each()
-	{
-
-	}*/
-	
-	/*for each (ChessPiece* piece in pieces)
-	{
-		if (piece != activePiece)
-		{
-			piece->GetSprite().setColor(sf::Color(255, 255, 255, 255));
-		}
-	}*/	
-
 	if (activePiece)
 	{
-		if (lastActivePiece != activePiece)
+		if (lastActivePiece != activePiece && lastActivePiece)
 		{
 			lastActivePiece->GetSprite().setColor(sf::Color(255, 255, 255, 255));
 		}
@@ -273,7 +264,7 @@ void Table::ShowAccessibleSquares()
 					//if yes, don't allow movement
 					bool allowMovementForward = true;
 					
-					if (activePiece->tablePosition.y - 1 < 0)
+					if (activePiece->tablePosition.y - 1 > -1)
 					{
 						for (int i = 0; i < 16; i++)
 						{
@@ -292,6 +283,9 @@ void Table::ShowAccessibleSquares()
 					{
 						//board[activePiece->tablePosition.x][activePiece->tablePosition.y - 1]->sprite.setColor(sf::Color(0, 255, 0, 255)
 						squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][activePiece->tablePosition.y - 1]);
+						
+						  
+
 					}
 				}
 				else if (activePiece->player == 2)
@@ -315,7 +309,7 @@ void Table::ShowAccessibleSquares()
 					if (activePiece->tablePosition.y + 1 < 8 && allowMovementForward)
 					{
 						//highlight the available square
-
+						squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][activePiece->tablePosition.y + 1]);
 					}
 				}
 
@@ -367,11 +361,6 @@ void Table::ShowAccessibleSquares()
 	}
 
 	HighlightSquares();
-}
-
-void Table::HighlightSquare(const int x, const int y)
-{
-
 }
 
 void Table::HighlightSquares()

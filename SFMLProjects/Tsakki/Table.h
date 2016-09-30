@@ -20,7 +20,6 @@ public:
 	void Uninitialize();
 
 	void ShowAccessibleSquares();
-	void HighlightSquare(const int x, const int y);
 	void HighlightSquares();
 
 	bool SelectActivePiece(const sf::Vector2f mousePosition);

@@ -36,6 +36,7 @@ public:
 private:
 	sf::Sprite sprite;
 	sf::Texture texture;
+	bool hasMoved = false;
 };
 
 #endif

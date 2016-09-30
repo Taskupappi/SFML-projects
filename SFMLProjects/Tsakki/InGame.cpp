@@ -26,6 +26,7 @@ void InGame::Loop(sf::RenderWindow* _window, const sf::Vector2f _mousePosition)
 bool InGame::HandleTurn(sf::RenderWindow* _window, const sf::Vector2f _mousePosition)
 {
 	board.SelectActivePiece(_mousePosition);
+	board.ShowAccessibleSquares();
 
 	if (playerOneTurn)
 	{
@@ -47,12 +48,16 @@ bool InGame::HandleTurn(sf::RenderWindow* _window, const sf::Vector2f _mousePosi
 
 bool InGame::Move(const int _player, sf::RenderWindow* _window, const sf::Vector2f _mousePosition)
 {
-	if (board.GetActivePiece()->player == _player)
+	if (board.GetActivePiece())
 	{
-		//board.GetLegalPositions();
-		return true;
+		if (board.GetActivePiece()->player == _player)
+		{
+			//board.GetLegalPositions();
+			return true;
 
+		}
 	}
+	
 
 	return false;
 }
@@ -66,7 +71,8 @@ void InGame::Draw(sf::RenderWindow* _window)
 
 void InGame::EndTurn()
 {
-	board.ClearHighlights();
+	
+	//board.ClearHighlights();
 }
 
 void InGame::Uninitialize()
