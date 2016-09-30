@@ -54,5 +54,7 @@ Temporary Items
 *.suo
 *.obj
 *.tlog
+*.log
 *.idb
 *.pdb
+*.opensdf
