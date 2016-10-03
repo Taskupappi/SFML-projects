@@ -508,3 +508,8 @@ void Table::PrintMouseTablePosition()
 {
 	std::cout << "\n" << "mouse position on the table:\n" << "x: " << mouseToTablePosition[0] << "\ny: " << mouseToTablePosition[1] << std::endl;
 }
+
+void Table::CheckMovement(bool playerOneTurn, const sf::Vector2f mousePosition)
+{
+
+}

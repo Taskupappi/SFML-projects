@@ -28,14 +28,14 @@ bool InGame::HandleTurn(sf::RenderWindow* _window, const sf::Vector2f _mousePosi
 
 	if (playerOneTurn)
 	{		
-		if (Move(1, _window, _mousePosition))
+		if (Move(1, _mousePosition))
 		{
 			EndTurn();
 		}
 	}
 	else
 	{
-		if (Move(2, _window, _mousePosition))
+		if (Move(2, _mousePosition))
 		{
 			EndTurn();
 		}
@@ -44,7 +44,58 @@ bool InGame::HandleTurn(sf::RenderWindow* _window, const sf::Vector2f _mousePosi
 	return false;
 }
 
-bool InGame::Move(const int _player, sf::RenderWindow* _window, const sf::Vector2f _mousePosition)
+void InGame::Draw(sf::RenderWindow* _window)
+{
+	_window->clear(sf::Color(0, 0, 150, 255));
+
+	board.Draw(_window);
+}
+
+void InGame::EndTurn()
+{
+	board.ClearActivePiece();
+	board.ClearHighlights();
+
+	if (playerOneTurn)
+	{
+		playerOneTurn = false;
+	}
+	else
+	{
+		playerOneTurn = true;
+	}
+	
+	movementDone = false;
+}
+
+void InGame::Uninitialize()
+{
+	board.Uninitialize();
+}
+
+void InGame::HandleInput(const sf::Event event, sf::Vector2f _mousePosition)
+{
+	switch (event.type)
+	{
+		case sf::Event::MouseButtonReleased:
+		{
+			if (board.GetActivePiece())
+			{
+				board.CheckMovement(playerOneTurn, _mousePosition, );
+			}
+			else
+			{
+				board.SelectActivePiece(_mousePosition);
+			}
+			break;
+		}
+		default:
+			break;
+	}
+}
+
+/*
+bool InGame::Move(const int _player, const sf::Vector2f _mousePosition)
 {
 	board.PrintMouseTablePosition();
 
@@ -62,7 +113,7 @@ bool InGame::Move(const int _player, sf::RenderWindow* _window, const sf::Vector
 						board.GetActivePiece()->GetSprite().setPosition(square->sprite.getPosition().x, square->sprite.getPosition().y);
 						board.GetActivePiece()->tablePosition = square->tablePosition;
 						board.GetActivePiece()->hasMoved = true;
-						return true;						
+						return true;
 					}
 				}
 			}
@@ -70,35 +121,7 @@ bool InGame::Move(const int _player, sf::RenderWindow* _window, const sf::Vector
 	}
 	return false;
 }
-
-void InGame::Draw(sf::RenderWindow* _window)
-{
-	_window->clear(sf::Color(0, 0, 150, 255));
-
-	board.Draw(_window);
-}
-
-void InGame::EndTurn()
-{
-	board.ClearActivePiece();
-	board.ClearHighlights();
-
-
-	if (playerOneTurn)
-	{
-		playerOneTurn = false;
-	}
-	else
-	{
-		playerOneTurn = true;
-	}
-	//board.ClearHighlights();
-}
-
-void InGame::Uninitialize()
-{
-	board.Uninitialize();
-}
+*/
 
 //bool InGame::Move(int _player, sf::RenderWindow* _window, const sf::Vector2f _mousePosition)
 //{

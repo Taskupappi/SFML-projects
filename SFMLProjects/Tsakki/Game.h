@@ -12,6 +12,7 @@ public:
 	void Initialize();
 	void Loop();
 	void Uninitialize();
+	void HandleInput();
 
 private:
 	sf::Vector2f mousePosition;

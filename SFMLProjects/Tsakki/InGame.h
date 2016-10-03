@@ -16,8 +16,9 @@ public:
 	void Loop(sf::RenderWindow* window, const sf::Vector2f mousePosition);
 	void Uninitialize();
 	void Draw(sf::RenderWindow* window);
+	void HandleInput(const sf::Event event, const sf::Vector2f mousePosition);
 
-	bool Move(const int player, sf::RenderWindow* window, const sf::Vector2f mousePosition);
+	//bool Move(const int player, const sf::Vector2f mousePosition);
 
 	//
 	bool HandleTurn(sf::RenderWindow* window, const sf::Vector2f mousePosition);
@@ -30,7 +31,6 @@ private:
 
 	Table board;
 	bool playerOneTurn = true;
-	bool turnCompleted = false;
 };
 #endif
 

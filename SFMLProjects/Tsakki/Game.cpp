@@ -8,6 +8,7 @@ Game::Game()
 	screenResolution = new sf::Vector2u(800, 600);	
 	
 	window = new sf::RenderWindow(sf::VideoMode(screenResolution->x, screenResolution->y), "Tsakki");
+	window->setKeyRepeatEnabled(false);
 }
 
 Game::~Game()
@@ -34,21 +35,7 @@ void Game::Loop()
 		//calculate mouse position
 		mousePosition = window->mapPixelToCoords(sf::Mouse::getPosition(*window));
 
-		sf::Event event;
-
-		//switch (event)
-		//{
-
-		//default:
-		//	break;
-		//}
-
-		while (window->pollEvent(event))
-		{
-			if (event.type == sf::Event::Closed)
-				window->close();
-
-		}
+		HandleInput();	
 
 		//for debugging
 		system("cls");
@@ -56,6 +43,23 @@ void Game::Loop()
 
 		//run state main loop
 		stateManager.GetState()->Loop(window, mousePosition);
+	}
+}
+
+void Game::HandleInput()
+{
+	sf::Event event;
+
+	while (window->pollEvent(event))
+	{	
+		if (event.type == sf::Event::Closed)
+		{
+			window->close();
+		}
+		else
+		{
+			stateManager.GetState()->HandleInput(event.type);
+		}
 	}
 }
 

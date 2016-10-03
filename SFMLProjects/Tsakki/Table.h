@@ -7,7 +7,6 @@
 #include "Square.h"
 #include "ChessPiece.h"
 
-
 class Table
 {
 public:
@@ -30,7 +29,7 @@ public:
 	std::array<int, 2> MousePositionToTablePosition(sf::Vector2f mousePosition);
 
 	//
-	bool Move();
+	void CheckMovement(bool playerOneTurn, const sf::Vector2f mousePosition);
 
 	//stuff for ending the turn
 	void ClearHighlights();
