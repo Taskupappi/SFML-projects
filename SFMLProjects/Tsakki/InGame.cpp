@@ -1,7 +1,5 @@
 #include "InGame.h"
 
-
-
 void InGame::Initialize()
 {
 	board.Initialize();
@@ -29,7 +27,7 @@ bool InGame::HandleTurn(sf::RenderWindow* _window, const sf::Vector2f _mousePosi
 	board.ShowAccessibleSquares();
 
 	if (playerOneTurn)
-	{
+	{		
 		if (Move(1, _window, _mousePosition))
 		{
 			EndTurn();
@@ -48,17 +46,28 @@ bool InGame::HandleTurn(sf::RenderWindow* _window, const sf::Vector2f _mousePosi
 
 bool InGame::Move(const int _player, sf::RenderWindow* _window, const sf::Vector2f _mousePosition)
 {
-	if (board.GetActivePiece())
-	{
-		if (board.GetActivePiece()->player == _player)
-		{
-			//board.GetLegalPositions();
-			return true;
+	board.PrintMouseTablePosition();
 
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+	{
+		if (board.GetActivePiece())
+		{
+			//check if the active piece is controlled by the player whose turn it is
+			if (board.GetActivePiece()->player == _player)
+			{
+				for each (Square* square in board.GetHighlightedSquares())
+				{
+					if (square->sprite.getGlobalBounds().contains(_mousePosition))
+					{
+						board.GetActivePiece()->GetSprite().setPosition(square->sprite.getPosition().x, square->sprite.getPosition().y);
+						board.GetActivePiece()->tablePosition = square->tablePosition;
+						board.GetActivePiece()->hasMoved = true;
+						return true;						
+					}
+				}
+			}
 		}
 	}
-	
-
 	return false;
 }
 
@@ -71,7 +80,18 @@ void InGame::Draw(sf::RenderWindow* _window)
 
 void InGame::EndTurn()
 {
-	
+	board.ClearActivePiece();
+	board.ClearHighlights();
+
+
+	if (playerOneTurn)
+	{
+		playerOneTurn = false;
+	}
+	else
+	{
+		playerOneTurn = true;
+	}
 	//board.ClearHighlights();
 }
 

@@ -1,5 +1,7 @@
 #include "Table.h"
 
+#include <iostream>
+
 Table::Table()
 {
 	for (int y = 0; y < 8; y++)
@@ -16,19 +18,19 @@ Table::Table()
 				{
 					//white squares
 					if (x % 2 == 0)
-						board[x][y] = new Square(true);
+						board[x][y] = new Square(true, x, y);
 					//black squares
 					else
-						board[x][y] = new Square(false);
+						board[x][y] = new Square(false, x, y);
 				}
 				else
 				{
 					//white squares
 					if (x % 2 == 0)
-						board[x][y] = new Square(false);
+						board[x][y] = new Square(false, x, y);
 					//black squares
 					else
-						board[x][y] = new Square(true);
+						board[x][y] = new Square(true, x, y);
 				}
 			}
 			//first row
@@ -36,10 +38,10 @@ Table::Table()
 			{
 				//white squares
 				if (x % 2 == 0)
-					board[x][y] = new Square(true);
+					board[x][y] = new Square(true, x, y);
 				//black squares
 				else
-					board[x][y] = new Square(false);
+					board[x][y] = new Square(false, x, y);
 			}
 		}
 	}
@@ -198,7 +200,7 @@ void Table::Draw(sf::RenderWindow* window)
 {
 	for each (Square* square in highlightedSquares)
 	{
-		square->sprite.setColor(sf::Color(128, 128, 128, 255));
+		square->sprite.setColor(sf::Color(255, 0, 0, 255));
 	}
 
 	//draw all squares of the table
@@ -235,16 +237,24 @@ bool Table::SelectActivePiece(const sf::Vector2f mousePosition)
 			{
 				if (pieces[x][y]->GetSprite().getGlobalBounds().contains(mousePosition))
 				{
-						lastActivePiece = activePiece;
-						activePiece = pieces[x][y];
-						return true;					
+					lastActivePiece = activePiece;
+					activePiece = pieces[x][y];
+
+					if (lastActivePiece == nullptr)
+					{
+						return false;
+					}					
+					else
+					{
+						return true;
+					}										
 				}
 			}
 		}
 	}
 	else if (activePiece && sf::Mouse::isButtonPressed(sf::Mouse::Right))
 	{
-		activePiece = nullptr;
+		ClearActivePiece();
 	}
 
 	return false;
@@ -254,6 +264,8 @@ void Table::ShowAccessibleSquares()
 {
 	if (activePiece)
 	{
+		squaresToBeHighlighted.clear();
+
 		switch (activePiece->type)
 		{
 			case ChessPieceType::pawn:
@@ -281,11 +293,29 @@ void Table::ShowAccessibleSquares()
 
 					if (allowMovementForward)
 					{
-						//board[activePiece->tablePosition.x][activePiece->tablePosition.y - 1]->sprite.setColor(sf::Color(0, 255, 0, 255)
 						squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][activePiece->tablePosition.y - 1]);
-						
-						  
 
+						if (!activePiece->hasMoved)
+						{
+							bool allowTwoSquareMovent = true;
+
+							for (int i = 0; i < 16; i++)
+							{
+								if ((pieces[0][i]->tablePosition.x == activePiece->tablePosition.x) && (pieces[0][i]->tablePosition.y == activePiece->tablePosition.y - 2))
+								{
+									allowTwoSquareMovent = false;
+								}
+								if ((pieces[1][i]->tablePosition.x == activePiece->tablePosition.x) && (pieces[1][i]->tablePosition.y == activePiece->tablePosition.y - 2))
+								{
+									allowTwoSquareMovent = false;
+								}
+							}
+
+							if (allowTwoSquareMovent)
+							{
+								squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][activePiece->tablePosition.y - 2]);
+							}
+						}
 					}
 				}
 				else if (activePiece->player == 2)
@@ -310,6 +340,28 @@ void Table::ShowAccessibleSquares()
 					{
 						//highlight the available square
 						squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][activePiece->tablePosition.y + 1]);
+
+						if (!activePiece->hasMoved)
+						{
+							bool allowTwoSquareMovent = true;
+
+							for (int i = 0; i < 16; i++)
+							{
+								if ((pieces[0][i]->tablePosition.x == activePiece->tablePosition.x) && (pieces[0][i]->tablePosition.y == activePiece->tablePosition.y + 2))
+								{
+									allowTwoSquareMovent = false;
+								}
+								if ((pieces[1][i]->tablePosition.x == activePiece->tablePosition.x) && (pieces[1][i]->tablePosition.y == activePiece->tablePosition.y + 2))
+								{
+									allowTwoSquareMovent = false;
+								}
+							}
+
+							if (allowTwoSquareMovent)
+							{
+								squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][activePiece->tablePosition.y + 2]);
+							}
+						}
 					}
 				}
 
@@ -365,12 +417,8 @@ void Table::ShowAccessibleSquares()
 
 void Table::HighlightSquares()
 {
-	if (activePiece == lastActivePiece)
-	{
-		return;
-	}
-	else
-	{
+	if (activePiece != lastActivePiece)
+	{	
 		//reset all the highlighted squares
 		std::vector<Square*>::iterator highlightedSquaresIt = highlightedSquares.begin();
 
@@ -382,18 +430,18 @@ void Table::HighlightSquares()
 
 		highlightedSquares.clear();
 
-		//add the new highlighted squares and highlight them
+		//add squares that are supposed to be highlighted and highlight them
 		std::vector<Square*>::iterator squaresToHightlightIt = squaresToBeHighlighted.begin();
 
 		while (squaresToHightlightIt != this->squaresToBeHighlighted.end())
 		{
-			(*squaresToHightlightIt)->sprite.setColor(sf::Color(255, 0, 255, 255));
+			highlightedSquares.push_back((*squaresToHightlightIt));
 			squaresToHightlightIt++;
 		}
 
-		for each (Square* square in squaresToBeHighlighted)
+		for each (Square* square in highlightedSquares)
 		{
-			highlightedSquares.push_back(square);
+			square->sprite.setColor(sf::Color(255, 0, 255, 255));
 		}
 
 		//empty the squaresToBeHighlighted so it won't hold any unnecessary squares
@@ -416,6 +464,26 @@ void Table::ClearHighlights()
 
 }
 
+void Table::ClearActivePiece()
+{
+	if (lastActivePiece)
+	{
+		lastActivePiece->GetSprite().setColor(sf::Color(255, 255, 255, 255));
+	}
+
+	if (activePiece)
+	{
+		lastActivePiece = activePiece;
+	}
+
+	if (activePiece)
+	{
+		activePiece->GetSprite().setColor(sf::Color(255, 255, 255, 255));
+	}
+	
+	activePiece = nullptr;
+}
+
 std::array<int, 2> Table::MousePositionToTablePosition(sf::Vector2f mousePosition)
 {
 	for (int x = 0; x < 8; x++)
@@ -424,11 +492,19 @@ std::array<int, 2> Table::MousePositionToTablePosition(sf::Vector2f mousePositio
 		{
 			if (board[x][y]->sprite.getGlobalBounds().contains(mousePosition))
 			{
-				mouseToTablePosition[1] = x;
-				mouseToTablePosition[2] = y;
-				printf("mouse to table x: %f y: %f ", mouseToTablePosition[1], mouseToTablePosition[1]);
+				mouseToTablePosition[0] = x;
+				mouseToTablePosition[1] = y;				
+				//printf("\n mouse to table \nx: %f \ny: %f ", mouseToTablePosition[0], mouseToTablePosition[1]);
 				return mouseToTablePosition;
 			}
 		}
 	}
+
+	printf("error in MousePositionToTablePosition");
+	return mouseToTablePosition;
+}
+
+void Table::PrintMouseTablePosition()
+{
+	std::cout << "\n" << "mouse position on the table:\n" << "x: " << mouseToTablePosition[0] << "\ny: " << mouseToTablePosition[1] << std::endl;
 }

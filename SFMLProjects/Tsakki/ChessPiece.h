@@ -3,7 +3,6 @@
 
 #include <SFML\Graphics.hpp>
 
-
 #include <list>
 #include <vector>
 #include <string>
@@ -31,12 +30,13 @@ public:
 	sf::Sprite& GetSprite(){ return sprite; };
 
 	int player;
+	bool hasMoved = false;
 	ChessPieceType type;
 	sf::Vector2i tablePosition;
 private:
 	sf::Sprite sprite;
 	sf::Texture texture;
-	bool hasMoved = false;
+
 };
 
 #endif

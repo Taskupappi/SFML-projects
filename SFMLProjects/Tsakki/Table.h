@@ -25,6 +25,7 @@ public:
 	bool SelectActivePiece(const sf::Vector2f mousePosition);
 	ChessPiece* GetActivePiece(){ return activePiece; };
 
+	void PrintMouseTablePosition();
 	std::vector<int[1][1]> GetLegalPositions();
 	std::array<int, 2> MousePositionToTablePosition(sf::Vector2f mousePosition);
 
@@ -33,7 +34,9 @@ public:
 
 	//stuff for ending the turn
 	void ClearHighlights();
+	void ClearActivePiece();
 	
+	std::vector<Square*> GetHighlightedSquares(){ return highlightedSquares; };
 private:
 	std::vector<Square*> highlightedSquares;
 	std::vector<Square*> squaresToBeHighlighted;

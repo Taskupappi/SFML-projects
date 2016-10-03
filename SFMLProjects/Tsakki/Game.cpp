@@ -35,10 +35,19 @@ void Game::Loop()
 		mousePosition = window->mapPixelToCoords(sf::Mouse::getPosition(*window));
 
 		sf::Event event;
+
+		//switch (event)
+		//{
+
+		//default:
+		//	break;
+		//}
+
 		while (window->pollEvent(event))
 		{
 			if (event.type == sf::Event::Closed)
 				window->close();
+
 		}
 
 		//for debugging

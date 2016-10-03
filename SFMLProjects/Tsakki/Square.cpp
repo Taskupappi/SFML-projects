@@ -1,9 +1,8 @@
 #include "Square.h"
 
-Square::Square( bool _isWhite)
+Square::Square(bool _isWhite, const unsigned int _tablePosX, const unsigned int _tablePosY)
+	:isWhite(_isWhite), tablePosition(_tablePosX, _tablePosY)
 {
-	isWhite = _isWhite;
-
 	texture.loadFromFile("ChessboardSquares.png");
 	sprite.setTexture(texture);
 
