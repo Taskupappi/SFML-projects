@@ -16,6 +16,7 @@ public:
 
 private:
 	sf::Vector2f mousePosition;
+	std::array<int, 2> mouseBoardPosition;
 	sf::Vector2u* screenResolution;
 	sf::RenderWindow* window;
 	GameStateManager stateManager;

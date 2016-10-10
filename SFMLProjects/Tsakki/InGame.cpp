@@ -23,25 +23,33 @@ void InGame::Loop(sf::RenderWindow* _window, const sf::Vector2f _mousePosition)
 
 bool InGame::HandleTurn(sf::RenderWindow* _window, const sf::Vector2f _mousePosition)
 {
-	board.SelectActivePiece(_mousePosition);
+	//board.SelectActivePiece(_mousePosition);
 	board.ShowAccessibleSquares();
 
 	if (playerOneTurn)
 	{		
-		if (Move(1, _mousePosition))
+		if (Move())
 		{
 			EndTurn();
 		}
 	}
 	else
 	{
-		if (Move(2, _mousePosition))
+		if (Move())
 		{
 			EndTurn();
 		}
 	}
 
 	return false;
+}
+
+bool InGame::Move()
+{
+	if (board.GetSquareToMove())
+	{
+		return board.MoveActivePiece(playerOneTurn, board.GetSquareToMove());		
+	}
 }
 
 void InGame::Draw(sf::RenderWindow* _window)
@@ -64,8 +72,10 @@ void InGame::EndTurn()
 	{
 		playerOneTurn = true;
 	}
+
+	board.ClearActivePiece();
 	
-	movementDone = false;
+	//movementDone = false;
 }
 
 void InGame::Uninitialize()
@@ -73,15 +83,17 @@ void InGame::Uninitialize()
 	board.Uninitialize();
 }
 
-void InGame::HandleInput(const sf::Event event, sf::Vector2f _mousePosition)
+void InGame::HandleInput(const sf::Event::EventType event, const sf::Vector2f _mousePosition)
 {
-	switch (event.type)
+	mouseToBoardPosition = board.MousePositionToTablePosition(_mousePosition);
+
+	switch (event)
 	{
 		case sf::Event::MouseButtonReleased:
 		{
 			if (board.GetActivePiece())
 			{
-				board.CheckMovement(playerOneTurn, _mousePosition, );
+				board.CheckMovement(playerOneTurn, _mousePosition);
 			}
 			else
 			{

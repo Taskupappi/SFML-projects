@@ -229,35 +229,38 @@ void Table::Draw(sf::RenderWindow* window)
 bool Table::SelectActivePiece(const sf::Vector2f mousePosition)
 {
 	//if mouse pressed, check if any of the chess pieces were selected
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+	for (int x = 0; x < 2; x++)
 	{
-		for (int x = 0; x < 2; x++)
+		for (int y = 0; y < 16; y++)
 		{
-			for (int y = 0; y < 16; y++)
+			if (pieces[x][y]->GetSprite().getGlobalBounds().contains(mousePosition))
 			{
-				if (pieces[x][y]->GetSprite().getGlobalBounds().contains(mousePosition))
+				if (activePiece)
 				{
 					lastActivePiece = activePiece;
-					activePiece = pieces[x][y];
-
-					if (lastActivePiece == nullptr)
-					{
-						return false;
-					}					
-					else
-					{
-						return true;
-					}										
 				}
+				
+				activePiece = pieces[x][y];
+
+				if (lastActivePiece == nullptr)
+				{
+					return false;
+				}					
+				else
+				{
+					return true;
+				}										
 			}
 		}
 	}
-	else if (activePiece && sf::Mouse::isButtonPressed(sf::Mouse::Right))
-	{
-		ClearActivePiece();
-	}
-
 	return false;
+}
+
+bool Table::SelectActivePiece(ChessPiece* _piece)
+{
+	lastActivePiece = activePiece;
+	activePiece = _piece;
+	return true;
 }
 
 void Table::ShowAccessibleSquares()
@@ -481,6 +484,7 @@ void Table::ClearActivePiece()
 		activePiece->GetSprite().setColor(sf::Color(255, 255, 255, 255));
 	}
 	
+	squareToMove = nullptr;
 	activePiece = nullptr;
 }
 
@@ -493,14 +497,17 @@ std::array<int, 2> Table::MousePositionToTablePosition(sf::Vector2f mousePositio
 			if (board[x][y]->sprite.getGlobalBounds().contains(mousePosition))
 			{
 				mouseToTablePosition[0] = x;
-				mouseToTablePosition[1] = y;				
+				mouseToTablePosition[1] = y;
+				//std::cout << "x: " << mouseToTablePosition[0] << " y: " << mouseToTablePosition[1] << std::endl;
+				//printf(mouseToTablePosition[0]);
+				//printf(mouseToTablePosition[1]);
 				//printf("\n mouse to table \nx: %f \ny: %f ", mouseToTablePosition[0], mouseToTablePosition[1]);
 				return mouseToTablePosition;
 			}
 		}
 	}
 
-	printf("error in MousePositionToTablePosition");
+	//printf("error in MousePositionToTablePosition");
 	return mouseToTablePosition;
 }
 
@@ -509,7 +516,66 @@ void Table::PrintMouseTablePosition()
 	std::cout << "\n" << "mouse position on the table:\n" << "x: " << mouseToTablePosition[0] << "\ny: " << mouseToTablePosition[1] << std::endl;
 }
 
-void Table::CheckMovement(bool playerOneTurn, const sf::Vector2f mousePosition)
+void Table::CheckMovement(const bool _playerOneTurn, const sf::Vector2f _mousePosition)
 {
+	if (activePiece)
+	{
+		if ((activePiece->player == 1 && _playerOneTurn) || (activePiece->player == 2 && !_playerOneTurn))
+		{
+			for each (Square* square in highlightedSquares)
+			{
+				if (square->tablePosition.x == mouseToTablePosition[0] && square->tablePosition.y == mouseToTablePosition[1])
+				{
+					//set square where the piece will move when the turn is handled
+					squareToMove = square;
+					return;
+				}
+			}
+		}		
+	}
+	
+	//ChessPiece* piece = GetPieceAtPosition(MousePositionToTablePosition(_mousePosition));
 
+	if (GetPieceAtPosition(MousePositionToTablePosition(_mousePosition)))
+	{
+		SelectActivePiece(GetPieceAtPosition(MousePositionToTablePosition(_mousePosition)));
+	}
+	else
+	{
+		//there was no chess piece in the pressed square, nor was it a legal move. Thus we clear active piece
+		ClearActivePiece();
+	}
 }
+
+bool Table::MoveActivePiece(const bool _playerOneTurn, Square* _squareToMove)
+{
+	if (activePiece)
+	{
+		activePiece->tablePosition = _squareToMove->tablePosition;
+		activePiece->GetSprite().setPosition(_squareToMove->sprite.getPosition().x, _squareToMove->sprite.getPosition().y);
+		ClearActivePiece();
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+ChessPiece* Table::GetPieceAtPosition(const std::array<int, 2> _position)
+{
+	for (size_t i = 0; i < 2; i++)
+	{
+		for (size_t j = 0; j < 16; j++)
+		{
+			if (pieces[i][j]->tablePosition.x == _position[0] && pieces[i][j]->tablePosition.y == _position[1])
+			{
+				return pieces[i][j];
+			}
+		}
+	}
+
+	return nullptr;
+}
+
+

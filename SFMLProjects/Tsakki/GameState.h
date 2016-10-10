@@ -14,7 +14,7 @@ public:
 	virtual void Loop(sf::RenderWindow* window, const sf::Vector2f mousePosition){};
 	virtual void Uninitialize(){};
 	virtual void Draw(){};
-	virtual void HandleInput(const sf::Event::EventType event){};
+	virtual void HandleInput(const sf::Event::EventType event, const sf::Vector2f mousePosition){};
 };
 
 #endif

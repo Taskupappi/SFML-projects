@@ -33,13 +33,13 @@ void Game::Loop()
 	while (stateManager.GetState() != nullptr)
 	{
 		//calculate mouse position
-		mousePosition = window->mapPixelToCoords(sf::Mouse::getPosition(*window));
+		mousePosition = window->mapPixelToCoords(sf::Mouse::getPosition(*window));		
 
 		HandleInput();	
 
 		//for debugging
-		system("cls");
-		printf("x: %f \ny: %f \n", mousePosition.x, mousePosition.y);
+		//system("cls");
+		//printf("x: %f \ny: %f \n", mousePosition.x, mousePosition.y);
 
 		//run state main loop
 		stateManager.GetState()->Loop(window, mousePosition);
@@ -58,7 +58,7 @@ void Game::HandleInput()
 		}
 		else
 		{
-			stateManager.GetState()->HandleInput(event.type);
+			stateManager.GetState()->HandleInput(event.type, mousePosition);
 		}
 	}
 }
