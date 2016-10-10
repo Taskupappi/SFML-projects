@@ -498,16 +498,10 @@ std::array<int, 2> Table::MousePositionToTablePosition(sf::Vector2f mousePositio
 			{
 				mouseToTablePosition[0] = x;
 				mouseToTablePosition[1] = y;
-				//std::cout << "x: " << mouseToTablePosition[0] << " y: " << mouseToTablePosition[1] << std::endl;
-				//printf(mouseToTablePosition[0]);
-				//printf(mouseToTablePosition[1]);
-				//printf("\n mouse to table \nx: %f \ny: %f ", mouseToTablePosition[0], mouseToTablePosition[1]);
 				return mouseToTablePosition;
 			}
 		}
 	}
-
-	//printf("error in MousePositionToTablePosition");
 	return mouseToTablePosition;
 }
 
