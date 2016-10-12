@@ -167,6 +167,7 @@ void Table::Uninitialize()
 {
 
 	activePiece = nullptr;
+	lastActivePiece = nullptr;
 
 	//for each (ChessPiece* piece in pieces)
 	//{
@@ -238,6 +239,10 @@ bool Table::SelectActivePiece(const sf::Vector2f mousePosition)
 				if (activePiece)
 				{
 					lastActivePiece = activePiece;
+				}
+				else
+				{
+					lastActivePiece = nullptr;
 				}
 				
 				activePiece = pieces[x][y];
@@ -372,17 +377,78 @@ void Table::ShowAccessibleSquares()
 			}
 			case ChessPieceType::knight:
 			{
-				if (activePiece->player == 1)
+				if (activePiece->tablePosition.x - 1 > -1 && activePiece->tablePosition.y - 2 > -1)
 				{
-
+					squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y - 2]);
 				}
+				if (activePiece->tablePosition.x + 1 < 8 && activePiece->tablePosition.y - 2 > -1)
+				{
+					squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y - 2]);
+				}
+				if (activePiece->tablePosition.x - 1 > -1 && activePiece->tablePosition.y + 2 < 8)
+				{
+					squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y + 2]);
+				}
+				if (activePiece->tablePosition.x + 1 < 8 && activePiece->tablePosition.y + 2 < 8)
+				{
+					squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y + 2]);
+				}
+				if (activePiece->tablePosition.x + 2 < 8 && activePiece->tablePosition.y - 1 > -1)
+				{
+					squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + 2][activePiece->tablePosition.y - 1]);
+				}
+				if (activePiece->tablePosition.x + 2 < 8 && activePiece->tablePosition.y + 1 < 8)
+				{
+					squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + 2][activePiece->tablePosition.y + 1]);
+				}
+				if (activePiece->tablePosition.x - 2 > -1 && activePiece->tablePosition.y - 1 > -1)
+				{
+					squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - 2][activePiece->tablePosition.y - 1]);
+				}
+					
+
 				break;
 			}
 			case ChessPieceType::rook:
 			{
-				if (activePiece->player == 1)
-				{
+				int closestPosition[2] = { -10, -10 };
 
+				for (int i = 0; i < 2; i++)
+				{
+					for (int j = 0; j < 16; j++)
+					{
+						//find the closest piece in front of the rook
+						if (pieces[i][j]->tablePosition.x == activePiece->tablePosition.x && pieces[i][j]->tablePosition.y < activePiece->tablePosition.y)
+						{
+							//set the first closest position
+							if (closestPosition[0] == -10 && closestPosition[1] == -10)
+							{
+								closestPosition[0] = pieces[i][j]->tablePosition.x;
+								closestPosition[1] = pieces[i][j]->tablePosition.y;
+							}
+
+							//if someone is closer to the rook and infront of it, set its position as the closest position
+							if (closestPosition[1] < pieces[i][j]->tablePosition.y && pieces[i][j]->tablePosition.y < activePiece->tablePosition.y)
+							{
+								closestPosition[0] = pieces[i][j]->tablePosition.x;
+								closestPosition[1] = pieces[i][j]->tablePosition.y;
+							}
+						}
+
+						if (closestPosition[0] != -10 && closestPosition[1] != -10)
+						{
+
+						}
+						else
+						{
+
+						}
+						//if not a single piece was found, allow movement all the way to the end of the board 
+
+						//then find the closest piece behind the rook
+
+						//again if not a single piece was found, allow full movement backwards
+					}
 				}
 				break;
 			}

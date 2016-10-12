@@ -30,7 +30,8 @@ void Game::Uninitialize()
 void Game::Loop()
 {
 	//state ei välttämättä vaihu
-	while (stateManager.GetState() != nullptr)
+	//while (stateManager.GetState() != nullptr)
+	while (window->isOpen())
 	{
 		//calculate mouse position
 		mousePosition = window->mapPixelToCoords(sf::Mouse::getPosition(*window));		

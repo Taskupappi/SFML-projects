@@ -7,10 +7,12 @@ GameStateManager::GameStateManager()
 
 GameStateManager::~GameStateManager()
 {
-	std::list<GameState*>::iterator state = states.end();
+	std::list<GameState*>::iterator state; // = states.begin();
 
-	for (state = states.end(); state != states.begin(); --state)
+	while (states.empty())
 	{
+		state = states.begin();
+		(*state)->Uninitialize();
 		delete (*state);
 	}
 }

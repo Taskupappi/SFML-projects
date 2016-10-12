@@ -8,7 +8,7 @@ int main()
 	
 	game.Initialize();
 	game.Loop();
-	game.Uninitialize();
+	//game.Uninitialize();
 		
 	return 0;
 }
