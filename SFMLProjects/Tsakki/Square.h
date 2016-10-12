@@ -11,7 +11,7 @@ public:
 
 	sf::Sprite sprite;
 	bool isWhite;
-	const sf::Vector2i tablePosition;
+	const sf::Vector2u tablePosition;
 private:
 
 	sf::Texture texture;
