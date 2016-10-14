@@ -169,6 +169,9 @@ void Table::Uninitialize()
 	activePiece = nullptr;
 	lastActivePiece = nullptr;
 
+	delete activePiece;
+	delete lastActivePiece;
+
 	//for each (ChessPiece* piece in pieces)
 	//{
 	//	delete piece;
@@ -405,51 +408,215 @@ void Table::ShowAccessibleSquares()
 				{
 					squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - 2][activePiece->tablePosition.y - 1]);
 				}
-					
-
 				break;
 			}
 			case ChessPieceType::rook:
 			{
-				int closestPosition[2] = { -10, -10 };
+				//int closestPosition[2] = { -10, -10 };
 
-				for (int i = 0; i < 2; i++)
+				ChessPiece* tempPiece = nullptr;
+				int indexTeam = 0;
+				int indexPiece = 0;
+
+				//infront S-N
+				for (; indexTeam < 2; indexTeam++)
 				{
-					for (int j = 0; j < 16; j++)
+					for (; indexPiece < 16; indexPiece++)
 					{
 						//find the closest piece in front of the rook
-						if (pieces[i][j]->tablePosition.x == activePiece->tablePosition.x && pieces[i][j]->tablePosition.y < activePiece->tablePosition.y)
+						if (pieces[indexTeam][indexPiece]->tablePosition.x == activePiece->tablePosition.x && pieces[indexTeam][indexPiece]->tablePosition.y < activePiece->tablePosition.y)
 						{
 							//set the first closest position
-							if (closestPosition[0] == -10 && closestPosition[1] == -10)
+							if (tempPiece == nullptr)
 							{
-								closestPosition[0] = pieces[i][j]->tablePosition.x;
-								closestPosition[1] = pieces[i][j]->tablePosition.y;
+								tempPiece = pieces[indexTeam][indexPiece];
 							}
 
 							//if someone is closer to the rook and infront of it, set its position as the closest position
-							if (closestPosition[1] < pieces[i][j]->tablePosition.y && pieces[i][j]->tablePosition.y < activePiece->tablePosition.y)
+							if (tempPiece->tablePosition.y < pieces[indexTeam][indexPiece]->tablePosition.y && pieces[indexTeam][indexPiece]->tablePosition.y < activePiece->tablePosition.y)
 							{
-								closestPosition[0] = pieces[i][j]->tablePosition.x;
-								closestPosition[1] = pieces[i][j]->tablePosition.y;
+								tempPiece = pieces[indexTeam][indexPiece];
 							}
 						}
-
-						if (closestPosition[0] != -10 && closestPosition[1] != -10)
-						{
-
-						}
-						else
-						{
-
-						}
-						//if not a single piece was found, allow movement all the way to the end of the board 
-
-						//then find the closest piece behind the rook
-
-						//again if not a single piece was found, allow full movement backwards
 					}
 				}
+				if (tempPiece == nullptr)
+				{
+					//we can highlight every square in front of the rook
+					for (int i = activePiece->tablePosition.y - 1; i < 0; i--)
+					{
+						squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][i]);
+					}
+				}
+				else
+				{
+					//since there is someone in front of the rook, we can only move the distance in between....
+					for (int i = (activePiece->tablePosition.y - tempPiece->tablePosition.y) - 1; i > 0; i--)
+					{
+						squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][activePiece->tablePosition.y - i]);
+					}
+
+					//..unless the piece is enemy. Then we can eat that as well
+					if (tempPiece->player != activePiece->player)
+					{
+						squaresToBeHighlighted.push_back(board[tempPiece->tablePosition.x][tempPiece->tablePosition.y]);
+					}
+
+				}
+					
+				//behind N-S
+				tempPiece = nullptr;
+				indexTeam = 0;
+				indexPiece = 0;
+
+				for (; indexTeam < 2; indexTeam++)
+				{
+					for (; indexPiece < 16; indexPiece++)
+					{
+						//find the closest piece behind the rook
+						if (pieces[indexTeam][indexPiece]->tablePosition.x == activePiece->tablePosition.x && pieces[indexTeam][indexPiece]->tablePosition.y > activePiece->tablePosition.y)
+						{
+							//set the first closest position
+							if (tempPiece == nullptr)
+							{
+								tempPiece = pieces[indexTeam][indexPiece];
+							}
+
+							//if someone is closer to the rook and infront of it, set its position as the closest position
+							if (tempPiece->tablePosition.y > pieces[indexTeam][indexPiece]->tablePosition.y && pieces[indexTeam][indexPiece]->tablePosition.y > activePiece->tablePosition.y)
+							{
+								tempPiece = pieces[indexTeam][indexPiece];
+							}
+						}
+					}
+				}
+				if (tempPiece == nullptr)
+				{
+					//we can highlight every square behind of the rook
+					for (int i = 7; i > activePiece->tablePosition.y; i--)
+					{
+						squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][i]);
+					}
+				}
+				else
+				{
+					//since there is someone behind of the rook, we can only move the distance in between....
+					for (int i = (tempPiece->tablePosition.y - activePiece->tablePosition.y) - 1; i < 0; i--)
+					{
+						squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][activePiece->tablePosition.y + (i * -1)]);
+					}
+
+					//..unless the piece is enemy. Then we can eat that as well
+					if (tempPiece->player != activePiece->player)
+					{
+						squaresToBeHighlighted.push_back(board[tempPiece->tablePosition.x][tempPiece->tablePosition.y]);
+					}
+
+				}
+
+				//left side
+				tempPiece = nullptr;
+				indexTeam = 0;
+				indexPiece = 0;
+
+				for (; indexTeam < 2; indexTeam++)
+				{
+					for (; indexPiece < 16; indexPiece++)
+					{
+						//find the closest piece on the left side of the rook
+						if (pieces[indexTeam][indexPiece]->tablePosition.x < activePiece->tablePosition.x && pieces[indexTeam][indexPiece]->tablePosition.y == activePiece->tablePosition.y)
+						{
+							//set the first closest position
+							if (tempPiece == nullptr)
+							{
+								tempPiece = pieces[indexTeam][indexPiece];
+							}
+
+							//if someone is closer to the rook on the left side of it, set its position as the closest position
+							if (tempPiece->tablePosition.x < pieces[indexTeam][indexPiece]->tablePosition.x && pieces[indexTeam][indexPiece]->tablePosition.x < activePiece->tablePosition.x)
+							{
+								tempPiece = pieces[indexTeam][indexPiece];
+							}
+						}
+					}
+				}
+				if (tempPiece == nullptr)
+				{
+					//we can highlight every square on the left side of the rook
+					for (int i = 0; i < activePiece->tablePosition.x; i++)
+					{
+						squaresToBeHighlighted.push_back(board[i][activePiece->tablePosition.y]);
+					}
+				}
+				else
+				{
+					//since there is someone on the left side of the rook, we can only move the distance in between....
+					for (int i = (activePiece->tablePosition.x - tempPiece->tablePosition.x) - 1; i > tempPiece->tablePosition.x; i--)
+					{
+						squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - i][activePiece->tablePosition.y]);
+					}
+
+					//..unless the piece is enemy. Then we can eat that as well
+					if (tempPiece->player != activePiece->player)
+					{
+						squaresToBeHighlighted.push_back(board[tempPiece->tablePosition.x][tempPiece->tablePosition.y]);
+					}
+
+				}
+
+				//right side
+				tempPiece = nullptr;
+				indexTeam = 0;
+				indexPiece = 0;
+
+				for (; indexTeam < 2; indexTeam++)
+				{
+					for (; indexPiece < 16; indexPiece++)
+					{
+						//find the closest piece on the left side of the rook
+						if (pieces[indexTeam][indexPiece]->tablePosition.x > activePiece->tablePosition.x && pieces[indexTeam][indexPiece]->tablePosition.y == activePiece->tablePosition.y)
+						{
+							//set the first closest position
+							if (tempPiece == nullptr)
+							{
+								tempPiece = pieces[indexTeam][indexPiece];
+							}
+
+							//if someone is closer to the rook on the left side of it, set its position as the closest position
+							if (tempPiece->tablePosition.x > pieces[indexTeam][indexPiece]->tablePosition.x && pieces[indexTeam][indexPiece]->tablePosition.x > activePiece->tablePosition.x)
+							{
+								tempPiece = pieces[indexTeam][indexPiece];
+							}
+						}
+					}
+				}
+				if (tempPiece == nullptr)
+				{
+					//we can highlight every square on the right side of the rook
+					for (int i = 7; i > activePiece->tablePosition.x; i--)
+					{
+						squaresToBeHighlighted.push_back(board[i][activePiece->tablePosition.y]);
+					}
+				}
+				else
+				{
+					//since there is someone on the left side of the rook, we can only move the distance in between....
+					for (int i = (tempPiece->tablePosition.x - activePiece->tablePosition.x) - 1; i > activePiece->tablePosition.x; i--)
+					{
+						squaresToBeHighlighted.push_back(board[tempPiece->tablePosition.x - i][tempPiece->tablePosition.y]);
+					}
+
+					//..unless the piece is enemy. Then we can eat that as well
+					if (tempPiece->player != activePiece->player)
+					{
+						squaresToBeHighlighted.push_back(board[tempPiece->tablePosition.x][tempPiece->tablePosition.y]);
+					}
+
+				}
+
+
+				tempPiece = nullptr;
+				delete tempPiece;
 				break;
 			}
 			case ChessPieceType::bishop:
