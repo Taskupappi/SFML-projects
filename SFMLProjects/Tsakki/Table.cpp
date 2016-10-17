@@ -9,40 +9,12 @@ Table::Table()
 		for (int x = 0; x < 8; x++)
 		{
 			//check the end of the last row
-
-			//if y - 1 is not below zero are not in the first row
-			if (y - 1 > -1)
-			{
-				bool lastIsWhite = board[7][y - 1]->isWhite;
-				if (lastIsWhite)
-				{
-					//white squares
-					if (x % 2 == 0)
-						board[x][y] = new Square(true, x, y);
-					//black squares
-					else
-						board[x][y] = new Square(false, x, y);
-				}
-				else
-				{
-					//white squares
-					if (x % 2 == 0)
-						board[x][y] = new Square(false, x, y);
-					//black squares
-					else
-						board[x][y] = new Square(true, x, y);
-				}
-			}
-			//first row
+			//white squares
+			if ((x + y) % 2 == 0)
+				board[x][y] = new Square(true, x, y);
+			//black squares
 			else
-			{
-				//white squares
-				if (x % 2 == 0)
-					board[x][y] = new Square(true, x, y);
-				//black squares
-				else
-					board[x][y] = new Square(false, x, y);
-			}
+				board[x][y] = new Square(false, x, y);
 		}
 	}
 	
@@ -443,7 +415,7 @@ void Table::ShowAccessibleSquares()
 			case ChessPieceType::rook:
 			{
 				//towards top
-				for (int i = activePiece->tablePosition.y - 1; i> 0; i--)
+				for (int i = activePiece->tablePosition.y - 1; i > 0; i--)
 				{
 					if (board[activePiece->tablePosition.x][i]->onSquare == nullptr)
 					{
@@ -455,7 +427,6 @@ void Table::ShowAccessibleSquares()
 						{
 							squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][i]);
 						}
-
 						break;
 					}
 				}
@@ -473,7 +444,6 @@ void Table::ShowAccessibleSquares()
 						{
 							squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][i]);
 						}
-
 						break;
 					}
 				}
@@ -482,17 +452,16 @@ void Table::ShowAccessibleSquares()
 				//towards left
 				for (int i = activePiece->tablePosition.x - 1; i > 0; i--)
 				{
-					if (board[activePiece->tablePosition.x][i]->onSquare == nullptr)
+					if (board[i][activePiece->tablePosition.y]->onSquare == nullptr)
 					{
-						squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][i]);
+						squaresToBeHighlighted.push_back(board[i][activePiece->tablePosition.y]);
 					}
 					else
 					{
-						if (board[activePiece->tablePosition.x][i]->onSquare->player != activePiece->player)
+						if (board[i][activePiece->tablePosition.y]->onSquare->player != activePiece->player)
 						{
-							squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][i]);
+							squaresToBeHighlighted.push_back(board[i][activePiece->tablePosition.y]);
 						}
-
 						break;
 					}
 				}
@@ -501,17 +470,16 @@ void Table::ShowAccessibleSquares()
 				//towards right
 				for (int i = activePiece->tablePosition.x + 1; i < 8; i++)
 				{
-					if (board[activePiece->tablePosition.x][i]->onSquare == nullptr)
+					if (board[i][activePiece->tablePosition.y]->onSquare == nullptr)
 					{
-						squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][i]);
+						squaresToBeHighlighted.push_back(board[i][activePiece->tablePosition.y]);
 					}
 					else
 					{
-						if (board[activePiece->tablePosition.x][i]->onSquare->player != activePiece->player)
+						if (board[i][activePiece->tablePosition.y]->onSquare->player != activePiece->player)
 						{
-							squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][i]);
+							squaresToBeHighlighted.push_back(board[i][activePiece->tablePosition.y]);
 						}
-
 						break;
 					}
 				}
@@ -912,7 +880,7 @@ ChessPiece* Table::GetPieceAtPosition(const std::array<int, 2> _position)
 
 void Table::SetOnTable(ChessPiece* _piece, sf::Vector2i _position)
 {
-	//board[_piece->tablePosition.x][_piece->tablePosition.x]->onSquare = nullptr;
+	board[_piece->tablePosition.x][_piece->tablePosition.y]->onSquare = nullptr;
 	_piece->tablePosition = _position;
 	_piece->GetSprite().setPosition((board[_piece->tablePosition.x][_piece->tablePosition.y]->sprite.getPosition().x), (board[_piece->tablePosition.x][_piece->tablePosition.y]->sprite.getPosition().y));
 	board[_position.x][_position.y]->onSquare = _piece;
@@ -920,7 +888,7 @@ void Table::SetOnTable(ChessPiece* _piece, sf::Vector2i _position)
 
 void Table::SetOnTable(ChessPiece* _piece, Square* _square)
 {
-	//board[_piece->tablePosition.x][_piece->tablePosition.x]->onSquare = nullptr;
+	board[_piece->tablePosition.x][_piece->tablePosition.y]->onSquare = nullptr;
 	_piece->tablePosition = _square->tablePosition;
 	_piece->GetSprite().setPosition((board[_piece->tablePosition.x][_piece->tablePosition.y]->sprite.getPosition().x), (board[_piece->tablePosition.x][_piece->tablePosition.y]->sprite.getPosition().y));
 	board[_piece->tablePosition.x][_piece->tablePosition.y]->onSquare = _piece;
@@ -933,22 +901,22 @@ Square* Table::GetSquareAtPosition(sf::Vector2i position)
 
 void Table::DebugStuff()
 {
-	int debug[8][8] = {0};
+	//int debug[8][8] = {0};
 
-	for (int i = 0; i < 8; i++)
-	{
-		for (int j = 0; j < 8; j++)
-		{
-			if (board[i][j]->onSquare != nullptr)
-			{
-				debug[i][j] = 1;
-			}
-			else
-			{
-				debug[i][j] = 2;
-			}				
-		}
-	}
+	//for (int i = 0; i < 8; i++)
+	//{
+	//	for (int j = 0; j < 8; j++)
+	//	{
+	//		if (board[i][j]->onSquare != nullptr)
+	//		{
+	//			debug[i][j] = 1;
+	//		}
+	//		else
+	//		{
+	//			debug[i][j] = 2;
+	//		}				
+	//	}
+	//}
 
 	system("cls");
 
@@ -956,11 +924,11 @@ void Table::DebugStuff()
 	{
 		for (int j = 0; j < 8; j++)
 		{
-			if (debug[i][j] == 1)
+			if (board[i][j]->onSquare != nullptr)
 			{
 				printf("X");
 			}
-			else if (debug[i][j] == 2)
+			else if (board[i][j]->onSquare == nullptr)
 			{
 				printf(".");
 			}
