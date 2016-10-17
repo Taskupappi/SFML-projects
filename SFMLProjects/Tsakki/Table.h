@@ -51,6 +51,8 @@ public:
 	
 	std::vector<Square*> GetHighlightedSquares(){ return highlightedSquares; };
 	Square* GetSquareToMove(){ return squareToMove; };
+
+	void DebugStuff();
 private:
 	std::vector<Square*> highlightedSquares;
 	std::vector<Square*> squaresToBeHighlighted;
