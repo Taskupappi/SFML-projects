@@ -75,10 +75,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Box2DCircle.cpp" />
+    <ClCompile Include="Hex.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Map.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Box2DCircle.h" />
+    <ClInclude Include="Hex.h" />
+    <ClInclude Include="Map.h" />
+    <ClInclude Include="MapGenerator.h" />
+    <ClInclude Include="Squad.h" />
+    <ClInclude Include="Unit.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
