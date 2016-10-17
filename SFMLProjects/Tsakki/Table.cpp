@@ -412,8 +412,6 @@ void Table::ShowAccessibleSquares()
 			}
 			case ChessPieceType::rook:
 			{
-				//int closestPosition[2] = { -10, -10 };
-
 				ChessPiece* tempPiece = nullptr;
 				int indexTeam = 0;
 				int indexPiece = 0;
@@ -443,7 +441,7 @@ void Table::ShowAccessibleSquares()
 				if (tempPiece == nullptr)
 				{
 					//we can highlight every square in front of the rook
-					for (int i = activePiece->tablePosition.y - 1; i < 0; i--)
+					for (int i = activePiece->tablePosition.y - 1; i > 0; i--)
 					{
 						squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][i]);
 					}
@@ -493,17 +491,17 @@ void Table::ShowAccessibleSquares()
 				if (tempPiece == nullptr)
 				{
 					//we can highlight every square behind of the rook
-					for (int i = 7; i > activePiece->tablePosition.y; i--)
+					for (int i = activePiece->tablePosition.y + 1; i < 8; i++)
 					{
-						squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][i]);
+						squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][i]);						
 					}
 				}
 				else
 				{
 					//since there is someone behind of the rook, we can only move the distance in between....
-					for (int i = (tempPiece->tablePosition.y - activePiece->tablePosition.y) - 1; i < 0; i--)
+					for (int i = (tempPiece->tablePosition.y - activePiece->tablePosition.y) - 1; i > 0; i--)
 					{
-						squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][activePiece->tablePosition.y + (i * -1)]);
+						squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][activePiece->tablePosition.y + i]);
 					}
 
 					//..unless the piece is enemy. Then we can eat that as well
