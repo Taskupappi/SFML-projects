@@ -52,34 +52,52 @@ Table::Table()
 		//rooks
 		if (i == 0 || i == 7)
 		{
-			pieces[0][i] = new ChessPiece(ChessPieceType::rook, 1, sf::Vector2i(i, 7));
+			pieces.push_back(new ChessPiece(ChessPieceType::rook, 1));
+			pieces.back()->tablePosition = sf::Vector2i(i, 7);
+			//pieces[0][i] = new ChessPiece(ChessPieceType::rook, 1);
+			//pieces[0][i]->tablePosition = sf::Vector2i(i, 7);
 		}
 		//knights
 		else if (i == 1 || i == 6)
 		{
-			pieces[0][i] = new ChessPiece(ChessPieceType::knight, 1, sf::Vector2i(i, 7));
+			pieces.push_back(new ChessPiece(ChessPieceType::knight, 1));
+			pieces.back()->tablePosition = sf::Vector2i(i, 7);
+			/*pieces[0][i] = new ChessPiece(ChessPieceType::knight, 1);
+			pieces[0][i]->tablePosition = sf::Vector2i(i, 7);*/
 		}
 		//bishops
 		else if (i == 2 || i == 5)
 		{
-			pieces[0][i] = new ChessPiece(ChessPieceType::bishop, 1, sf::Vector2i(i, 7));
+			pieces.push_back(new ChessPiece(ChessPieceType::bishop, 1));
+			pieces.back()->tablePosition = sf::Vector2i(i, 7);
+			/*pieces[0][i] = new ChessPiece(ChessPieceType::bishop, 1);
+			pieces[0][i]->tablePosition = sf::Vector2i(i, 7);*/
 		}
 		//Queen
 		else if (i == 3)
 		{
-			pieces[0][i] = new ChessPiece(ChessPieceType::queen, 1, sf::Vector2i(i, 7));
+			pieces.push_back(new ChessPiece(ChessPieceType::queen, 1));
+			pieces.back()->tablePosition = sf::Vector2i(i, 7);
+			//pieces[0][i] = new ChessPiece(ChessPieceType::queen, 1);
+			//pieces[0][i]->tablePosition = sf::Vector2i(i, 7);
 		}
 		//King
 		else if (i == 4)
 		{
-			pieces[0][i] = new ChessPiece(ChessPieceType::king, 1, sf::Vector2i(i, 7));
+			pieces.push_back(new ChessPiece(ChessPieceType::king, 1));
+			pieces.back()->tablePosition = sf::Vector2i(i, 7);
+		/*	pieces[0][i] = new ChessPiece(ChessPieceType::king, 1);
+			pieces[0][i]->tablePosition = sf::Vector2i(i, 7);*/
 		}
 	}
 
 	for (int x = 0; x < 8; x++)
 	{
 		//pawns
-		pieces[0][8 + x] = new ChessPiece(ChessPieceType::pawn, 1, sf::Vector2i(x, 6));
+		pieces.push_back(new ChessPiece(ChessPieceType::pawn, 1));
+		pieces.back()->tablePosition = sf::Vector2i(x, 6);
+	/*	pieces[0][8 + x] = new ChessPiece(ChessPieceType::pawn, 1);
+		pieces[0][8 + x]->tablePosition = sf::Vector2i(x, 6);*/
 	}
 	
 	//player 2 pieces
@@ -88,50 +106,78 @@ Table::Table()
 		//rooks
 		if (i == 0 || i == 7)
 		{
-			pieces[1][i] = new ChessPiece(ChessPieceType::rook, 2, sf::Vector2i(i, 0));
+			pieces.push_back(new ChessPiece(ChessPieceType::rook, 2));
+			pieces.back()->tablePosition = sf::Vector2i(i, 0);
+			//pieces[1][i] = new ChessPiece(ChessPieceType::rook, 2);
+			//pieces[1][i]->tablePosition = sf::Vector2i(i, 0);
 		}
 		//knights
 		else if (i == 1 || i == 6)
 		{
-			pieces[1][i] = new ChessPiece(ChessPieceType::knight, 2, sf::Vector2i(i, 0));
+			pieces.push_back(new ChessPiece(ChessPieceType::knight, 2));
+			pieces.back()->tablePosition = sf::Vector2i(i, 0);
+		/*	pieces[1][i] = new ChessPiece(ChessPieceType::knight, 2);
+			pieces[1][i]->tablePosition = sf::Vector2i(i, 0);*/
 		}
 		//bishops
 		else if (i == 2 || i == 5)
 		{
-			pieces[1][i] = new ChessPiece(ChessPieceType::bishop, 2, sf::Vector2i(i, 0));
+			pieces.push_back(new ChessPiece(ChessPieceType::bishop, 2));
+			pieces.back()->tablePosition = sf::Vector2i(i, 0);
+			/*pieces[1][i] = new ChessPiece(ChessPieceType::bishop, 2);
+			pieces[1][i]->tablePosition = sf::Vector2i(i, 0);*/
 		}
 		//Queen
 		else if (i == 3)
 		{
-			pieces[1][i] = new ChessPiece(ChessPieceType::queen, 2, sf::Vector2i(i, 0));
+			pieces.push_back(new ChessPiece(ChessPieceType::queen, 2));
+			pieces.back()->tablePosition = sf::Vector2i(i, 0);
+			/*pieces[1][i] = new ChessPiece(ChessPieceType::queen, 2);
+			pieces[1][i]->tablePosition = sf::Vector2i(i, 0);*/
 		}
 		//King
 		else if (i == 4)
 		{
-			pieces[1][i] = new ChessPiece(ChessPieceType::king, 2, sf::Vector2i(i, 0));
+			pieces.push_back(new ChessPiece(ChessPieceType::king, 2));
+			pieces.back()->tablePosition = sf::Vector2i(i, 0);
+			//pieces[1][i] = new ChessPiece(ChessPieceType::king, 2);
+			//pieces[1][i]->tablePosition = sf::Vector2i(i, 0);
 		}
 	}
 
 	for (int x = 0; x < 8; x++)
 	{
 		//pawns
-		pieces[1][8 + x] = new ChessPiece(ChessPieceType::pawn, 2, sf::Vector2i(x, 1));
+		pieces.push_back(new ChessPiece(ChessPieceType::rook, 2));
+		pieces.back()->tablePosition = sf::Vector2i(x, 1);
+	/*	pieces[1][8 + x] = new ChessPiece(ChessPieceType::pawn, 2);
+		pieces[1][8 + x]->tablePosition = sf::Vector2i(x, 1);*/
 	}
 
 	activePiece = nullptr;
 	lastActivePiece = nullptr;
-	//highlightedSquares = new std::list<Square*>();
 }
 
 Table::~Table()
 {
-	for (int i = 1; i > -1; i--)
+	std::vector<ChessPiece*>::iterator piece = pieces.end() - 1;
+	for (; piece != pieces.begin() - 1; piece--)
 	{
-		for (int y = 15; y > -1; y--)
-		{
-			delete pieces[i][y];
-		}
+		delete (*piece);
 	}
+
+	/*for each (ChessPiece* piece in pieces)
+	{
+		delete piece;
+	}*/
+
+	//for (int i = 1; i > -1; i--)
+	//{
+	//	for (int y = 15; y > -1; y--)
+	//	{
+	//		delete pieces[i][y];
+	//	}
+	//}
 
 	for (int i = 7; i > -1; i--)
 	{
@@ -154,12 +200,9 @@ void Table::Initialize()
 	}
 
 	//place all pieces on the table
-	for (int x = 0; x < 2; x++)
+	for each (ChessPiece* piece in pieces)
 	{
-		for (int y = 0; y < 16; y++)
-		{
-			pieces[x][y]->GetSprite().setPosition((board[pieces[x][y]->tablePosition.x][pieces[x][y]->tablePosition.y]->sprite.getPosition().x), (board[pieces[x][y]->tablePosition.x][pieces[x][y]->tablePosition.y]->sprite.getPosition().y));
-		}
+		SetOnTable(piece, piece->tablePosition);
 	}
 }
 
@@ -226,38 +269,38 @@ void Table::Draw(sf::RenderWindow* window)
 	//draw all the pieces on the chess table
 	for each (ChessPiece* piece in pieces)
 	{
-		window->draw(piece->GetSprite());
+		if (piece != nullptr)
+		{
+			window->draw(piece->GetSprite());
+		}
 	}
 }
 
 bool Table::SelectActivePiece(const sf::Vector2f mousePosition)
 {
 	//if mouse pressed, check if any of the chess pieces were selected
-	for (int x = 0; x < 2; x++)
+	for each (ChessPiece* piece in pieces)
 	{
-		for (int y = 0; y < 16; y++)
+		if (piece->GetSprite().getGlobalBounds().contains(mousePosition))
 		{
-			if (pieces[x][y]->GetSprite().getGlobalBounds().contains(mousePosition))
+			if (activePiece)
 			{
-				if (activePiece)
-				{
-					lastActivePiece = activePiece;
-				}
-				else
-				{
-					lastActivePiece = nullptr;
-				}
-				
-				activePiece = pieces[x][y];
+				lastActivePiece = activePiece;
+			}
+			else
+			{
+				lastActivePiece = nullptr;
+			}
 
-				if (lastActivePiece == nullptr)
-				{
-					return false;
-				}					
-				else
-				{
-					return true;
-				}										
+			activePiece = piece;
+
+			if (lastActivePiece == nullptr)
+			{
+				return false;
+			}
+			else
+			{
+				return true;
 			}
 		}
 	}
@@ -289,13 +332,9 @@ void Table::ShowAccessibleSquares()
 					
 					if (activePiece->tablePosition.y - 1 > -1)
 					{
-						for (int i = 0; i < 16; i++)
+						for each (ChessPiece* piece in pieces)
 						{
-							if ((pieces[0][i]->tablePosition.x == activePiece->tablePosition.x) && (pieces[0][i]->tablePosition.y == activePiece->tablePosition.y - 1))
-							{
-								allowMovementForward = false;
-							}
-							if ((pieces[1][i]->tablePosition.x == activePiece->tablePosition.x) && (pieces[1][i]->tablePosition.y == activePiece->tablePosition.y - 1))
+							if ((piece->tablePosition.x == activePiece->tablePosition.x) && (piece->tablePosition.y == activePiece->tablePosition.y - 1))
 							{
 								allowMovementForward = false;
 							}
@@ -310,13 +349,9 @@ void Table::ShowAccessibleSquares()
 						{
 							bool allowTwoSquareMovent = true;
 
-							for (int i = 0; i < 16; i++)
+							for each (ChessPiece* piece in pieces)
 							{
-								if ((pieces[0][i]->tablePosition.x == activePiece->tablePosition.x) && (pieces[0][i]->tablePosition.y == activePiece->tablePosition.y - 2))
-								{
-									allowTwoSquareMovent = false;
-								}
-								if ((pieces[1][i]->tablePosition.x == activePiece->tablePosition.x) && (pieces[1][i]->tablePosition.y == activePiece->tablePosition.y - 2))
+								if ((piece->tablePosition.x == activePiece->tablePosition.x) && (piece->tablePosition.y == activePiece->tablePosition.y - 2))
 								{
 									allowTwoSquareMovent = false;
 								}
@@ -335,13 +370,9 @@ void Table::ShowAccessibleSquares()
 					//if yes, don't allow movement
 					bool allowMovementForward = true;
 
-					for (int i = 0; i < 16; i++)
+					for each (ChessPiece* piece in pieces)
 					{
-						if ((pieces[0][i]->tablePosition.x == activePiece->tablePosition.x) && (pieces[0][i]->tablePosition.y == activePiece->tablePosition.y + 1))
-						{
-							allowMovementForward = false;
-						}
-						if ((pieces[1][i]->tablePosition.x == activePiece->tablePosition.x) && (pieces[1][i]->tablePosition.y == activePiece->tablePosition.y + 1))
+						if ((piece->tablePosition.x == activePiece->tablePosition.x) && (piece->tablePosition.y == activePiece->tablePosition.y + 1))
 						{
 							allowMovementForward = false;
 						}
@@ -356,15 +387,11 @@ void Table::ShowAccessibleSquares()
 						{
 							bool allowTwoSquareMovent = true;
 
-							for (int i = 0; i < 16; i++)
+							for each (ChessPiece* piece in pieces)
 							{
-								if ((pieces[0][i]->tablePosition.x == activePiece->tablePosition.x) && (pieces[0][i]->tablePosition.y == activePiece->tablePosition.y + 2))
+								if ((piece->tablePosition.x == activePiece->tablePosition.x) && (piece->tablePosition.y == activePiece->tablePosition.y + 2))
 								{
-									allowTwoSquareMovent = false;
-								}
-								if ((pieces[1][i]->tablePosition.x == activePiece->tablePosition.x) && (pieces[1][i]->tablePosition.y == activePiece->tablePosition.y + 2))
-								{
-									allowTwoSquareMovent = false;
+									allowMovementForward = false;
 								}
 							}
 
@@ -412,29 +439,26 @@ void Table::ShowAccessibleSquares()
 			}
 			case ChessPieceType::rook:
 			{
+				//infront S-N
 				ChessPiece* tempPiece = nullptr;
 				int indexTeam = 0;
 				int indexPiece = 0;
-
-				//infront S-N
-				for (; indexTeam < 2; indexTeam++)
+			
+				for each (ChessPiece* piece in pieces)
 				{
-					for (; indexPiece < 16; indexPiece++)
+					//find the closest piece in front of the rook
+					if (piece->tablePosition.x == activePiece->tablePosition.x && piece->tablePosition.y < activePiece->tablePosition.y)
 					{
-						//find the closest piece in front of the rook
-						if (pieces[indexTeam][indexPiece]->tablePosition.x == activePiece->tablePosition.x && pieces[indexTeam][indexPiece]->tablePosition.y < activePiece->tablePosition.y)
+						//set the first closest position
+						if (tempPiece == nullptr)
 						{
-							//set the first closest position
-							if (tempPiece == nullptr)
-							{
-								tempPiece = pieces[indexTeam][indexPiece];
-							}
+							tempPiece = piece;
+						}
 
-							//if someone is closer to the rook and infront of it, set its position as the closest position
-							if (tempPiece->tablePosition.y < pieces[indexTeam][indexPiece]->tablePosition.y && pieces[indexTeam][indexPiece]->tablePosition.y < activePiece->tablePosition.y)
-							{
-								tempPiece = pieces[indexTeam][indexPiece];
-							}
+						//if someone is closer to the rook and infront of it, set its position as the closest position
+						if (tempPiece->tablePosition.y < piece->tablePosition.y && piece->tablePosition.y < activePiece->tablePosition.y)
+						{
+							tempPiece = piece;
 						}
 					}
 				}
@@ -467,26 +491,23 @@ void Table::ShowAccessibleSquares()
 				indexTeam = 0;
 				indexPiece = 0;
 
-				for (; indexTeam < 2; indexTeam++)
+				for each (ChessPiece* piece in pieces)
 				{
-					for (; indexPiece < 16; indexPiece++)
+					//find the closest piece behind the rook
+					if (piece->tablePosition.x == activePiece->tablePosition.x && piece->tablePosition.y > activePiece->tablePosition.y)
 					{
-						//find the closest piece behind the rook
-						if (pieces[indexTeam][indexPiece]->tablePosition.x == activePiece->tablePosition.x && pieces[indexTeam][indexPiece]->tablePosition.y > activePiece->tablePosition.y)
+						//set the first closest position
+						if (tempPiece == nullptr)
 						{
-							//set the first closest position
-							if (tempPiece == nullptr)
-							{
-								tempPiece = pieces[indexTeam][indexPiece];
-							}
-
-							//if someone is closer to the rook and infront of it, set its position as the closest position
-							if (tempPiece->tablePosition.y > pieces[indexTeam][indexPiece]->tablePosition.y && pieces[indexTeam][indexPiece]->tablePosition.y > activePiece->tablePosition.y)
-							{
-								tempPiece = pieces[indexTeam][indexPiece];
-							}
+							tempPiece = piece;
 						}
-					}
+
+						//if someone is closer to the rook and infront of it, set its position as the closest position
+						if (tempPiece->tablePosition.y > piece->tablePosition.y && piece->tablePosition.y > activePiece->tablePosition.y)
+						{
+							tempPiece = piece;
+						}
+					}					
 				}
 				if (tempPiece == nullptr)
 				{
@@ -517,26 +538,23 @@ void Table::ShowAccessibleSquares()
 				indexTeam = 0;
 				indexPiece = 0;
 
-				for (; indexTeam < 2; indexTeam++)
+				for each (ChessPiece* piece in pieces)
 				{
-					for (; indexPiece < 16; indexPiece++)
+					//find the closest piece on the left side of the rook
+					if (piece->tablePosition.x < activePiece->tablePosition.x && piece->tablePosition.y == activePiece->tablePosition.y)
 					{
-						//find the closest piece on the left side of the rook
-						if (pieces[indexTeam][indexPiece]->tablePosition.x < activePiece->tablePosition.x && pieces[indexTeam][indexPiece]->tablePosition.y == activePiece->tablePosition.y)
+						//set the first closest position
+						if (tempPiece == nullptr)
 						{
-							//set the first closest position
-							if (tempPiece == nullptr)
-							{
-								tempPiece = pieces[indexTeam][indexPiece];
-							}
-
-							//if someone is closer to the rook on the left side of it, set its position as the closest position
-							if (tempPiece->tablePosition.x < pieces[indexTeam][indexPiece]->tablePosition.x && pieces[indexTeam][indexPiece]->tablePosition.x < activePiece->tablePosition.x)
-							{
-								tempPiece = pieces[indexTeam][indexPiece];
-							}
+							tempPiece = piece;
 						}
-					}
+
+						//if someone is closer to the rook on the left side of it, set its position as the closest position
+						if (tempPiece->tablePosition.x < piece->tablePosition.x && piece->tablePosition.x < activePiece->tablePosition.x)
+						{
+							tempPiece = piece;
+						}
+					}					
 				}
 				if (tempPiece == nullptr)
 				{
@@ -567,26 +585,24 @@ void Table::ShowAccessibleSquares()
 				indexTeam = 0;
 				indexPiece = 0;
 
-				for (; indexTeam < 2; indexTeam++)
+				for each (ChessPiece* piece in pieces)
 				{
-					for (; indexPiece < 16; indexPiece++)
+					//find the closest piece on the left side of the rook
+					if (piece->tablePosition.x > activePiece->tablePosition.x && piece->tablePosition.y == activePiece->tablePosition.y)
 					{
-						//find the closest piece on the left side of the rook
-						if (pieces[indexTeam][indexPiece]->tablePosition.x > activePiece->tablePosition.x && pieces[indexTeam][indexPiece]->tablePosition.y == activePiece->tablePosition.y)
+						//set the first closest position
+						if (tempPiece == nullptr)
 						{
-							//set the first closest position
-							if (tempPiece == nullptr)
-							{
-								tempPiece = pieces[indexTeam][indexPiece];
-							}
+							tempPiece = piece;
+						}
 
-							//if someone is closer to the rook on the left side of it, set its position as the closest position
-							if (tempPiece->tablePosition.x > pieces[indexTeam][indexPiece]->tablePosition.x && pieces[indexTeam][indexPiece]->tablePosition.x > activePiece->tablePosition.x)
-							{
-								tempPiece = pieces[indexTeam][indexPiece];
-							}
+						//if someone is closer to the rook on the left side of it, set its position as the closest position
+						if (tempPiece->tablePosition.x > piece->tablePosition.x && piece->tablePosition.x > activePiece->tablePosition.x)
+						{
+							tempPiece = piece;
 						}
 					}
+					
 				}
 				if (tempPiece == nullptr)
 				{
@@ -619,26 +635,30 @@ void Table::ShowAccessibleSquares()
 			}
 			case ChessPieceType::bishop:
 			{
-				if (activePiece->player == 1)
-				{
+				ChessPiece* tempPiece = nullptr;
+				int indexTeam = 0;
+				int indexPiece = 0;
 
-				}
+				
+
+				//top right
+
+
+
+				//top left
+
+				//bottom right
+
+				//bottom left
+
 				break;
 			}
 			case ChessPieceType::queen:
 			{
-				if (activePiece->player == 1)
-				{
-
-				}
 				break;
 			}
 			case ChessPieceType::king:
 			{
-				if (activePiece->player == 1)
-				{
-
-				}
 				break;
 			}
 			default:
@@ -776,8 +796,11 @@ bool Table::MoveActivePiece(const bool _playerOneTurn, Square* _squareToMove)
 {
 	if (activePiece)
 	{
-		activePiece->tablePosition = _squareToMove->tablePosition;
-		activePiece->GetSprite().setPosition(_squareToMove->sprite.getPosition().x, _squareToMove->sprite.getPosition().y);
+		if (_squareToMove->onSquare != nullptr)
+		{
+			EatPiece(_squareToMove->onSquare);
+		}
+		SetOnTable(activePiece, _squareToMove);
 		ClearActivePiece();
 		return true;
 	}
@@ -787,20 +810,50 @@ bool Table::MoveActivePiece(const bool _playerOneTurn, Square* _squareToMove)
 	}
 }
 
+void Table::EatPiece(ChessPiece* pieceToDelete)
+{
+	std::vector<ChessPiece*>::iterator piece = pieces.begin();
+
+	while (piece != pieces.end())
+	{
+		if ((*piece)->tablePosition == pieceToDelete->tablePosition)
+		{
+			delete *piece;
+			piece = pieces.erase(piece);
+			break;
+		}
+		piece++;
+	}
+}
+
 ChessPiece* Table::GetPieceAtPosition(const std::array<int, 2> _position)
 {
-	for (size_t i = 0; i < 2; i++)
+	for each (ChessPiece* piece in pieces)
 	{
-		for (size_t j = 0; j < 16; j++)
+		if (piece->tablePosition.x == _position[0] && piece->tablePosition.y == _position[1])
 		{
-			if (pieces[i][j]->tablePosition.x == _position[0] && pieces[i][j]->tablePosition.y == _position[1])
-			{
-				return pieces[i][j];
-			}
+			return piece;
 		}
 	}
 
 	return nullptr;
 }
 
+void Table::SetOnTable(ChessPiece* _piece, sf::Vector2i _position)
+{
+	_piece->tablePosition = _position;
+	_piece->GetSprite().setPosition((board[_piece->tablePosition.x][_piece->tablePosition.y]->sprite.getPosition().x), (board[_piece->tablePosition.x][_piece->tablePosition.y]->sprite.getPosition().y));
+	board[_position.x][_position.y]->onSquare = _piece;
+}
 
+void Table::SetOnTable(ChessPiece* _piece, Square* _square)
+{
+	_piece->tablePosition = _square->tablePosition;
+	_piece->GetSprite().setPosition((board[_piece->tablePosition.x][_piece->tablePosition.y]->sprite.getPosition().x), (board[_piece->tablePosition.x][_piece->tablePosition.y]->sprite.getPosition().y));
+	board[_piece->tablePosition.x][_piece->tablePosition.y]->onSquare = _piece;
+}
+
+Square* Table::GetSquareAtPosition(sf::Vector2i position)
+{
+	return board[position.x][position.y];
+}

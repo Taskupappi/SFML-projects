@@ -35,8 +35,15 @@ public:
 	//
 	void CheckMovement(const bool playerOneTurn, const sf::Vector2f mousePosition);
 	bool MoveActivePiece(const bool playerOneTurn, Square* squareToMove);
+	void EatPiece(ChessPiece* pieceToDelete);
+
 
 	ChessPiece* GetPieceAtPosition(const std::array<int, 2> position);
+
+	//used to move chess piece or set the position
+	void SetOnTable(ChessPiece* piece, sf::Vector2i position);
+	void SetOnTable(ChessPiece* piece, Square* squareToMove);
+	Square* GetSquareAtPosition(sf::Vector2i position);
 
 	//stuff for ending the turn
 	void ClearHighlights();
@@ -51,7 +58,8 @@ private:
 	ChessPiece* activePiece;
 	ChessPiece* lastActivePiece;
 	Square* board[8][8];
-	ChessPiece* pieces[2][16];
+	std::vector<ChessPiece*> pieces;
+	//ChessPiece* pieces[2][16];
 
 	std::vector<int[1][1]> allMoves;
 	std::array<int, 2> mouseToTablePosition;

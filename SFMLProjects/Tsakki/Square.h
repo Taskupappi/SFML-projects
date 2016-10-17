@@ -3,6 +3,8 @@
 
 #include <SFML\Graphics.hpp>
 
+#include "ChessPiece.h"
+
 class Square
 {
 public:
@@ -12,6 +14,7 @@ public:
 	sf::Sprite sprite;
 	bool isWhite;
 	const sf::Vector2i tablePosition;
+	ChessPiece* onSquare = nullptr;
 private:
 
 	sf::Texture texture;
