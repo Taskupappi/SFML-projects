@@ -6,11 +6,11 @@
 class Hex : public sf::Drawable, public sf::Transformable
 {
 public:
-	Hex();
+	Hex(const int size);
 	~Hex();
 
 private:
-	sf::CircleShape hexagon;
+	sf::CircleShape* hexagon;
 
 };
 

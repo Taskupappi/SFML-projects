@@ -1,6 +1,9 @@
 #ifndef MAPGENERATOR_H
 #define MAPGENERATOR_H
 
+#include <cstdlib>
+#include <iostream>
+#include <ctime>
 #include <vector>
 
 class MapGenerator
@@ -9,7 +12,7 @@ public:
 	MapGenerator();
 	~MapGenerator();
 
-	 GenerateNewMap(const unsigned int height, const unsigned int width);
+	 void GenerateNewMap(const unsigned int width, const unsigned int height, unsigned int fillPercentage);
 
 private:
 };
