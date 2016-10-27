@@ -4,7 +4,7 @@ ChessPiece::ChessPiece(ChessPieceType const _type, int const _player)
 {
 	//Sprite stuff
 	//texture.loadFromFile("ChessPieceSprite.png");
-	texture.loadFromFile("chesspiece.png");
+	texture.loadFromFile("Chess_Pieces_Sprite.png");
 	sprite.setTexture(texture);
 
 	//owner
@@ -14,85 +14,85 @@ ChessPiece::ChessPiece(ChessPieceType const _type, int const _player)
 	{
 		case pawn:
 		{
-			if (player == 2)
+			if (player == 1)
 			{
-				sprite.setTextureRect(sf::IntRect(50, 10, 10, 10));
+				sprite.setTextureRect(sf::IntRect(225, 0, 45, 45));
 				//sprite.setTextureRect(sf::IntRect(1667, 667, 333, 333));
 				
 			}
 			else
 			{
-				sprite.setTextureRect(sf::IntRect(50, 0, 10, 10));
+				sprite.setTextureRect(sf::IntRect(225, 45, 45, 45));
 				//sprite.setTextureRect(sf::IntRect(1667, 333, 333, 333));
 			}			
 			break;
 		}			
 		case knight:
 		{
-			if (player == 2)
+			if (player == 1)
 			{
-				sprite.setTextureRect(sf::IntRect(10, 10, 10, 10));
+				sprite.setTextureRect(sf::IntRect(135, 0, 45, 45));
 				//sprite.setTextureRect(sf::IntRect(1000, 667, 333, 333));
 			}
 			else
 			{
-				sprite.setTextureRect(sf::IntRect(10, 0, 10, 10));
+				sprite.setTextureRect(sf::IntRect(135, 45, 45, 45));
 				//sprite.setTextureRect(sf::IntRect(1000, 333, 333, 333));
 			}
 			break;
 		}
 		case rook:	
 		{
-			if (player == 2)
+			if (player == 1)
 			{
-				sprite.setTextureRect(sf::IntRect(0, 10, 10, 10));
+				sprite.setTextureRect(sf::IntRect(180, 0, 45, 45));
 				//sprite.setTextureRect(sf::IntRect(1333, 667, 333, 333));
 			}
 			else
 			{
-				sprite.setTextureRect(sf::IntRect(0, 0, 10, 10));
+				sprite.setTextureRect(sf::IntRect(180, 45, 45, 45));
 				//sprite.setTextureRect(sf::IntRect(1333, 333, 333, 333));
 			}
 			break;
 		}
 		case bishop:
 		{
-			if (player == 2)
+			if (player == 1)
 			{
-				sprite.setTextureRect(sf::IntRect(20, 10, 10, 10));
+				sprite.setTextureRect(sf::IntRect(90, 0, 45, 45));
 				//sprite.setTextureRect(sf::IntRect(667, 667, 333, 333));
 			}
 			else
 			{
-				sprite.setTextureRect(sf::IntRect(20, 0, 10, 10));
+				sprite.setTextureRect(sf::IntRect(90, 45, 45, 45));
 				//sprite.setTextureRect(sf::IntRect(667, 333, 333, 333));
 			}
 			break;
 		}
 		case queen:
 		{
-			if (player == 2)
+			if (player == 1)
 			{
-				sprite.setTextureRect(sf::IntRect(30, 10, 10, 10));
+				sprite.setTextureRect(sf::IntRect(45, 0, 45, 45));
 				//sprite.setTextureRect(sf::IntRect(333, 667, 333, 333));
 			}
 			else
 			{
-				sprite.setTextureRect(sf::IntRect(30, 0, 10, 10));
+				sprite.setTextureRect(sf::IntRect(45, 45, 45, 45));
 				//sprite.setTextureRect(sf::IntRect(333, 333, 333, 333));
 			}
 			break;
 		}
 		case king:
 		{
-			if (player == 2)
+			if (player == 1)
 			{
-				sprite.setTextureRect(sf::IntRect(40, 10, 10, 10));
+				sprite.setTextureRect(sf::IntRect(0, 0, 45, 45));
 				//sprite.setTextureRect(sf::IntRect(0, 667, 333, 333));
 			}
 			else
 			{
-				sprite.setTextureRect(sf::IntRect(40, 0, 10, 10));
+				sprite.setTextureRect(sf::IntRect(0, 45, 45, 45));
 				//sprite.setTextureRect(sf::IntRect(0, 333, 333, 333));
 			}
 			break;
@@ -101,8 +101,8 @@ ChessPiece::ChessPiece(ChessPieceType const _type, int const _player)
 			break;
 	}
 
-	sprite.setScale(5.0f, 5.0f);
-	sprite.setOrigin(5.0f, 5.0f);
+	sprite.setScale(1.00f, 1.00f);
+	sprite.setOrigin(25.5f, 25.5f);
 	//sprite.setOrigin(166.5f, 166.5f);
 	type = _type;
 

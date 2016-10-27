@@ -1,7 +1,7 @@
 #include "Hex.h"
 
 
-Hex::Hex(const int _size)
+Hex::Hex()
 {
-	hexagon = new sf::CircleShape(_size, 6);
+	hexagon = new sf::CircleShape(10, 6);
 }

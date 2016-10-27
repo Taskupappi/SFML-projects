@@ -3,10 +3,10 @@
 
 #include "SFML\Graphics.hpp"
 
-class Hex : public sf::Drawable, public sf::Transformable
+class Hex : public sf::Transformable
 {
 public:
-	Hex(const int size);
+	Hex();
 	~Hex();
 
 private:

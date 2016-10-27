@@ -120,7 +120,7 @@ Table::Table()
 	for (int x = 0; x < 8; x++)
 	{
 		//pawns
-		pieces.push_back(new ChessPiece(ChessPieceType::rook, 2));
+		pieces.push_back(new ChessPiece(ChessPieceType::pawn, 2));
 		pieces.back()->tablePosition = sf::Vector2i(x, 1);
 	/*	pieces[1][8 + x] = new ChessPiece(ChessPieceType::pawn, 2);
 		pieces[1][8 + x]->tablePosition = sf::Vector2i(x, 1);*/
@@ -338,6 +338,29 @@ void Table::ShowAccessibleSquares()
 							}
 						}
 					}
+
+					if (activePiece->tablePosition.x - 1 > -1 && activePiece->tablePosition.y - 1 > -1)
+					{
+						if (board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y - 1]->onSquare != nullptr)
+						{
+							if (board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y - 1]->onSquare->player != activePiece->player)
+							{
+								squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y - 1]);
+							}
+						}					
+					}
+
+					if (activePiece->tablePosition.x + 1 < 8 && activePiece->tablePosition.y - 1 > -1)
+					{
+						if (board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y - 1]->onSquare != nullptr)
+						{
+							if (board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y - 1]->onSquare->player != activePiece->player)
+							{
+								squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y - 1]);
+							}
+						}
+					}
+
 				}
 				else if (activePiece->player == 2)
 				{
@@ -373,6 +396,28 @@ void Table::ShowAccessibleSquares()
 							if (allowTwoSquareMovent)
 							{
 								squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][activePiece->tablePosition.y + 2]);
+							}
+						}
+					}
+
+					if (activePiece->tablePosition.x - 1 > -1 && activePiece->tablePosition.y + 1 < 8)
+					{
+						if (board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y - 1]->onSquare != nullptr)
+						{
+							if (board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y + 1]->onSquare->player != activePiece->player)
+							{
+								squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y + 1]);
+							}
+						}
+					}
+
+					if (activePiece->tablePosition.x + 1 < 8 && activePiece->tablePosition.y + 1 < 8)
+					{
+						if (board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y - 1]->onSquare != nullptr)
+						{
+							if (board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y + 1]->onSquare->player != activePiece->player)
+							{
+								squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y + 1]);
 							}
 						}
 					}
@@ -488,10 +533,10 @@ void Table::ShowAccessibleSquares()
 				int x = 1;
 				int y = 1;
 
-				//top right
-				while (x < 8 && y < 8)
-				{
-					if (board[activePiece->tablePosition.x + x][activePiece->tablePosition.y + y])
+				//bottom right
+				while (activePiece->tablePosition.x + x < 8 && activePiece->tablePosition.y + y < 8)
+				{	
+					if (board[activePiece->tablePosition.x + x][activePiece->tablePosition.y + y] != nullptr)
 					{
 						if (board[activePiece->tablePosition.x + x][activePiece->tablePosition.y + y]->onSquare == nullptr)
 						{
@@ -501,7 +546,7 @@ void Table::ShowAccessibleSquares()
 						{
 							if (board[activePiece->tablePosition.x + x][activePiece->tablePosition.y + y]->onSquare->player != activePiece->player)
 							{
-								squaresToBeHighlighted.push_back(board[i][activePiece->tablePosition.y]);
+								squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + x][activePiece->tablePosition.y + y]);
 							}
 							break;
 						}
@@ -513,37 +558,421 @@ void Table::ShowAccessibleSquares()
 
 					x++;
 					y++;
-				}			
+				}	
+
+				//bottom left
+				x = 1;
+				y = 1;
+
+				while (activePiece->tablePosition.x - x > -1 && activePiece->tablePosition.y + y < 8)
+				{		
+					if (board[activePiece->tablePosition.x - x][activePiece->tablePosition.y + y] != nullptr)
+					{
+						if (board[activePiece->tablePosition.x - x][activePiece->tablePosition.y + y]->onSquare == nullptr)
+						{
+							squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - x][activePiece->tablePosition.y + y]);
+						}
+						else
+						{
+							if (board[activePiece->tablePosition.x - x][activePiece->tablePosition.y + y]->onSquare->player != activePiece->player)
+							{
+								squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - x][activePiece->tablePosition.y + y]);
+							}
+							break;
+						}
+					}
+					else
+					{
+						break;
+					}	
+
+					x++;
+					y++;
+				}
+
+				//top right
+				x = 1;
+				y = 1;
+
+				while (activePiece->tablePosition.x + x < 8 && activePiece->tablePosition.y - y > -1)
+				{
+					if (board[activePiece->tablePosition.x + x][activePiece->tablePosition.y - y] != nullptr)
+					{
+						if (board[activePiece->tablePosition.x + x][activePiece->tablePosition.y - y]->onSquare == nullptr)
+						{
+							squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + x][activePiece->tablePosition.y - y]);
+						}
+						else
+						{
+							if (board[activePiece->tablePosition.x + x][activePiece->tablePosition.y - y]->onSquare->player != activePiece->player)
+							{
+								squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + x][activePiece->tablePosition.y - y]);
+							}
+							break;
+						}
+					}
+					else
+					{
+						break;
+					}
+
+					x++;
+					y++;
+				}
 
 				//top left
 				x = 1;
 				y = 1;
 
-				while (x < 8 && y < 8)
+				while (activePiece->tablePosition.x - x > -1 && activePiece->tablePosition.y - y > -1)
 				{
-					if (board[activePiece->tablePosition.x - x][activePiece->tablePosition.y + y])
+					if (board[activePiece->tablePosition.x - x][activePiece->tablePosition.y - y] != nullptr)
 					{
-						if (board[activePiece->tablePosition.x - x][activePiece->tablePosition.y + y]->onSquare == nullptr)
+						if (board[activePiece->tablePosition.x - x][activePiece->tablePosition.y - y]->onSquare == nullptr)
 						{
-							squaresToBeHighlighted.push_back(board[][]);
+							squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - x][activePiece->tablePosition.y - y]);
+						}
+						else
+						{
+							if (board[activePiece->tablePosition.x - x][activePiece->tablePosition.y - y]->onSquare->player != activePiece->player)
+							{
+								squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - x][activePiece->tablePosition.y - y]);
+							}
+							break;
 						}
 					}
+					else
+					{
+						break;
+					}
+
+					x++;
+					y++;
 				}
-
-				//bottom right
-				
-
-				//bottom left
-				
-
 				break;
 			}
 			case ChessPieceType::queen:
 			{
+				//towards top
+				for (int i = activePiece->tablePosition.y - 1; i > -1; i--)
+				{
+					if (board[activePiece->tablePosition.x][i]->onSquare == nullptr)
+					{
+						squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][i]);
+					}
+					else
+					{
+						if (board[activePiece->tablePosition.x][i]->onSquare->player != activePiece->player)
+						{
+							squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][i]);
+						}
+						break;
+					}
+				}
+
+				//towards bottom
+				for (int i = activePiece->tablePosition.y + 1; i < 8; i++)
+				{
+					if (board[activePiece->tablePosition.x][i]->onSquare == nullptr)
+					{
+						squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][i]);
+					}
+					else
+					{
+						if (board[activePiece->tablePosition.x][i]->onSquare->player != activePiece->player)
+						{
+							squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][i]);
+						}
+						break;
+					}
+				}
+
+				//towards left
+				for (int i = activePiece->tablePosition.x - 1; i > -1; i--)
+				{
+					if (board[i][activePiece->tablePosition.y]->onSquare == nullptr)
+					{
+						squaresToBeHighlighted.push_back(board[i][activePiece->tablePosition.y]);
+					}
+					else
+					{
+						if (board[i][activePiece->tablePosition.y]->onSquare->player != activePiece->player)
+						{
+							squaresToBeHighlighted.push_back(board[i][activePiece->tablePosition.y]);
+						}
+						break;
+					}
+				}
+
+				//towards right
+				for (int i = activePiece->tablePosition.x + 1; i < 8; i++)
+				{
+					if (board[i][activePiece->tablePosition.y]->onSquare == nullptr)
+					{
+						squaresToBeHighlighted.push_back(board[i][activePiece->tablePosition.y]);
+					}
+					else
+					{
+						if (board[i][activePiece->tablePosition.y]->onSquare->player != activePiece->player)
+						{
+							squaresToBeHighlighted.push_back(board[i][activePiece->tablePosition.y]);
+						}
+						break;
+					}
+				}
+
+				int x = 1;
+				int y = 1;
+
+				//bottom right
+				while (activePiece->tablePosition.x + x < 8 && activePiece->tablePosition.y + y < 8)
+				{
+					if (board[activePiece->tablePosition.x + x][activePiece->tablePosition.y + y] != nullptr)
+					{
+						if (board[activePiece->tablePosition.x + x][activePiece->tablePosition.y + y]->onSquare == nullptr)
+						{
+							squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + x][activePiece->tablePosition.y + y]);
+						}
+						else
+						{
+							if (board[activePiece->tablePosition.x + x][activePiece->tablePosition.y + y]->onSquare->player != activePiece->player)
+							{
+								squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + x][activePiece->tablePosition.y + y]);
+							}
+							break;
+						}
+					}
+					else
+					{
+						break;
+					}
+
+					x++;
+					y++;
+				}
+
+				//bottom left
+				x = 1;
+				y = 1;
+
+				while (activePiece->tablePosition.x - x > -1 && activePiece->tablePosition.y + y < 8)
+				{
+					if (board[activePiece->tablePosition.x - x][activePiece->tablePosition.y + y] != nullptr)
+					{
+						if (board[activePiece->tablePosition.x - x][activePiece->tablePosition.y + y]->onSquare == nullptr)
+						{
+							squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - x][activePiece->tablePosition.y + y]);
+						}
+						else
+						{
+							if (board[activePiece->tablePosition.x - x][activePiece->tablePosition.y + y]->onSquare->player != activePiece->player)
+							{
+								squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - x][activePiece->tablePosition.y + y]);
+							}
+							break;
+						}
+					}
+					else
+					{
+						break;
+					}
+
+					x++;
+					y++;
+				}
+
+				//top right
+				x = 1;
+				y = 1;
+
+				while (activePiece->tablePosition.x + x < 8 && activePiece->tablePosition.y - y > -1)
+				{
+					if (board[activePiece->tablePosition.x + x][activePiece->tablePosition.y - y] != nullptr)
+					{
+						if (board[activePiece->tablePosition.x + x][activePiece->tablePosition.y - y]->onSquare == nullptr)
+						{
+							squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + x][activePiece->tablePosition.y - y]);
+						}
+						else
+						{
+							if (board[activePiece->tablePosition.x + x][activePiece->tablePosition.y - y]->onSquare->player != activePiece->player)
+							{
+								squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + x][activePiece->tablePosition.y - y]);
+							}
+							break;
+						}
+					}
+					else
+					{
+						break;
+					}
+
+					x++;
+					y++;
+				}
+
+				//top left
+				x = 1;
+				y = 1;
+
+				while (activePiece->tablePosition.x - x > -1 && activePiece->tablePosition.y - y > -1)
+				{
+					if (board[activePiece->tablePosition.x - x][activePiece->tablePosition.y - y] != nullptr)
+					{
+						if (board[activePiece->tablePosition.x - x][activePiece->tablePosition.y - y]->onSquare == nullptr)
+						{
+							squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - x][activePiece->tablePosition.y - y]);
+						}
+						else
+						{
+							if (board[activePiece->tablePosition.x - x][activePiece->tablePosition.y - y]->onSquare->player != activePiece->player)
+							{
+								squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - x][activePiece->tablePosition.y - y]);
+							}
+							break;
+						}
+					}
+					else
+					{
+						break;
+					}
+
+					x++;
+					y++;
+				}
+
 				break;
 			}
 			case ChessPieceType::king:
 			{
+				//top
+				if (activePiece->tablePosition.y - 1 > -1)
+				{
+					if (board[activePiece->tablePosition.x][activePiece->tablePosition.y - 1]->onSquare == nullptr)
+					{
+						squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][activePiece->tablePosition.y - 1]);
+					}
+					else
+					{
+						if (board[activePiece->tablePosition.x][activePiece->tablePosition.y - 1]->onSquare->player != activePiece->player)
+						{
+							squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][activePiece->tablePosition.y - 1]);
+						}
+					}
+				}
+				
+				//bottom
+				if (activePiece->tablePosition.y + 1 < 8)
+				{
+					if (board[activePiece->tablePosition.x][activePiece->tablePosition.y + 1]->onSquare == nullptr)
+					{
+						squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][activePiece->tablePosition.y + 1]);
+					}
+					else
+					{
+						if (board[activePiece->tablePosition.x][activePiece->tablePosition.y + 1]->onSquare->player != activePiece->player)
+						{
+							squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][activePiece->tablePosition.y + 1]);
+						}
+					}
+				}
+
+				//left
+				if (activePiece->tablePosition.x - 1 > -1)
+				{
+					if (board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y]->onSquare == nullptr)
+					{
+						squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y]);
+					}
+					else
+					{
+						if (board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y]->onSquare->player != activePiece->player)
+						{
+							squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y]);
+						}
+					}
+				}
+
+				//right
+				if (activePiece->tablePosition.x + 1 < 8)
+				{
+					if (board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y]->onSquare == nullptr)
+					{
+						squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y]);
+					}
+					else
+					{
+						if (board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y]->onSquare->player != activePiece->player)
+						{
+							squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y]);
+						}
+					}
+				}
+
+				//upper left
+				if (activePiece->tablePosition.x - 1 > -1 && activePiece->tablePosition.y - 1 > -1)
+				{
+					if (board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y - 1]->onSquare == nullptr)
+					{
+						squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y - 1]);
+					}
+					else
+					{
+						if (board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y - 1]->onSquare->player != activePiece->player)
+						{
+							squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y - 1]);
+						}
+					}
+				}
+
+				//upper right
+				if (activePiece->tablePosition.x + 1 < 8 && activePiece->tablePosition.y - 1 > -1)
+				{
+					if (board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y - 1]->onSquare == nullptr)
+					{
+						squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y - 1]);
+					}
+					else
+					{
+						if (board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y - 1]->onSquare->player != activePiece->player)
+						{
+							squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y - 1]);
+						}
+					}
+				}
+
+				//lower right
+				if (activePiece->tablePosition.x + 1 < 8 && activePiece->tablePosition.y + 1 < 8)
+				{
+					if (board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y + 1]->onSquare == nullptr)
+					{
+						squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y + 1]);
+					}
+					else
+					{
+						if (board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y + 1]->onSquare->player != activePiece->player)
+						{
+							squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y + 1]);
+						}
+					}
+				}
+
+				//lower left
+				if (activePiece->tablePosition.x - 1 > -1 && activePiece->tablePosition.y + 1 < 8)
+				{
+					if (board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y + 1]->onSquare == nullptr)
+					{
+						squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y + 1]);
+					}
+					else
+					{
+						if (board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y + 1]->onSquare->player != activePiece->player)
+						{
+							squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y + 1]);
+						}
+					}
+				}
+
 				break;
 			}
 			default:
