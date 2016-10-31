@@ -446,7 +446,25 @@ bool Table::MoveActivePiece(const bool _playerOneTurn, Square* _squareToMove)
 		//update where active piece has moved so far
 		activePiece->allMoves.push_back(std::make_pair(activePiece->tablePosition, _squareToMove->tablePosition));
 		
-		//place active piece on the talbe
+		if (activePiece->type == ChessPieceType::pawn && (_squareToMove->tablePosition.y == 0 || _squareToMove->tablePosition.y == 7))
+		{
+			pieces.push_back(new ChessPiece(ChessPieceType::queen, activePiece->player));
+			pieces.back()->tablePosition = sf::Vector2i(activePiece->tablePosition.x, activePiece->tablePosition.y);
+
+			std::vector<ChessPiece*>::iterator piece = pieces.begin();
+			for (; piece != pieces.end(); piece++)
+			{
+				if ((*piece) == activePiece)
+				{
+					delete (*piece);
+					pieces.erase(piece);
+					break;
+				}
+			}
+
+			activePiece = pieces.back();
+		}
+
 		SetOnTable(activePiece, _squareToMove);
 		ClearActivePiece();
 		return true;
