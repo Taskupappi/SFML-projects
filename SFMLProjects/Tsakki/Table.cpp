@@ -258,7 +258,7 @@ bool Table::SelectActivePiece(const sf::Vector2f mousePosition)
 		if (piece->GetSprite().getGlobalBounds().contains(mousePosition))
 		{
 			if (activePiece)
-			{
+			{				
 				lastActivePiece = activePiece;
 			}
 			else
@@ -276,6 +276,11 @@ bool Table::SelectActivePiece(const sf::Vector2f mousePosition)
 			{
 				return true;
 			}
+
+			if (lastActivePiece == activePiece)
+			{
+				ClearHighlights();
+			}
 		}
 	}
 	return false;
@@ -288,699 +293,22 @@ bool Table::SelectActivePiece(ChessPiece* _piece)
 	return true;
 }
 
-//Chess piece movement!
-void Table::ShowAccessibleSquares()
+void Table::SetSquaresForHighlighting()
 {
 	if (activePiece)
 	{
-		squaresToBeHighlighted.clear();
-
-		switch (activePiece->type)
+		if (activePiece != lastActivePiece)
 		{
-			case ChessPieceType::pawn:
+			squaresToBeHighlighted.clear();
+
+			for (std::vector<sf::Vector2i>::iterator squareCoordinates = activePiece->possibleMoves.begin(); squareCoordinates != activePiece->possibleMoves.end(); squareCoordinates++)
 			{
-				if (activePiece->player == 1)
-				{
-					//check if there is a piece in front of the pawn
-					//if yes, don't allow movement
-					bool allowMovementForward = true;
-					
-					if (activePiece->tablePosition.y - 1 > -1)
-					{
-						for each (ChessPiece* piece in pieces)
-						{
-							if ((piece->tablePosition.x == activePiece->tablePosition.x) && (piece->tablePosition.y == activePiece->tablePosition.y - 1))
-							{
-								allowMovementForward = false;
-							}
-						}
-					}
-
-					if (allowMovementForward)
-					{
-						squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][activePiece->tablePosition.y - 1]);
-
-						if (!activePiece->hasMoved)
-						{
-							bool allowTwoSquareMovent = true;
-
-							for each (ChessPiece* piece in pieces)
-							{
-								if ((piece->tablePosition.x == activePiece->tablePosition.x) && (piece->tablePosition.y == activePiece->tablePosition.y - 2))
-								{
-									allowTwoSquareMovent = false;
-								}
-							}
-
-							if (allowTwoSquareMovent)
-							{
-								squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][activePiece->tablePosition.y - 2]);
-							}
-						}
-					}
-
-					if (activePiece->tablePosition.x - 1 > -1 && activePiece->tablePosition.y - 1 > -1)
-					{
-						if (board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y - 1]->onSquare != nullptr)
-						{
-							if (board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y - 1]->onSquare->player != activePiece->player)
-							{
-								squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y - 1]);
-							}
-						}					
-					}
-
-					if (activePiece->tablePosition.x + 1 < 8 && activePiece->tablePosition.y - 1 > -1)
-					{
-						if (board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y - 1]->onSquare != nullptr)
-						{
-							if (board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y - 1]->onSquare->player != activePiece->player)
-							{
-								squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y - 1]);
-							}
-						}
-					}
-
-				}
-				else if (activePiece->player == 2)
-				{
-					//check if there is a piece in front of the pawn
-					//if yes, don't allow movement
-					bool allowMovementForward = true;
-
-					for each (ChessPiece* piece in pieces)
-					{
-						if ((piece->tablePosition.x == activePiece->tablePosition.x) && (piece->tablePosition.y == activePiece->tablePosition.y + 1))
-						{
-							allowMovementForward = false;
-						}
-					}
-
-					if (activePiece->tablePosition.y + 1 < 8 && allowMovementForward)
-					{
-						//highlight the available square
-						squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][activePiece->tablePosition.y + 1]);
-
-						if (!activePiece->hasMoved)
-						{
-							bool allowTwoSquareMovent = true;
-
-							for each (ChessPiece* piece in pieces)
-							{
-								if ((piece->tablePosition.x == activePiece->tablePosition.x) && (piece->tablePosition.y == activePiece->tablePosition.y + 2))
-								{
-									allowMovementForward = false;
-								}
-							}
-
-							if (allowTwoSquareMovent)
-							{
-								squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][activePiece->tablePosition.y + 2]);
-							}
-						}
-					}
-
-					if (activePiece->tablePosition.x - 1 > -1 && activePiece->tablePosition.y + 1 < 8)
-					{
-						if (board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y - 1]->onSquare != nullptr)
-						{
-							if (board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y + 1]->onSquare->player != activePiece->player)
-							{
-								squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y + 1]);
-							}
-						}
-					}
-
-					if (activePiece->tablePosition.x + 1 < 8 && activePiece->tablePosition.y + 1 < 8)
-					{
-						if (board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y - 1]->onSquare != nullptr)
-						{
-							if (board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y + 1]->onSquare->player != activePiece->player)
-							{
-								squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y + 1]);
-							}
-						}
-					}
-				}
-
-				break;
+				squaresToBeHighlighted.push_back(board[(*squareCoordinates).x][(*squareCoordinates).y]);
 			}
-			case ChessPieceType::knight:
-			{
-				if (activePiece->tablePosition.x - 1 > -1 && activePiece->tablePosition.y - 2 > -1)
-				{
-					squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y - 2]);
-				}
-				if (activePiece->tablePosition.x + 1 < 8 && activePiece->tablePosition.y - 2 > -1)
-				{
-					squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y - 2]);
-				}
-				if (activePiece->tablePosition.x - 1 > -1 && activePiece->tablePosition.y + 2 < 8)
-				{
-					squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y + 2]);
-				}
-				if (activePiece->tablePosition.x + 1 < 8 && activePiece->tablePosition.y + 2 < 8)
-				{
-					squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y + 2]);
-				}
-				if (activePiece->tablePosition.x + 2 < 8 && activePiece->tablePosition.y - 1 > -1)
-				{
-					squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + 2][activePiece->tablePosition.y - 1]);
-				}
-				if (activePiece->tablePosition.x + 2 < 8 && activePiece->tablePosition.y + 1 < 8)
-				{
-					squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + 2][activePiece->tablePosition.y + 1]);
-				}
-				if (activePiece->tablePosition.x - 2 > -1 && activePiece->tablePosition.y - 1 > -1)
-				{
-					squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - 2][activePiece->tablePosition.y - 1]);
-				}
-				break;
-			}
-			case ChessPieceType::rook:
-			{
-				//towards top
-				for (int i = activePiece->tablePosition.y - 1; i > -1; i--)
-				{
-					if (board[activePiece->tablePosition.x][i]->onSquare == nullptr)
-					{
-						squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][i]);
-					}
-					else
-					{
-						if (board[activePiece->tablePosition.x][i]->onSquare->player != activePiece->player)
-						{
-							squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][i]);
-						}
-						break;
-					}
-				}
 
-				//towards bottom
-				for (int i = activePiece->tablePosition.y + 1; i < 8; i++)
-				{
-					if (board[activePiece->tablePosition.x][i]->onSquare == nullptr)
-					{
-						squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][i]);
-					}
-					else
-					{
-						if (board[activePiece->tablePosition.x][i]->onSquare->player != activePiece->player)
-						{
-							squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][i]);
-						}
-						break;
-					}
-				}
-				
-				//towards left
-				for (int i = activePiece->tablePosition.x - 1; i > -1; i--)
-				{
-					if (board[i][activePiece->tablePosition.y]->onSquare == nullptr)
-					{
-						squaresToBeHighlighted.push_back(board[i][activePiece->tablePosition.y]);
-					}
-					else
-					{
-						if (board[i][activePiece->tablePosition.y]->onSquare->player != activePiece->player)
-						{
-							squaresToBeHighlighted.push_back(board[i][activePiece->tablePosition.y]);
-						}
-						break;
-					}
-				}
-				
-				//towards right
-				for (int i = activePiece->tablePosition.x + 1; i < 8; i++)
-				{
-					if (board[i][activePiece->tablePosition.y]->onSquare == nullptr)
-					{
-						squaresToBeHighlighted.push_back(board[i][activePiece->tablePosition.y]);
-					}
-					else
-					{
-						if (board[i][activePiece->tablePosition.y]->onSquare->player != activePiece->player)
-						{
-							squaresToBeHighlighted.push_back(board[i][activePiece->tablePosition.y]);
-						}
-						break;
-					}
-				}
-				break;
-			}
-			case ChessPieceType::bishop:
-			{
-				int x = 1;
-				int y = 1;
-
-				//bottom right
-				while (activePiece->tablePosition.x + x < 8 && activePiece->tablePosition.y + y < 8)
-				{	
-					if (board[activePiece->tablePosition.x + x][activePiece->tablePosition.y + y] != nullptr)
-					{
-						if (board[activePiece->tablePosition.x + x][activePiece->tablePosition.y + y]->onSquare == nullptr)
-						{
-							squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + x][activePiece->tablePosition.y + y]);
-						}
-						else
-						{
-							if (board[activePiece->tablePosition.x + x][activePiece->tablePosition.y + y]->onSquare->player != activePiece->player)
-							{
-								squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + x][activePiece->tablePosition.y + y]);
-							}
-							break;
-						}
-					}
-					else
-					{
-						break;
-					}
-
-					x++;
-					y++;
-				}	
-
-				//bottom left
-				x = 1;
-				y = 1;
-
-				while (activePiece->tablePosition.x - x > -1 && activePiece->tablePosition.y + y < 8)
-				{		
-					if (board[activePiece->tablePosition.x - x][activePiece->tablePosition.y + y] != nullptr)
-					{
-						if (board[activePiece->tablePosition.x - x][activePiece->tablePosition.y + y]->onSquare == nullptr)
-						{
-							squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - x][activePiece->tablePosition.y + y]);
-						}
-						else
-						{
-							if (board[activePiece->tablePosition.x - x][activePiece->tablePosition.y + y]->onSquare->player != activePiece->player)
-							{
-								squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - x][activePiece->tablePosition.y + y]);
-							}
-							break;
-						}
-					}
-					else
-					{
-						break;
-					}	
-
-					x++;
-					y++;
-				}
-
-				//top right
-				x = 1;
-				y = 1;
-
-				while (activePiece->tablePosition.x + x < 8 && activePiece->tablePosition.y - y > -1)
-				{
-					if (board[activePiece->tablePosition.x + x][activePiece->tablePosition.y - y] != nullptr)
-					{
-						if (board[activePiece->tablePosition.x + x][activePiece->tablePosition.y - y]->onSquare == nullptr)
-						{
-							squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + x][activePiece->tablePosition.y - y]);
-						}
-						else
-						{
-							if (board[activePiece->tablePosition.x + x][activePiece->tablePosition.y - y]->onSquare->player != activePiece->player)
-							{
-								squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + x][activePiece->tablePosition.y - y]);
-							}
-							break;
-						}
-					}
-					else
-					{
-						break;
-					}
-
-					x++;
-					y++;
-				}
-
-				//top left
-				x = 1;
-				y = 1;
-
-				while (activePiece->tablePosition.x - x > -1 && activePiece->tablePosition.y - y > -1)
-				{
-					if (board[activePiece->tablePosition.x - x][activePiece->tablePosition.y - y] != nullptr)
-					{
-						if (board[activePiece->tablePosition.x - x][activePiece->tablePosition.y - y]->onSquare == nullptr)
-						{
-							squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - x][activePiece->tablePosition.y - y]);
-						}
-						else
-						{
-							if (board[activePiece->tablePosition.x - x][activePiece->tablePosition.y - y]->onSquare->player != activePiece->player)
-							{
-								squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - x][activePiece->tablePosition.y - y]);
-							}
-							break;
-						}
-					}
-					else
-					{
-						break;
-					}
-
-					x++;
-					y++;
-				}
-				break;
-			}
-			case ChessPieceType::queen:
-			{
-				//towards top
-				for (int i = activePiece->tablePosition.y - 1; i > -1; i--)
-				{
-					if (board[activePiece->tablePosition.x][i]->onSquare == nullptr)
-					{
-						squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][i]);
-					}
-					else
-					{
-						if (board[activePiece->tablePosition.x][i]->onSquare->player != activePiece->player)
-						{
-							squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][i]);
-						}
-						break;
-					}
-				}
-
-				//towards bottom
-				for (int i = activePiece->tablePosition.y + 1; i < 8; i++)
-				{
-					if (board[activePiece->tablePosition.x][i]->onSquare == nullptr)
-					{
-						squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][i]);
-					}
-					else
-					{
-						if (board[activePiece->tablePosition.x][i]->onSquare->player != activePiece->player)
-						{
-							squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][i]);
-						}
-						break;
-					}
-				}
-
-				//towards left
-				for (int i = activePiece->tablePosition.x - 1; i > -1; i--)
-				{
-					if (board[i][activePiece->tablePosition.y]->onSquare == nullptr)
-					{
-						squaresToBeHighlighted.push_back(board[i][activePiece->tablePosition.y]);
-					}
-					else
-					{
-						if (board[i][activePiece->tablePosition.y]->onSquare->player != activePiece->player)
-						{
-							squaresToBeHighlighted.push_back(board[i][activePiece->tablePosition.y]);
-						}
-						break;
-					}
-				}
-
-				//towards right
-				for (int i = activePiece->tablePosition.x + 1; i < 8; i++)
-				{
-					if (board[i][activePiece->tablePosition.y]->onSquare == nullptr)
-					{
-						squaresToBeHighlighted.push_back(board[i][activePiece->tablePosition.y]);
-					}
-					else
-					{
-						if (board[i][activePiece->tablePosition.y]->onSquare->player != activePiece->player)
-						{
-							squaresToBeHighlighted.push_back(board[i][activePiece->tablePosition.y]);
-						}
-						break;
-					}
-				}
-
-				int x = 1;
-				int y = 1;
-
-				//bottom right
-				while (activePiece->tablePosition.x + x < 8 && activePiece->tablePosition.y + y < 8)
-				{
-					if (board[activePiece->tablePosition.x + x][activePiece->tablePosition.y + y] != nullptr)
-					{
-						if (board[activePiece->tablePosition.x + x][activePiece->tablePosition.y + y]->onSquare == nullptr)
-						{
-							squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + x][activePiece->tablePosition.y + y]);
-						}
-						else
-						{
-							if (board[activePiece->tablePosition.x + x][activePiece->tablePosition.y + y]->onSquare->player != activePiece->player)
-							{
-								squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + x][activePiece->tablePosition.y + y]);
-							}
-							break;
-						}
-					}
-					else
-					{
-						break;
-					}
-
-					x++;
-					y++;
-				}
-
-				//bottom left
-				x = 1;
-				y = 1;
-
-				while (activePiece->tablePosition.x - x > -1 && activePiece->tablePosition.y + y < 8)
-				{
-					if (board[activePiece->tablePosition.x - x][activePiece->tablePosition.y + y] != nullptr)
-					{
-						if (board[activePiece->tablePosition.x - x][activePiece->tablePosition.y + y]->onSquare == nullptr)
-						{
-							squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - x][activePiece->tablePosition.y + y]);
-						}
-						else
-						{
-							if (board[activePiece->tablePosition.x - x][activePiece->tablePosition.y + y]->onSquare->player != activePiece->player)
-							{
-								squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - x][activePiece->tablePosition.y + y]);
-							}
-							break;
-						}
-					}
-					else
-					{
-						break;
-					}
-
-					x++;
-					y++;
-				}
-
-				//top right
-				x = 1;
-				y = 1;
-
-				while (activePiece->tablePosition.x + x < 8 && activePiece->tablePosition.y - y > -1)
-				{
-					if (board[activePiece->tablePosition.x + x][activePiece->tablePosition.y - y] != nullptr)
-					{
-						if (board[activePiece->tablePosition.x + x][activePiece->tablePosition.y - y]->onSquare == nullptr)
-						{
-							squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + x][activePiece->tablePosition.y - y]);
-						}
-						else
-						{
-							if (board[activePiece->tablePosition.x + x][activePiece->tablePosition.y - y]->onSquare->player != activePiece->player)
-							{
-								squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + x][activePiece->tablePosition.y - y]);
-							}
-							break;
-						}
-					}
-					else
-					{
-						break;
-					}
-
-					x++;
-					y++;
-				}
-
-				//top left
-				x = 1;
-				y = 1;
-
-				while (activePiece->tablePosition.x - x > -1 && activePiece->tablePosition.y - y > -1)
-				{
-					if (board[activePiece->tablePosition.x - x][activePiece->tablePosition.y - y] != nullptr)
-					{
-						if (board[activePiece->tablePosition.x - x][activePiece->tablePosition.y - y]->onSquare == nullptr)
-						{
-							squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - x][activePiece->tablePosition.y - y]);
-						}
-						else
-						{
-							if (board[activePiece->tablePosition.x - x][activePiece->tablePosition.y - y]->onSquare->player != activePiece->player)
-							{
-								squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - x][activePiece->tablePosition.y - y]);
-							}
-							break;
-						}
-					}
-					else
-					{
-						break;
-					}
-
-					x++;
-					y++;
-				}
-
-				break;
-			}
-			case ChessPieceType::king:
-			{
-				//top
-				if (activePiece->tablePosition.y - 1 > -1)
-				{
-					if (board[activePiece->tablePosition.x][activePiece->tablePosition.y - 1]->onSquare == nullptr)
-					{
-						squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][activePiece->tablePosition.y - 1]);
-					}
-					else
-					{
-						if (board[activePiece->tablePosition.x][activePiece->tablePosition.y - 1]->onSquare->player != activePiece->player)
-						{
-							squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][activePiece->tablePosition.y - 1]);
-						}
-					}
-				}
-				
-				//bottom
-				if (activePiece->tablePosition.y + 1 < 8)
-				{
-					if (board[activePiece->tablePosition.x][activePiece->tablePosition.y + 1]->onSquare == nullptr)
-					{
-						squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][activePiece->tablePosition.y + 1]);
-					}
-					else
-					{
-						if (board[activePiece->tablePosition.x][activePiece->tablePosition.y + 1]->onSquare->player != activePiece->player)
-						{
-							squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][activePiece->tablePosition.y + 1]);
-						}
-					}
-				}
-
-				//left
-				if (activePiece->tablePosition.x - 1 > -1)
-				{
-					if (board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y]->onSquare == nullptr)
-					{
-						squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y]);
-					}
-					else
-					{
-						if (board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y]->onSquare->player != activePiece->player)
-						{
-							squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y]);
-						}
-					}
-				}
-
-				//right
-				if (activePiece->tablePosition.x + 1 < 8)
-				{
-					if (board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y]->onSquare == nullptr)
-					{
-						squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y]);
-					}
-					else
-					{
-						if (board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y]->onSquare->player != activePiece->player)
-						{
-							squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y]);
-						}
-					}
-				}
-
-				//upper left
-				if (activePiece->tablePosition.x - 1 > -1 && activePiece->tablePosition.y - 1 > -1)
-				{
-					if (board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y - 1]->onSquare == nullptr)
-					{
-						squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y - 1]);
-					}
-					else
-					{
-						if (board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y - 1]->onSquare->player != activePiece->player)
-						{
-							squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y - 1]);
-						}
-					}
-				}
-
-				//upper right
-				if (activePiece->tablePosition.x + 1 < 8 && activePiece->tablePosition.y - 1 > -1)
-				{
-					if (board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y - 1]->onSquare == nullptr)
-					{
-						squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y - 1]);
-					}
-					else
-					{
-						if (board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y - 1]->onSquare->player != activePiece->player)
-						{
-							squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y - 1]);
-						}
-					}
-				}
-
-				//lower right
-				if (activePiece->tablePosition.x + 1 < 8 && activePiece->tablePosition.y + 1 < 8)
-				{
-					if (board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y + 1]->onSquare == nullptr)
-					{
-						squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y + 1]);
-					}
-					else
-					{
-						if (board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y + 1]->onSquare->player != activePiece->player)
-						{
-							squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y + 1]);
-						}
-					}
-				}
-
-				//lower left
-				if (activePiece->tablePosition.x - 1 > -1 && activePiece->tablePosition.y + 1 < 8)
-				{
-					if (board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y + 1]->onSquare == nullptr)
-					{
-						squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y + 1]);
-					}
-					else
-					{
-						if (board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y + 1]->onSquare->player != activePiece->player)
-						{
-							squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y + 1]);
-						}
-					}
-				}
-
-				break;
-			}
-			default:
-				break;
+			HighlightSquares();
 		}
 	}
-
-	HighlightSquares();
 }
 
 void Table::HighlightSquares()
@@ -1085,7 +413,7 @@ void Table::CheckMovement(const bool _playerOneTurn, const sf::Vector2f _mousePo
 			{
 				if (square->tablePosition.x == mouseToTablePosition[0] && square->tablePosition.y == mouseToTablePosition[1])
 				{
-					//set square where the piece will move when the turn is handled
+					//set square where the piece will move when the turn is handled					
 					squareToMove = square;
 					return;
 				}
@@ -1102,7 +430,7 @@ void Table::CheckMovement(const bool _playerOneTurn, const sf::Vector2f _mousePo
 	else
 	{
 		//there was no chess piece in the pressed square, nor was it a legal move. Thus we clear active piece
-		ClearActivePiece();
+		Deselect();
 	}
 }
 
@@ -1114,6 +442,11 @@ bool Table::MoveActivePiece(const bool _playerOneTurn, Square* _squareToMove)
 		{
 			EatPiece(_squareToMove->onSquare);
 		}
+
+		//update where active piece has moved so far
+		activePiece->allMoves.push_back(std::make_pair(activePiece->tablePosition, _squareToMove->tablePosition));
+		
+		//place active piece on the talbe
 		SetOnTable(activePiece, _squareToMove);
 		ClearActivePiece();
 		return true;
@@ -1210,4 +543,812 @@ void Table::DebugStuff()
 		}
 		printf("\n");
 	}
+}
+
+bool Table::CalculatePieceMovement()
+{
+	for (std::vector<ChessPiece*>::iterator piece = pieces.begin(); piece != pieces.end(); piece++)
+	{
+		(*piece)->possibleMoves.clear();
+
+		switch ((*piece)->type)
+		{
+			case ChessPieceType::pawn:
+			{
+				if ((*piece)->player == 1)
+				{
+					//check if there is a piece in front of the pawn
+					//if yes, don't allow movement
+					bool allowMovementForward = true;
+
+					if ((*piece)->tablePosition.y - 1 > -1)
+					{
+						for each (ChessPiece* otherPiece in pieces)
+						{
+							if ((otherPiece->tablePosition.x == (*piece)->tablePosition.x) && (otherPiece->tablePosition.y == (*piece)->tablePosition.y - 1))
+							{
+								allowMovementForward = false;
+							}
+						}
+					}
+
+					if (allowMovementForward)
+					{
+						(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x, (*piece)->tablePosition.y - 1));
+						//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][activePiece->tablePosition.y - 1]);
+
+						if ((*piece)->allMoves.empty())
+						{
+							bool allowTwoSquareMovent = true;
+
+							for each (ChessPiece* otherPiece in pieces)
+							{
+								if ((otherPiece->tablePosition.x == (*piece)->tablePosition.x) && (otherPiece->tablePosition.y == (*piece)->tablePosition.y - 2))
+								{
+									allowTwoSquareMovent = false;
+								}
+							}
+
+							if (allowTwoSquareMovent)
+							{
+								(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x, (*piece)->tablePosition.y - 2));
+								//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][activePiece->tablePosition.y - 2]);
+							}
+						}
+					}
+
+					if ((*piece)->tablePosition.x - 1 > -1 && (*piece)->tablePosition.y - 1 > -1)
+					{
+						if (board[(*piece)->tablePosition.x - 1][(*piece)->tablePosition.y - 1]->onSquare != nullptr)
+						{
+							if (board[(*piece)->tablePosition.x - 1][(*piece)->tablePosition.y - 1]->onSquare->player != (*piece)->player)
+							{
+								(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x - 1, (*piece)->tablePosition.y - 1));
+								//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y - 1]);
+							}
+						}
+					}
+
+					if ((*piece)->tablePosition.x + 1 < 8 && (*piece)->tablePosition.y - 1 > -1)
+					{
+						if (board[(*piece)->tablePosition.x + 1][(*piece)->tablePosition.y - 1]->onSquare != nullptr)
+						{
+							if (board[(*piece)->tablePosition.x + 1][(*piece)->tablePosition.y - 1]->onSquare->player != (*piece)->player)
+							{
+								(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x + 1, (*piece)->tablePosition.y - 1));
+								//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y - 1]);
+							}
+						}
+					}
+
+				}
+				else if ((*piece)->player == 2)
+				{
+					//check if there is a piece in front of the pawn
+					//if yes, don't allow movement
+					bool allowMovementForward = true;
+
+					for each (ChessPiece* otherPiece in pieces)
+					{
+						if ((otherPiece->tablePosition.x == (*piece)->tablePosition.x) && (otherPiece->tablePosition.y == (*piece)->tablePosition.y + 1))
+						{
+							allowMovementForward = false;
+						}
+					}
+
+					if ((*piece)->tablePosition.y + 1 < 8 && allowMovementForward)
+					{
+						//highlight the available square
+						(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x, (*piece)->tablePosition.y + 1));
+						//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][activePiece->tablePosition.y + 1]);
+
+						if ((*piece)->allMoves.empty())
+						{
+							bool allowTwoSquareMovement = true;
+
+							for each (ChessPiece* otherPiece in pieces)
+							{
+								if ((otherPiece->tablePosition.x == (*piece)->tablePosition.x) && (otherPiece->tablePosition.y == (*piece)->tablePosition.y + 2))
+								{
+									allowMovementForward = false;
+								}
+							}
+
+							if (allowTwoSquareMovement)
+							{
+								(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x, (*piece)->tablePosition.y + 2));
+								//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][activePiece->tablePosition.y + 2]);
+							}
+						}
+					}
+
+					if ((*piece)->tablePosition.x - 1 > -1 && (*piece)->tablePosition.y + 1 < 8)
+					{
+						if (board[(*piece)->tablePosition.x - 1][(*piece)->tablePosition.y + 1]->onSquare != nullptr)
+						{
+							if (board[(*piece)->tablePosition.x - 1][(*piece)->tablePosition.y + 1]->onSquare->player != (*piece)->player)
+							{
+								(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x - 1, (*piece)->tablePosition.y + 1));
+								//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y + 1]);
+							}
+						}
+					}
+
+					if ((*piece)->tablePosition.x + 1 < 8 && (*piece)->tablePosition.y + 1 < 8)
+					{
+						if (board[(*piece)->tablePosition.x + 1][(*piece)->tablePosition.y + 1]->onSquare != nullptr)
+						{
+							if (board[(*piece)->tablePosition.x + 1][(*piece)->tablePosition.y + 1]->onSquare->player != (*piece)->player)
+							{
+								(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x + 1, (*piece)->tablePosition.y + 1));
+								//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y - 1]);
+							}
+						}
+					}
+				}
+
+				break;
+			}
+			case ChessPieceType::knight:
+			{
+
+				if ((*piece)->tablePosition.x - 1 > -1 && (*piece)->tablePosition.y - 2 > -1)
+				{
+					if (board[(*piece)->tablePosition.x - 1][(*piece)->tablePosition.y - 2]->onSquare == nullptr)
+					(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x - 1, (*piece)->tablePosition.y - 2));
+
+					else if (board[(*piece)->tablePosition.x - 1][(*piece)->tablePosition.y - 2]->onSquare->player != (*piece)->player)
+					(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x - 1, (*piece)->tablePosition.y - 2));
+					//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y - 2]);
+				}
+
+				if ((*piece)->tablePosition.x + 1 < 8 && (*piece)->tablePosition.y - 2 > -1)
+				{
+					if (board[(*piece)->tablePosition.x + 1][(*piece)->tablePosition.y - 2]->onSquare == nullptr)
+					(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x + 1, (*piece)->tablePosition.y - 2));
+
+					else if (board[(*piece)->tablePosition.x + 1][(*piece)->tablePosition.y - 2]->onSquare->player != (*piece)->player)
+					(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x + 1, (*piece)->tablePosition.y - 2));
+					//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y - 2]);
+				}
+
+				if ((*piece)->tablePosition.x - 1 > -1 && (*piece)->tablePosition.y + 2 < 8)
+				{ 
+					if (board[(*piece)->tablePosition.x - 1][(*piece)->tablePosition.y + 2]->onSquare == nullptr)
+					(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x - 1, (*piece)->tablePosition.y + 2));
+
+					else if (board[(*piece)->tablePosition.x - 1][(*piece)->tablePosition.y + 2]->onSquare->player != (*piece)->player)
+						(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x - 1, (*piece)->tablePosition.y + 2));
+					//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y + 2]);
+				}
+
+				if ((*piece)->tablePosition.x + 1 < 8 && (*piece)->tablePosition.y + 2 < 8)
+				{
+					if (board[(*piece)->tablePosition.x + 1][(*piece)->tablePosition.y + 2]->onSquare == nullptr)
+					(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x + 1, (*piece)->tablePosition.y + 2));
+
+					else if (board[(*piece)->tablePosition.x + 1][(*piece)->tablePosition.y + 2]->onSquare->player != (*piece)->player)
+					(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x + 1, (*piece)->tablePosition.y + 2));
+					//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y + 2]);
+				}
+
+				if ((*piece)->tablePosition.x + 2 < 8 && (*piece)->tablePosition.y - 1 > -1)
+				{
+					if (board[(*piece)->tablePosition.x + 2][(*piece)->tablePosition.y - 1]->onSquare == nullptr)
+					(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x + 2, (*piece)->tablePosition.y - 1));
+
+					else if (board[(*piece)->tablePosition.x + 2][(*piece)->tablePosition.y - 1]->onSquare->player != (*piece)->player)
+					(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x + 2, (*piece)->tablePosition.y - 1));
+					//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + 2][activePiece->tablePosition.y - 1]);
+				}
+
+				if ((*piece)->tablePosition.x + 2 < 8 && (*piece)->tablePosition.y + 1 < 8)
+				{
+					if (board[(*piece)->tablePosition.x + 2][(*piece)->tablePosition.y + 1]->onSquare == nullptr)
+					(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x + 2, (*piece)->tablePosition.y + 1));
+
+					else if (board[(*piece)->tablePosition.x + 2][(*piece)->tablePosition.y + 1]->onSquare->player != (*piece)->player)
+					(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x + 2, (*piece)->tablePosition.y + 1));
+					//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + 2][activePiece->tablePosition.y + 1]);
+				}
+
+				if ((*piece)->tablePosition.x - 2 > -1 && (*piece)->tablePosition.y - 1 > -1)
+				{
+					if (board[(*piece)->tablePosition.x - 2][(*piece)->tablePosition.y - 1]->onSquare == nullptr)
+					(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x - 2, (*piece)->tablePosition.y - 1));
+
+					else if (board[(*piece)->tablePosition.x - 2][(*piece)->tablePosition.y - 1]->onSquare->player != (*piece)->player)
+					(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x - 2, (*piece)->tablePosition.y - 1));
+					//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - 2][activePiece->tablePosition.y - 1]);
+				}
+
+				if ((*piece)->tablePosition.x - 2 > -1 && (*piece)->tablePosition.y + 1 < 8)
+				{
+					if (board[(*piece)->tablePosition.x - 2][(*piece)->tablePosition.y + 1]->onSquare == nullptr)
+					(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x - 2, (*piece)->tablePosition.y + 1));
+
+					else if (board[(*piece)->tablePosition.x - 2][(*piece)->tablePosition.y + 1]->onSquare->player != (*piece)->player)
+						(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x - 2, (*piece)->tablePosition.y + 1));
+					//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - 2][activePiece->tablePosition.y - 1]);
+				}
+				break;
+			}
+			case ChessPieceType::rook:
+			{
+				//towards top
+				for (int i = (*piece)->tablePosition.y - 1; i > -1; i--)
+				{
+					if (board[(*piece)->tablePosition.x][i]->onSquare == nullptr)
+					{
+						(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x, i));
+						//squaresToBeHighlighted.push_back(board[(*piece)->tablePosition.x][i]);
+					}
+					else
+					{
+						if (board[(*piece)->tablePosition.x][i]->onSquare->player != (*piece)->player)
+						{
+							(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x, i));
+							//squaresToBeHighlighted.push_back(board[(*piece)->tablePosition.x][i]);
+						}
+						break;
+					}
+				}
+
+				//towards bottom
+				for (int i = (*piece)->tablePosition.y + 1; i < 8; i++)
+				{
+					if (board[(*piece)->tablePosition.x][i]->onSquare == nullptr)
+					{
+						(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x, i));
+						//squaresToBeHighlighted.push_back(board[(*piece)->tablePosition.x][i]);
+					}
+					else
+					{
+						if (board[(*piece)->tablePosition.x][i]->onSquare->player != (*piece)->player)
+						{
+							(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x, i));
+							//squaresToBeHighlighted.push_back(board[(*piece)->tablePosition.x][i]);
+						}
+						break;
+					}
+				}
+
+				//towards left
+				for (int i = (*piece)->tablePosition.x - 1; i > -1; i--)
+				{
+					if (board[i][(*piece)->tablePosition.y]->onSquare == nullptr)
+					{
+						(*piece)->possibleMoves.push_back(sf::Vector2i(i, (*piece)->tablePosition.y));
+						//squaresToBeHighlighted.push_back(board[i][(*piece)->tablePosition.y]);
+					}
+					else
+					{
+						if (board[i][(*piece)->tablePosition.y]->onSquare->player != (*piece)->player)
+						{
+							(*piece)->possibleMoves.push_back(sf::Vector2i(i, (*piece)->tablePosition.y));
+							//squaresToBeHighlighted.push_back(board[i][(*piece)->tablePosition.y]);
+						}
+						break;
+					}
+				}
+
+				//towards right
+				for (int i = (*piece)->tablePosition.x + 1; i < 8; i++)
+				{
+					if (board[i][(*piece)->tablePosition.y]->onSquare == nullptr)
+					{
+						(*piece)->possibleMoves.push_back(sf::Vector2i(i, (*piece)->tablePosition.y));
+						//squaresToBeHighlighted.push_back(board[i][(*piece)->tablePosition.y]);
+					}
+					else
+					{
+						if (board[i][(*piece)->tablePosition.y]->onSquare->player != (*piece)->player)
+						{
+							(*piece)->possibleMoves.push_back(sf::Vector2i(i, (*piece)->tablePosition.y));
+							//squaresToBeHighlighted.push_back(board[i][(*piece)->tablePosition.y]);
+						}
+						break;
+					}
+				}
+				break;
+			}
+			case ChessPieceType::bishop:
+			{
+				int x = 1;
+				int y = 1;
+
+				//bottom right
+				while ((*piece)->tablePosition.x + x < 8 && (*piece)->tablePosition.y + y < 8)
+				{
+					if (board[(*piece)->tablePosition.x + x][(*piece)->tablePosition.y + y] != nullptr)
+					{
+						if (board[(*piece)->tablePosition.x + x][(*piece)->tablePosition.y + y]->onSquare == nullptr)
+						{
+							(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x + x, (*piece)->tablePosition.y + y));
+							//squaresToBeHighlighted.push_back(board[(*piece)->tablePosition.x + x][(*piece)->tablePosition.y + y]);
+						}
+						else
+						{
+							if (board[(*piece)->tablePosition.x + x][(*piece)->tablePosition.y + y]->onSquare->player != (*piece)->player)
+							{
+								(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x + x, (*piece)->tablePosition.y + y));
+								//squaresToBeHighlighted.push_back(board[(*piece)->tablePosition.x + x][(*piece)->tablePosition.y + y]);
+							}
+							break;
+						}
+					}
+					else
+					{
+						break;
+					}
+
+					x++;
+					y++;
+				}
+
+				//bottom left
+				x = 1;
+				y = 1;
+
+				while ((*piece)->tablePosition.x - x > -1 && (*piece)->tablePosition.y + y < 8)
+				{
+					if (board[(*piece)->tablePosition.x - x][(*piece)->tablePosition.y + y] != nullptr)
+					{
+						if (board[(*piece)->tablePosition.x - x][(*piece)->tablePosition.y + y]->onSquare == nullptr)
+						{
+							(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x - x, (*piece)->tablePosition.y + y));
+							//squaresToBeHighlighted.push_back(board[(*piece)->tablePosition.x - x][(*piece)->tablePosition.y + y]);
+						}
+						else
+						{
+							if (board[(*piece)->tablePosition.x - x][(*piece)->tablePosition.y + y]->onSquare->player != (*piece)->player)
+							{
+								(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x - x, (*piece)->tablePosition.y + y));
+								//squaresToBeHighlighted.push_back(board[(*piece)->tablePosition.x - x][(*piece)->tablePosition.y + y]);
+							}
+							break;
+						}
+					}
+					else
+					{
+						break;
+					}
+
+					x++;
+					y++;
+				}
+
+				//top right
+				x = 1;
+				y = 1;
+
+				while ((*piece)->tablePosition.x + x < 8 && (*piece)->tablePosition.y - y > -1)
+				{
+					if (board[(*piece)->tablePosition.x + x][(*piece)->tablePosition.y - y] != nullptr)
+					{
+						if (board[(*piece)->tablePosition.x + x][(*piece)->tablePosition.y - y]->onSquare == nullptr)
+						{
+							(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x + x, (*piece)->tablePosition.y - y));
+							//squaresToBeHighlighted.push_back(board[(*piece)->tablePosition.x + x][(*piece)->tablePosition.y - y]);
+						}
+						else
+						{
+							if (board[(*piece)->tablePosition.x + x][(*piece)->tablePosition.y - y]->onSquare->player != (*piece)->player)
+							{
+								(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x + x, (*piece)->tablePosition.y - y));
+								//squaresToBeHighlighted.push_back(board[(*piece)->tablePosition.x + x][(*piece)->tablePosition.y - y]);
+							}
+							break;
+						}
+					}
+					else
+					{
+						break;
+					}
+
+					x++;
+					y++;
+				}
+
+				//top left
+				x = 1;
+				y = 1;
+
+				while ((*piece)->tablePosition.x - x > -1 && (*piece)->tablePosition.y - y > -1)
+				{
+					if (board[(*piece)->tablePosition.x - x][(*piece)->tablePosition.y - y] != nullptr)
+					{
+						if (board[(*piece)->tablePosition.x - x][(*piece)->tablePosition.y - y]->onSquare == nullptr)
+						{
+							(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x - x, (*piece)->tablePosition.y - y));
+							//squaresToBeHighlighted.push_back(board[(*piece)->tablePosition.x - x][(*piece)->tablePosition.y - y]);
+						}
+						else
+						{
+							if (board[(*piece)->tablePosition.x - x][(*piece)->tablePosition.y - y]->onSquare->player != (*piece)->player)
+							{
+								(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x - x, (*piece)->tablePosition.y - y));
+								//squaresToBeHighlighted.push_back(board[(*piece)->tablePosition.x - x][(*piece)->tablePosition.y - y]);
+							}
+							break;
+						}
+					}
+					else
+					{
+						break;
+					}
+
+					x++;
+					y++;
+				}
+				break;
+			}
+			case ChessPieceType::queen:
+			{
+				//towards top
+				for (int i = (*piece)->tablePosition.y - 1; i > -1; i--)
+				{
+					if (board[(*piece)->tablePosition.x][i]->onSquare == nullptr)
+					{
+						(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x, i));
+						//squaresToBeHighlighted.push_back(board[(*piece)->tablePosition.x][i]);
+					}
+					else
+					{
+						if (board[(*piece)->tablePosition.x][i]->onSquare->player != (*piece)->player)
+						{
+							(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x, i));
+							//squaresToBeHighlighted.push_back(board[(*piece)->tablePosition.x][i]);
+						}
+						break;
+					}
+				}
+
+				//towards bottom
+				for (int i = (*piece)->tablePosition.y + 1; i < 8; i++)
+				{
+					if (board[(*piece)->tablePosition.x][i]->onSquare == nullptr)
+					{
+						(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x, i));
+						//squaresToBeHighlighted.push_back(board[(*piece)->tablePosition.x][i]);
+					}
+					else
+					{
+						if (board[(*piece)->tablePosition.x][i]->onSquare->player != (*piece)->player)
+						{
+							(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x, i));
+							//squaresToBeHighlighted.push_back(board[(*piece)->tablePosition.x][i]);
+						}
+						break;
+					}
+				}
+
+				//towards left
+				for (int i = (*piece)->tablePosition.x - 1; i > -1; i--)
+				{
+					if (board[i][(*piece)->tablePosition.y]->onSquare == nullptr)
+					{
+						(*piece)->possibleMoves.push_back(sf::Vector2i(i, (*piece)->tablePosition.y));
+						//squaresToBeHighlighted.push_back(board[i][(*piece)->tablePosition.y]);
+					}
+					else
+					{
+						if (board[i][(*piece)->tablePosition.y]->onSquare->player != (*piece)->player)
+						{
+							(*piece)->possibleMoves.push_back(sf::Vector2i(i, (*piece)->tablePosition.y));
+							//squaresToBeHighlighted.push_back(board[i][(*piece)->tablePosition.y]);
+						}
+						break;
+					}
+				}
+
+				//towards right
+				for (int i = (*piece)->tablePosition.x + 1; i < 8; i++)
+				{
+					if (board[i][(*piece)->tablePosition.y]->onSquare == nullptr)
+					{
+						(*piece)->possibleMoves.push_back(sf::Vector2i(i, (*piece)->tablePosition.y));
+						//squaresToBeHighlighted.push_back(board[i][(*piece)->tablePosition.y]);
+					}
+					else
+					{
+						if (board[i][(*piece)->tablePosition.y]->onSquare->player != (*piece)->player)
+						{
+							(*piece)->possibleMoves.push_back(sf::Vector2i(i, (*piece)->tablePosition.y));
+							//squaresToBeHighlighted.push_back(board[i][(*piece)->tablePosition.y]);
+						}
+						break;
+					}
+				}
+
+				int x = 1;
+				int y = 1;
+
+				//bottom right
+				while ((*piece)->tablePosition.x + x < 8 && (*piece)->tablePosition.y + y < 8)
+				{
+					if (board[(*piece)->tablePosition.x + x][(*piece)->tablePosition.y + y] != nullptr)
+					{
+						if (board[(*piece)->tablePosition.x + x][(*piece)->tablePosition.y + y]->onSquare == nullptr)
+						{
+							(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x + x, (*piece)->tablePosition.y + y));
+							//squaresToBeHighlighted.push_back(board[(*piece)->tablePosition.x + x][(*piece)->tablePosition.y + y]);
+						}
+						else
+						{
+							if (board[(*piece)->tablePosition.x + x][(*piece)->tablePosition.y + y]->onSquare->player != (*piece)->player)
+							{
+								(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x + x, (*piece)->tablePosition.y + y));
+								//squaresToBeHighlighted.push_back(board[(*piece)->tablePosition.x + x][(*piece)->tablePosition.y + y]);
+							}
+							break;
+						}
+					}
+					else
+					{
+						break;
+					}
+
+					x++;
+					y++;
+				}
+
+				//bottom left
+				x = 1;
+				y = 1;
+
+				while ((*piece)->tablePosition.x - x > -1 && (*piece)->tablePosition.y + y < 8)
+				{
+					if (board[(*piece)->tablePosition.x - x][(*piece)->tablePosition.y + y] != nullptr)
+					{
+						if (board[(*piece)->tablePosition.x - x][(*piece)->tablePosition.y + y]->onSquare == nullptr)
+						{
+							(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x - x, (*piece)->tablePosition.y + y));
+							//squaresToBeHighlighted.push_back(board[(*piece)->tablePosition.x - x][(*piece)->tablePosition.y + y]);
+						}
+						else
+						{
+							if (board[(*piece)->tablePosition.x - x][(*piece)->tablePosition.y + y]->onSquare->player != (*piece)->player)
+							{
+								(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x - x, (*piece)->tablePosition.y + y));
+								//squaresToBeHighlighted.push_back(board[(*piece)->tablePosition.x - x][(*piece)->tablePosition.y + y]);
+							}
+							break;
+						}
+					}
+					else
+					{
+						break;
+					}
+
+					x++;
+					y++;
+				}
+
+				//top right
+				x = 1;
+				y = 1;
+
+				while ((*piece)->tablePosition.x + x < 8 && (*piece)->tablePosition.y - y > -1)
+				{
+					if (board[(*piece)->tablePosition.x + x][(*piece)->tablePosition.y - y] != nullptr)
+					{
+						if (board[(*piece)->tablePosition.x + x][(*piece)->tablePosition.y - y]->onSquare == nullptr)
+						{
+							(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x + x, (*piece)->tablePosition.y - y));
+							//squaresToBeHighlighted.push_back(board[(*piece)->tablePosition.x + x][(*piece)->tablePosition.y - y]);
+						}
+						else
+						{
+							if (board[(*piece)->tablePosition.x + x][(*piece)->tablePosition.y - y]->onSquare->player != (*piece)->player)
+							{
+								(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x + x, (*piece)->tablePosition.y - y));
+								//squaresToBeHighlighted.push_back(board[(*piece)->tablePosition.x + x][(*piece)->tablePosition.y - y]);
+							}
+							break;
+						}
+					}
+					else
+					{
+						break;
+					}
+
+					x++;
+					y++;
+				}
+
+				//top left
+				x = 1;
+				y = 1;
+
+				while ((*piece)->tablePosition.x - x > -1 && (*piece)->tablePosition.y - y > -1)
+				{
+					if (board[(*piece)->tablePosition.x - x][(*piece)->tablePosition.y - y] != nullptr)
+					{
+						if (board[(*piece)->tablePosition.x - x][(*piece)->tablePosition.y - y]->onSquare == nullptr)
+						{
+							(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x - x, (*piece)->tablePosition.y - y));
+							//squaresToBeHighlighted.push_back(board[(*piece)->tablePosition.x - x][(*piece)->tablePosition.y - y]);
+						}
+						else
+						{
+							if (board[(*piece)->tablePosition.x - x][(*piece)->tablePosition.y - y]->onSquare->player != (*piece)->player)
+							{
+								(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x - x, (*piece)->tablePosition.y - y));
+								//squaresToBeHighlighted.push_back(board[(*piece)->tablePosition.x - x][(*piece)->tablePosition.y - y]);
+							}
+							break;
+						}
+					}
+					else
+					{
+						break;
+					}
+
+					x++;
+					y++;
+				}
+
+				break;
+			}
+			case ChessPieceType::king:
+			{
+				//top
+				if ((*piece)->tablePosition.y - 1 > -1)
+				{
+					if (board[(*piece)->tablePosition.x][(*piece)->tablePosition.y - 1]->onSquare == nullptr)
+					{
+						(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x, (*piece)->tablePosition.y - 1));
+						//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][activePiece->tablePosition.y - 1]);
+					}
+					else
+					{
+						if (board[(*piece)->tablePosition.x][(*piece)->tablePosition.y - 1]->onSquare->player != (*piece)->player)
+						{
+							(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x, (*piece)->tablePosition.y - 1));
+							//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][activePiece->tablePosition.y - 1]);
+						}
+					}
+				}
+
+				//bottom
+				if ((*piece)->tablePosition.y + 1 < 8)
+				{
+					if (board[(*piece)->tablePosition.x][(*piece)->tablePosition.y + 1]->onSquare == nullptr)
+					{
+						(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x, (*piece)->tablePosition.y + 1));
+						//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][activePiece->tablePosition.y + 1]);
+					}
+					else
+					{
+						if (board[(*piece)->tablePosition.x][(*piece)->tablePosition.y + 1]->onSquare->player != (*piece)->player)
+						{
+							(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x, (*piece)->tablePosition.y + 1));
+							//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][activePiece->tablePosition.y + 1]);
+						}
+					}
+				}
+
+				//left
+				if ((*piece)->tablePosition.x - 1 > -1)
+				{
+					if (board[(*piece)->tablePosition.x - 1][(*piece)->tablePosition.y]->onSquare == nullptr)
+					{
+						(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x - 1, (*piece)->tablePosition.y));
+						//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y]);
+					}
+					else
+					{
+						if (board[(*piece)->tablePosition.x - 1][(*piece)->tablePosition.y]->onSquare->player != (*piece)->player)
+						{
+							(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x - 1, (*piece)->tablePosition.y));
+							//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y]);
+						}
+					}
+				}
+
+				//right
+				if ((*piece)->tablePosition.x + 1 < 8)
+				{
+					if (board[(*piece)->tablePosition.x + 1][(*piece)->tablePosition.y]->onSquare == nullptr)
+					{
+						(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x + 1, (*piece)->tablePosition.y));
+						//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y]);
+					}
+					else
+					{
+						if (board[(*piece)->tablePosition.x + 1][(*piece)->tablePosition.y]->onSquare->player != (*piece)->player)
+						{
+							(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x + 1, (*piece)->tablePosition.y));
+							//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y]);
+						}
+					}
+				}
+
+				//upper left
+				if ((*piece)->tablePosition.x - 1 > -1 && (*piece)->tablePosition.y - 1 > -1)
+				{
+					if (board[(*piece)->tablePosition.x - 1][(*piece)->tablePosition.y - 1]->onSquare == nullptr)
+					{
+						(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x - 1, (*piece)->tablePosition.y - 1));
+						//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y - 1]);
+					}
+					else
+					{
+						if (board[(*piece)->tablePosition.x - 1][(*piece)->tablePosition.y - 1]->onSquare->player != (*piece)->player)
+						{
+							(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x - 1, (*piece)->tablePosition.y - 1));
+							//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y - 1]);
+						}
+					}
+				}
+
+				//upper right
+				if ((*piece)->tablePosition.x + 1 < 8 && (*piece)->tablePosition.y - 1 > -1)
+				{
+					if (board[(*piece)->tablePosition.x + 1][(*piece)->tablePosition.y - 1]->onSquare == nullptr)
+					{
+						(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x + 1, (*piece)->tablePosition.y - 1));
+						//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y - 1]);
+					}
+					else
+					{
+						if (board[(*piece)->tablePosition.x + 1][(*piece)->tablePosition.y - 1]->onSquare->player != (*piece)->player)
+						{
+							(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x + 1, (*piece)->tablePosition.y - 1));
+							//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y - 1]);
+						}
+					}
+				}
+
+				//lower right
+				if ((*piece)->tablePosition.x + 1 < 8 && (*piece)->tablePosition.y + 1 < 8)
+				{
+					if (board[(*piece)->tablePosition.x + 1][(*piece)->tablePosition.y + 1]->onSquare == nullptr)
+					{
+						(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x + 1, (*piece)->tablePosition.y + 1));
+						//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y + 1]);
+					}
+					else
+					{
+						if (board[(*piece)->tablePosition.x + 1][(*piece)->tablePosition.y + 1]->onSquare->player != (*piece)->player)
+						{
+							(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x + 1, (*piece)->tablePosition.y + 1));
+							//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y + 1]);
+						}
+					}
+				}
+
+				//lower left
+				if ((*piece)->tablePosition.x - 1 > -1 && (*piece)->tablePosition.y + 1 < 8)
+				{
+					if (board[(*piece)->tablePosition.x - 1][(*piece)->tablePosition.y + 1]->onSquare == nullptr)
+					{
+						(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x - 1, (*piece)->tablePosition.y + 1));
+						//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y + 1]);
+					}
+					else
+					{
+						if (board[(*piece)->tablePosition.x - 1][(*piece)->tablePosition.y + 1]->onSquare->player != (*piece)->player)
+						{
+							(*piece)->possibleMoves.push_back(sf::Vector2i((*piece)->tablePosition.x - 1, (*piece)->tablePosition.y + 1));
+							//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y + 1]);
+						}
+					}
+				}
+
+				break;
+			}
+			default:
+				break;
+		}		
+	}
+
+	return true;
+}
+
+void Table::Deselect()
+{
+	ClearHighlights();
+	ClearActivePiece();
 }

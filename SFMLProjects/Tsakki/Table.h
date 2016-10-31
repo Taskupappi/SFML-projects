@@ -18,7 +18,13 @@ public:
 	void Initialize();
 	void Uninitialize();
 
-	void ShowAccessibleSquares();
+	//calculates movement for every piece in the beginning of the turn
+	//done only once each turn!
+	bool CalculatePieceMovement();
+
+	//set active piece's accessible squares to the "ToBeHighlighted" -vector
+	void SetSquaresForHighlighting();
+	//handles actual highlighting
 	void HighlightSquares();
 
 	//for mouse position
@@ -32,11 +38,13 @@ public:
 	std::vector<int[1][1]> GetLegalPositions();
 	std::array<int, 2> MousePositionToTablePosition(sf::Vector2f mousePosition);
 
-	//
+	//presets player movement before the buttons are selected
 	void CheckMovement(const bool playerOneTurn, const sf::Vector2f mousePosition);
+	
+	//
 	bool MoveActivePiece(const bool playerOneTurn, Square* squareToMove);
+	
 	void EatPiece(ChessPiece* pieceToDelete);
-
 
 	ChessPiece* GetPieceAtPosition(const std::array<int, 2> position);
 
@@ -51,6 +59,9 @@ public:
 	
 	std::vector<Square*> GetHighlightedSquares(){ return highlightedSquares; };
 	Square* GetSquareToMove(){ return squareToMove; };
+
+	//Input stuff
+	void Deselect();
 
 	void DebugStuff();
 private:

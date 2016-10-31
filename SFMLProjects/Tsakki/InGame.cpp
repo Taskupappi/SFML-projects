@@ -6,8 +6,20 @@ void InGame::Initialize()
 	playerOneTurn = true;
 }
 
+void InGame::BeginTurn(sf::RenderWindow* _window)
+{
+	//Do this only once per turn
+	board.CalculatePieceMovement();
+	beginTurnStep = false;
+}
+
 void InGame::Loop(sf::RenderWindow* _window, const sf::Vector2f _mousePosition)
 {
+	if (beginTurnStep)
+	{
+		BeginTurn(_window);
+	}
+
 	//logic
 	HandleTurn(_window, _mousePosition);
 
@@ -19,18 +31,21 @@ void InGame::Loop(sf::RenderWindow* _window, const sf::Vector2f _mousePosition)
 	this->Draw(_window);
 
 	_window->display();
+	
 }
 
 bool InGame::HandleTurn(sf::RenderWindow* _window, const sf::Vector2f _mousePosition)
 {
 	//board.SelectActivePiece(_mousePosition);
-	board.ShowAccessibleSquares();
+	
+	board.SetSquaresForHighlighting();
 
 	if (playerOneTurn)
 	{		
 		if (Move())
 		{
 			EndTurn();
+			return true;
 		}
 	}
 	else
@@ -38,6 +53,7 @@ bool InGame::HandleTurn(sf::RenderWindow* _window, const sf::Vector2f _mousePosi
 		if (Move())
 		{
 			EndTurn();
+			return true;
 		}
 	}
 
@@ -49,6 +65,10 @@ bool InGame::Move()
 	if (board.GetSquareToMove())
 	{
 		return board.MoveActivePiece(playerOneTurn, board.GetSquareToMove());		
+	}
+	else
+	{
+		return false;
 	}
 }
 
@@ -73,8 +93,8 @@ void InGame::EndTurn()
 		playerOneTurn = true;
 	}
 
-	board.ClearActivePiece();
-	
+	beginTurnStep = true;
+	board.ClearActivePiece();	
 	//movementDone = false;
 }
 
@@ -83,22 +103,30 @@ void InGame::Uninitialize()
 	board.Uninitialize();
 }
 
-void InGame::HandleInput(const sf::Event::EventType event, const sf::Vector2f _mousePosition)
+void InGame::HandleInput(const sf::Event _inputEvent, const sf::Vector2f _mousePosition)
 {
 	mouseToBoardPosition = board.MousePositionToTablePosition(_mousePosition);
 
-	switch (event)
-	{
+	switch (_inputEvent.type)
+	{	
 		case sf::Event::MouseButtonReleased:
-		{
-			if (board.GetActivePiece())
+		{			
+			if (_inputEvent.mouseButton.button == sf::Mouse::Left)
 			{
-				board.CheckMovement(playerOneTurn, _mousePosition);
+				if (board.GetActivePiece())
+				{
+					board.CheckMovement(playerOneTurn, _mousePosition);
+				}
+				else
+				{
+					board.SelectActivePiece(_mousePosition);
+				}
 			}
-			else
+			else if (_inputEvent.mouseButton.button == sf::Mouse::Right)
 			{
-				board.SelectActivePiece(_mousePosition);
+				board.Deselect();
 			}
+			
 			break;
 		}
 		default:

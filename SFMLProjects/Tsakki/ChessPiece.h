@@ -28,11 +28,11 @@ public:
 	sf::Sprite& GetSprite(){ return sprite; };
 
 	int player;
-	bool hasMoved = false;
 	ChessPieceType type;
 	sf::Vector2i tablePosition;
+	sf::Vector2i lastPosition;
 	std::vector<sf::Vector2i> possibleMoves;
-	std::vector<sf::Vector2i> allMoves;
+	std::vector<std::pair<sf::Vector2i, sf::Vector2i>> allMoves;
 private:
 	sf::Sprite sprite;
 	sf::Texture texture;

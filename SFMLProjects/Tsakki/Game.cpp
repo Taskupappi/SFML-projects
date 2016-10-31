@@ -59,7 +59,7 @@ void Game::HandleInput()
 		}
 		else
 		{
-			stateManager.GetState()->HandleInput(event.type, mousePosition);
+			stateManager.GetState()->HandleInput(event, mousePosition);
 		}
 	}
 }
