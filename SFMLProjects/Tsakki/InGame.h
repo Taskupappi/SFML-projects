@@ -4,6 +4,7 @@
 #include "GameState.h"
 #include "Table.h"
 #include "ChessPiece.h"
+#include "TextManager.h"
 
 class InGame : public GameState
 {
@@ -13,9 +14,9 @@ public:
 
 	//InGame state core
 	void Initialize();
-	void Loop(sf::RenderWindow* window, const sf::Vector2f mousePosition);
+	void Loop(sf::RenderWindow* window, const sf::Vector2f mousePosition,TextManager textManager);
 	void Uninitialize();
-	void Draw(sf::RenderWindow* window);
+	void Draw(sf::RenderWindow* window, TextManager textManager);
 	void HandleInput(const sf::Event inputEvent, const sf::Vector2f mousePosition);
 
 	//bool Move(const int player, const sf::Vector2f mousePosition);
@@ -28,6 +29,9 @@ public:
 	//bool HandleInput();
 	bool Move();
 
+
+	//text stuff
+	void SetPlayerTurnText(TextManager textManager);
 private:
 	bool beginTurnStep = true;
 	bool endTurn = false;

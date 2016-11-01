@@ -79,6 +79,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Square.cpp" />
     <ClCompile Include="Table.cpp" />
+    <ClCompile Include="TextManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ChessPiece.h" />
@@ -89,6 +90,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="Square.h" />
     <ClInclude Include="Table.h" />
+    <ClInclude Include="TextManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="ChessboardSquares.jpg" />

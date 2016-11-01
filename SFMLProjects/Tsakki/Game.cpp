@@ -43,7 +43,7 @@ void Game::Loop()
 		//printf("x: %f \ny: %f \n", mousePosition.x, mousePosition.y);
 
 		//run state main loop
-		stateManager.GetState()->Loop(window, mousePosition);
+		stateManager.GetState()->Loop(window, mousePosition, textManager);
 	}
 }
 

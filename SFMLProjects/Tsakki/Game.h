@@ -2,6 +2,7 @@
 #define GAME_H
 
 #include "GameStateManager.h"
+#include "TextManager.h"
 
 class Game
 {
@@ -20,6 +21,7 @@ private:
 	sf::Vector2u* screenResolution;
 	sf::RenderWindow* window;
 	GameStateManager stateManager;
+	TextManager textManager;
 };
 
 #endif

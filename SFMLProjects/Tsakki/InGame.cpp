@@ -13,11 +13,24 @@ void InGame::BeginTurn(sf::RenderWindow* _window)
 	beginTurnStep = false;
 }
 
-void InGame::Loop(sf::RenderWindow* _window, const sf::Vector2f _mousePosition)
+void InGame::SetPlayerTurnText(TextManager _textManager)
+{
+	if (playerOneTurn)
+	{
+		_textManager.AddText(TEXTTYPE::PLAYERTURN,"Player 1 Turn");
+	}
+	else
+	{
+		_textManager.AddText(TEXTTYPE::PLAYERTURN, "Player 2 Turn");
+	}
+}
+
+void InGame::Loop(sf::RenderWindow* _window, const sf::Vector2f _mousePosition, TextManager _textManager)
 {
 	if (beginTurnStep)
 	{
 		BeginTurn(_window);
+		SetPlayerTurnText(_textManager);
 	}
 
 	//logic
@@ -27,8 +40,9 @@ void InGame::Loop(sf::RenderWindow* _window, const sf::Vector2f _mousePosition)
 	_window->clear();
 
 	//Here we draw all the pieces,
-	//squares and highlights
-	this->Draw(_window);
+	//squares, highlights and text
+	//
+	this->Draw(_window, _textManager);
 
 	_window->display();
 	
@@ -72,11 +86,13 @@ bool InGame::Move()
 	}
 }
 
-void InGame::Draw(sf::RenderWindow* _window)
+void InGame::Draw(sf::RenderWindow* _window, TextManager _textManager)
 {
 	_window->clear(sf::Color(0, 0, 150, 255));
 
 	board.Draw(_window);
+	
+	_textManager.Draw(_window);
 }
 
 void InGame::EndTurn()
