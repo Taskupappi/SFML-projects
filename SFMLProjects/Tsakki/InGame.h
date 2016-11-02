@@ -14,9 +14,9 @@ public:
 
 	//InGame state core
 	void Initialize();
-	void Loop(sf::RenderWindow* window, const sf::Vector2f mousePosition,TextManager textManager);
+	void Loop(sf::RenderWindow* window, const sf::Vector2f mousePosition,TextManager* textManager);
 	void Uninitialize();
-	void Draw(sf::RenderWindow* window, TextManager textManager);
+	void Draw(sf::RenderWindow* window, TextManager* textManager);
 	void HandleInput(const sf::Event inputEvent, const sf::Vector2f mousePosition);
 
 	//bool Move(const int player, const sf::Vector2f mousePosition);
@@ -31,7 +31,7 @@ public:
 
 
 	//text stuff
-	void SetPlayerTurnText(TextManager textManager);
+	void SetPlayerTurnText(TextManager* textManager);
 private:
 	bool beginTurnStep = true;
 	bool endTurn = false;

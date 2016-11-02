@@ -21,7 +21,7 @@ private:
 	sf::Vector2u* screenResolution;
 	sf::RenderWindow* window;
 	GameStateManager stateManager;
-	TextManager textManager;
+	TextManager* textManager;
 };
 
 #endif

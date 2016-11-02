@@ -9,10 +9,12 @@ Game::Game()
 	
 	window = new sf::RenderWindow(sf::VideoMode(screenResolution->x, screenResolution->y), "Tsakki");
 	window->setKeyRepeatEnabled(false);
+	textManager = new TextManager();
 }
 
 Game::~Game()
 {
+	delete textManager;
 	delete screenResolution;
 	delete window;
 }

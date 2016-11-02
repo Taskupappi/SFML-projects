@@ -102,7 +102,7 @@ ChessPiece::ChessPiece(ChessPieceType const _type, int const _player)
 	}
 
 	sprite.setScale(1.00f, 1.00f);
-	sprite.setOrigin(25.5f, 25.5f);
+	sprite.setOrigin(sprite.getLocalBounds().width / 2.0f, sprite.getLocalBounds().height / 2.0f);
 	//sprite.setOrigin(166.5f, 166.5f);
 	type = _type;
 

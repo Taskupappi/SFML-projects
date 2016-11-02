@@ -78,7 +78,7 @@ private:
 	std::array<int, 2> mouseToTablePosition;
 
 	Square* squareToMove;
-	
+	int enPassantPosition[2];
 };
 
 #endif

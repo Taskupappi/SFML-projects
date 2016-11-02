@@ -13,19 +13,19 @@ void InGame::BeginTurn(sf::RenderWindow* _window)
 	beginTurnStep = false;
 }
 
-void InGame::SetPlayerTurnText(TextManager _textManager)
+void InGame::SetPlayerTurnText(TextManager* _textManager)
 {
 	if (playerOneTurn)
 	{
-		_textManager.AddText(TEXTTYPE::PLAYERTURN,"Player 1 Turn");
+		_textManager->AddText(TEXTTYPE::PLAYERTURN,"Player 1 Turn");
 	}
 	else
 	{
-		_textManager.AddText(TEXTTYPE::PLAYERTURN, "Player 2 Turn");
+		_textManager->AddText(TEXTTYPE::PLAYERTURN, "Player 2 Turn");
 	}
 }
 
-void InGame::Loop(sf::RenderWindow* _window, const sf::Vector2f _mousePosition, TextManager _textManager)
+void InGame::Loop(sf::RenderWindow* _window, const sf::Vector2f _mousePosition, TextManager* _textManager)
 {
 	if (beginTurnStep)
 	{
@@ -44,8 +44,7 @@ void InGame::Loop(sf::RenderWindow* _window, const sf::Vector2f _mousePosition, 
 	//
 	this->Draw(_window, _textManager);
 
-	_window->display();
-	
+	_window->display();	
 }
 
 bool InGame::HandleTurn(sf::RenderWindow* _window, const sf::Vector2f _mousePosition)
@@ -86,13 +85,13 @@ bool InGame::Move()
 	}
 }
 
-void InGame::Draw(sf::RenderWindow* _window, TextManager _textManager)
+void InGame::Draw(sf::RenderWindow* _window, TextManager* _textManager)
 {
 	_window->clear(sf::Color(0, 0, 150, 255));
 
 	board.Draw(_window);
 	
-	_textManager.Draw(_window);
+	_textManager->Draw(_window);
 }
 
 void InGame::EndTurn()
