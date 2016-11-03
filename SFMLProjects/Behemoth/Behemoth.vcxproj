@@ -74,14 +74,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Box2DCircle.cpp" />
     <ClCompile Include="Hex.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MapGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Box2DCircle.h" />
     <ClInclude Include="Hex.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapGenerator.h" />

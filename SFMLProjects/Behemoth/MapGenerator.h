@@ -6,6 +6,8 @@
 #include <ctime>
 #include <vector>
 
+#include "Map.h"
+
 class MapGenerator
 {
 public:
@@ -15,6 +17,7 @@ public:
 	 void GenerateNewMap(const unsigned int width, const unsigned int height, unsigned int fillPercentage);
 
 private:
+	std::vector<Map*> maps;
 };
 
 #endif

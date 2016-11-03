@@ -3,6 +3,8 @@
 
 #include "Hex.h"
 
+
+
 class Map
 {
 public:
@@ -10,8 +12,8 @@ public:
 	Map();
 
 	void InsertHexToMap(Hex* mapHex, const unsigned int positionX, const unsigned int positionY);
-	Hex* GetHexIndex(const int x, const int y);
-
+	Hex* GetHex(const int x, const int y);
+	void SetHex(Hex* mapHex, const int x, const int y);
 private:
 	Hex* hexes;
 	const int mapWidth;
