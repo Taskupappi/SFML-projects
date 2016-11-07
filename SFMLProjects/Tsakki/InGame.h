@@ -29,15 +29,16 @@ public:
 	//bool HandleInput();
 	bool Move();
 
-
 	//text stuff
 	void SetPlayerTurnText(TextManager* textManager);
+
 private:
 	bool beginTurnStep = true;
 	bool endTurn = false;
 	Table board;
 	bool playerOneTurn = true;
 	std::array<int, 2> mouseToBoardPosition;
+	//bool checkmate[2] {false, false};
 };
 #endif
 

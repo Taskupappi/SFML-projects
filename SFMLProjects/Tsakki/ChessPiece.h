@@ -32,7 +32,11 @@ public:
 	sf::Vector2i tablePosition;
 	sf::Vector2i lastPosition;
 	std::vector<sf::Vector2i> possibleMoves;
+
 	std::vector<std::pair<sf::Vector2i, sf::Vector2i>> allMoves;
+
+	std::vector<sf::Vector2i> checkingMoves;
+	bool isChecking = false;
 private:
 	sf::Sprite sprite;
 	sf::Texture texture;
