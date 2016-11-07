@@ -461,8 +461,9 @@ bool Table::MoveActivePiece(const bool _playerOneTurn, Square* _squareToMove)
 				if (activePiece->player == 1)
 				{
 					if (board[_squareToMove->tablePosition.x][_squareToMove->tablePosition.y + 1]->onSquare != nullptr)
-					{
+					{						
 						EatPiece(board[_squareToMove->tablePosition.x][_squareToMove->tablePosition.y + 1]->onSquare);
+						board[_squareToMove->tablePosition.x][_squareToMove->tablePosition.y + 1]->onSquare = nullptr;
 						enPassantPosition[0] = -12;
 						enPassantPosition[1] = -12;
 					}
@@ -470,8 +471,9 @@ bool Table::MoveActivePiece(const bool _playerOneTurn, Square* _squareToMove)
 				else if (activePiece->player == 2)
 				{
 					if (board[_squareToMove->tablePosition.x][_squareToMove->tablePosition.y - 1])
-					{
+					{						
 						EatPiece(board[_squareToMove->tablePosition.x][_squareToMove->tablePosition.y - 1]->onSquare);
+						board[_squareToMove->tablePosition.x][_squareToMove->tablePosition.y - 1]->onSquare = nullptr;
 						enPassantPosition[0] = -12;
 						enPassantPosition[1] = -12;
 					}
@@ -518,6 +520,12 @@ bool Table::MoveActivePiece(const bool _playerOneTurn, Square* _squareToMove)
 			}
 
 			activePiece = pieces.back();
+		}
+
+		if (activePiece->type != ChessPieceType::pawn)
+		{
+			enPassantPosition[0] = -12;
+			enPassantPosition[1] = -12;
 		}
 
 		SetOnTable(activePiece, _squareToMove);
