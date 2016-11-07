@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tsakki", "Tsakki\Tsakki.vcx
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Behemoth", "Behemoth\Behemoth.vcxproj", "{703A1461-C46E-403D-95D2-110E8DDF3FC9}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BitBoardChess", "BitBoardChess\BitBoardChess.vcxproj", "{4620085F-F76B-4C8C-8277-57A4DE0AACF0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -21,6 +23,10 @@ Global
 		{703A1461-C46E-403D-95D2-110E8DDF3FC9}.Debug|Win32.Build.0 = Debug|Win32
 		{703A1461-C46E-403D-95D2-110E8DDF3FC9}.Release|Win32.ActiveCfg = Release|Win32
 		{703A1461-C46E-403D-95D2-110E8DDF3FC9}.Release|Win32.Build.0 = Release|Win32
+		{4620085F-F76B-4C8C-8277-57A4DE0AACF0}.Debug|Win32.ActiveCfg = Debug|Win32
+		{4620085F-F76B-4C8C-8277-57A4DE0AACF0}.Debug|Win32.Build.0 = Debug|Win32
+		{4620085F-F76B-4C8C-8277-57A4DE0AACF0}.Release|Win32.ActiveCfg = Release|Win32
+		{4620085F-F76B-4C8C-8277-57A4DE0AACF0}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
