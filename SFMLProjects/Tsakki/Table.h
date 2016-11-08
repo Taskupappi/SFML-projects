@@ -5,9 +5,10 @@
 #include <array>
 
 #include "Square.h"
-//#include "ChessPiece.h"
+#include "ChessPiece.h"
 
-#include "Player.h"
+//#include "Player.h"
+
 
 class Table
 {
@@ -62,8 +63,9 @@ public:
 	std::vector<Square*> GetHighlightedSquares(){ return highlightedSquares; };
 	Square* GetSquareToMove(){ return squareToMove; };
 
-	//bool CheckForCheckmate();
+	bool CheckForCheck(const bool _playerOneTurn, Square* _squareToMove);
 
+	Table* CopyTable();
 	//Input stuff
 	void Deselect();
 
@@ -88,7 +90,7 @@ private:
 	std::vector<ChessPiece*> PiecesInCheck;
 
 
-	bool Checkmate[2] {false, false}; //Checkmate[0] == player 1 && Checkmate[1] == player 2
+	bool Checkmate[2]; //Checkmate[0] == player 1 && Checkmate[1] == player 2
 };
 
 #endif

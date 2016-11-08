@@ -17,7 +17,52 @@ Table::Table()
 				board[x][y] = new Square(false, x, y);
 		}
 	}
-	
+
+	activePiece = nullptr;
+	lastActivePiece = nullptr;
+	enPassantPosition[0] = -12;
+	enPassantPosition[1] = -12;
+
+	Checkmate[0] = false;
+	Checkmate[1] = false;
+}
+
+Table::~Table()
+{
+	std::vector<ChessPiece*>::iterator piece = pieces.begin();
+	for (; piece != pieces.end(); piece++)
+	{
+		delete (*piece);
+		piece = pieces.erase(piece);
+
+		if (piece == pieces.end())
+			break;
+	}
+
+	/*for each (ChessPiece* piece in pieces)
+	{
+		delete piece;
+	}*/
+
+	//for (int i = 1; i > -1; i--)
+	//{
+	//	for (int y = 15; y > -1; y--)
+	//	{
+	//		delete pieces[i][y];
+	//	}
+	//}
+
+	for (int i = 7; i > -1; i--)
+	{
+		for (int y = 7; y > -1; y--)
+		{
+			delete board[i][y];
+		}
+	}
+}
+
+void Table::Initialize()
+{
 	//player 1 pieces
 	for (int i = 0; i < 8; i++)
 	{
@@ -58,7 +103,7 @@ Table::Table()
 		{
 			pieces.push_back(new ChessPiece(ChessPieceType::king, 1));
 			pieces.back()->tablePosition = sf::Vector2i(i, 7);
-		/*	pieces[0][i] = new ChessPiece(ChessPieceType::king, 1);
+			/*	pieces[0][i] = new ChessPiece(ChessPieceType::king, 1);
 			pieces[0][i]->tablePosition = sf::Vector2i(i, 7);*/
 		}
 	}
@@ -68,10 +113,10 @@ Table::Table()
 		//pawns
 		pieces.push_back(new ChessPiece(ChessPieceType::pawn, 1));
 		pieces.back()->tablePosition = sf::Vector2i(x, 6);
-	/*	pieces[0][8 + x] = new ChessPiece(ChessPieceType::pawn, 1);
+		/*	pieces[0][8 + x] = new ChessPiece(ChessPieceType::pawn, 1);
 		pieces[0][8 + x]->tablePosition = sf::Vector2i(x, 6);*/
 	}
-	
+
 	//player 2 pieces
 	for (int i = 0; i < 8; i++)
 	{
@@ -88,7 +133,7 @@ Table::Table()
 		{
 			pieces.push_back(new ChessPiece(ChessPieceType::knight, 2));
 			pieces.back()->tablePosition = sf::Vector2i(i, 0);
-		/*	pieces[1][i] = new ChessPiece(ChessPieceType::knight, 2);
+			/*	pieces[1][i] = new ChessPiece(ChessPieceType::knight, 2);
 			pieces[1][i]->tablePosition = sf::Vector2i(i, 0);*/
 		}
 		//bishops
@@ -122,52 +167,10 @@ Table::Table()
 		//pawns
 		pieces.push_back(new ChessPiece(ChessPieceType::pawn, 2));
 		pieces.back()->tablePosition = sf::Vector2i(x, 1);
-	/*	pieces[1][8 + x] = new ChessPiece(ChessPieceType::pawn, 2);
+		/*	pieces[1][8 + x] = new ChessPiece(ChessPieceType::pawn, 2);
 		pieces[1][8 + x]->tablePosition = sf::Vector2i(x, 1);*/
 	}
 
-	activePiece = nullptr;
-	lastActivePiece = nullptr;
-	enPassantPosition[0] = -12;
-	enPassantPosition[1] = -12;
-}
-
-Table::~Table()
-{
-	std::vector<ChessPiece*>::iterator piece = pieces.begin();
-	for (; piece != pieces.end(); piece++)
-	{
-		delete (*piece);
-		piece = pieces.erase(piece);
-
-		if (piece == pieces.end())
-			break;
-	}
-
-	/*for each (ChessPiece* piece in pieces)
-	{
-		delete piece;
-	}*/
-
-	//for (int i = 1; i > -1; i--)
-	//{
-	//	for (int y = 15; y > -1; y--)
-	//	{
-	//		delete pieces[i][y];
-	//	}
-	//}
-
-	for (int i = 7; i > -1; i--)
-	{
-		for (int y = 7; y > -1; y--)
-		{
-			delete board[i][y];
-		}
-	}
-}
-
-void Table::Initialize()
-{
 	//place all table pieces
 	for (int y = 0; y < 8; y++)
 	{
@@ -440,97 +443,141 @@ void Table::CheckMovement(const bool _playerOneTurn, const sf::Vector2f _mousePo
 	}
 }
 
+Table* Table::CopyTable()
+{
+	Table* copyTable = new Table();
+
+	for each (ChessPiece* piece in pieces)
+	{
+		copyTable->pieces.push_back(new ChessPiece(piece->type, piece->player));
+		copyTable->pieces.back()->tablePosition = piece->tablePosition;
+		copyTable->pieces.back()->lastPosition = piece->lastPosition;
+		copyTable->pieces.back()->possibleMoves = piece->possibleMoves;
+		copyTable->pieces.back()->checkingMoves = piece->checkingMoves;
+		copyTable->pieces.back()->isChecking = piece->isChecking;
+		copyTable->SetOnTable(copyTable->pieces.back(), copyTable->pieces.back()->tablePosition);
+
+		if (activePiece->tablePosition == piece->tablePosition)
+		{
+			copyTable->activePiece = copyTable->pieces.back();
+		}
+
+		copyTable->enPassantPosition[0] = this->enPassantPosition[0];
+		copyTable->enPassantPosition[1] = this->enPassantPosition[1];
+	}
+
+	
+
+	return copyTable;
+}
+
+bool Table::CheckForCheck(const bool _playerOneTurn, Square* _squareToMove)
+{
+	//check if player moving active piece causes check
+	Table* tempTable = CopyTable();
+
+	CopyTable
+
+	tempTable->Uninitialize();
+	delete tempTable;
+
+	return true;
+}
+
 bool Table::MoveActivePiece(const bool _playerOneTurn, Square* _squareToMove)
 {
 	if (activePiece)
 	{
-		if (_squareToMove->onSquare != nullptr)
+		if (CheckForCheck(_playerOneTurn, _squareToMove))
 		{
-			EatPiece(_squareToMove->onSquare);
-		}
-
-		//update where active piece has moved so far
-		activePiece->allMoves.push_back(std::make_pair(activePiece->tablePosition, _squareToMove->tablePosition));
-		
-		//update en passant position
-		if (activePiece->type == ChessPieceType::pawn)
-		{
-			//if player uses En passant maneuver, eat the pawn which left it's back unguarded
-			if (_squareToMove->tablePosition.x == enPassantPosition[0] && _squareToMove->tablePosition.y == enPassantPosition[1])
+			if (_squareToMove->onSquare != nullptr)
 			{
-				if (activePiece->player == 1)
+				EatPiece(_squareToMove->onSquare);
+			}
+
+			//update where active piece has moved so far
+			activePiece->allMoves.push_back(std::make_pair(activePiece->tablePosition, _squareToMove->tablePosition));
+
+			//update en passant position
+			if (activePiece->type == ChessPieceType::pawn)
+			{
+				//if player uses En passant maneuver, eat the pawn which left it's back unguarded
+				if (_squareToMove->tablePosition.x == enPassantPosition[0] && _squareToMove->tablePosition.y == enPassantPosition[1])
 				{
-					if (board[_squareToMove->tablePosition.x][_squareToMove->tablePosition.y + 1]->onSquare != nullptr)
-					{						
-						EatPiece(board[_squareToMove->tablePosition.x][_squareToMove->tablePosition.y + 1]->onSquare);
-						board[_squareToMove->tablePosition.x][_squareToMove->tablePosition.y + 1]->onSquare = nullptr;
+					if (activePiece->player == 1)
+					{
+						if (board[_squareToMove->tablePosition.x][_squareToMove->tablePosition.y + 1]->onSquare != nullptr)
+						{
+							EatPiece(board[_squareToMove->tablePosition.x][_squareToMove->tablePosition.y + 1]->onSquare);
+							board[_squareToMove->tablePosition.x][_squareToMove->tablePosition.y + 1]->onSquare = nullptr;
+							enPassantPosition[0] = -12;
+							enPassantPosition[1] = -12;
+						}
+					}
+					else if (activePiece->player == 2)
+					{
+						if (board[_squareToMove->tablePosition.x][_squareToMove->tablePosition.y - 1])
+						{
+							EatPiece(board[_squareToMove->tablePosition.x][_squareToMove->tablePosition.y - 1]->onSquare);
+							board[_squareToMove->tablePosition.x][_squareToMove->tablePosition.y - 1]->onSquare = nullptr;
+							enPassantPosition[0] = -12;
+							enPassantPosition[1] = -12;
+						}
+					}
+				}
+
+				//update En passant position
+				if (activePiece->tablePosition.y - _squareToMove->tablePosition.y == 2)
+				{
+					enPassantPosition[0] = _squareToMove->tablePosition.x;
+					enPassantPosition[1] = _squareToMove->tablePosition.y + 1;
+				}
+				else if (activePiece->tablePosition.y - _squareToMove->tablePosition.y == -2)
+				{
+					enPassantPosition[0] = _squareToMove->tablePosition.x;
+					enPassantPosition[1] = _squareToMove->tablePosition.y - 1;
+				}
+				else
+				{
+					if ((enPassantPosition[0] >= 0 && enPassantPosition[0] < 8) && (enPassantPosition[1] >= 0 && enPassantPosition[1] < 8))
+					{
 						enPassantPosition[0] = -12;
 						enPassantPosition[1] = -12;
 					}
 				}
-				else if (activePiece->player == 2)
+
+			}
+
+			//check if the pawn gets to promote itself to a queen
+			if (activePiece->type == ChessPieceType::pawn && (_squareToMove->tablePosition.y == 0 || _squareToMove->tablePosition.y == 7))
+			{
+				pieces.push_back(new ChessPiece(ChessPieceType::queen, activePiece->player));
+				pieces.back()->tablePosition = sf::Vector2i(activePiece->tablePosition.x, activePiece->tablePosition.y);
+
+				std::vector<ChessPiece*>::iterator piece = pieces.begin();
+				for (; piece != pieces.end(); piece++)
 				{
-					if (board[_squareToMove->tablePosition.x][_squareToMove->tablePosition.y - 1])
-					{						
-						EatPiece(board[_squareToMove->tablePosition.x][_squareToMove->tablePosition.y - 1]->onSquare);
-						board[_squareToMove->tablePosition.x][_squareToMove->tablePosition.y - 1]->onSquare = nullptr;
-						enPassantPosition[0] = -12;
-						enPassantPosition[1] = -12;
+					if ((*piece) == activePiece)
+					{
+						delete (*piece);
+						pieces.erase(piece);
+						break;
 					}
 				}
+
+				activePiece = pieces.back();
 			}
 
-			//update En passant position
-			if (activePiece->tablePosition.y - _squareToMove->tablePosition.y == 2)
+			if (activePiece->type != ChessPieceType::pawn)
 			{
-				enPassantPosition[0] = _squareToMove->tablePosition.x;
-				enPassantPosition[1] = _squareToMove->tablePosition.y + 1;
-			}
-			else if (activePiece->tablePosition.y - _squareToMove->tablePosition.y == -2)
-			{
-				enPassantPosition[0] = _squareToMove->tablePosition.x;
-				enPassantPosition[1] = _squareToMove->tablePosition.y - 1;
-			}
-			else
-			{
-				if ((enPassantPosition[0] >= 0 && enPassantPosition[0] < 8) && (enPassantPosition[1] >= 0 && enPassantPosition[1] < 8))
-				{
-					enPassantPosition[0] = -12;
-					enPassantPosition[1] = -12;
-				}
+				enPassantPosition[0] = -12;
+				enPassantPosition[1] = -12;
 			}
 
+			SetOnTable(activePiece, _squareToMove);
+			ClearActivePiece();
+			return true;
 		}
-
-		//check if the pawn gets to promote itself to a queen
-		if (activePiece->type == ChessPieceType::pawn && (_squareToMove->tablePosition.y == 0 || _squareToMove->tablePosition.y == 7))
-		{
-			pieces.push_back(new ChessPiece(ChessPieceType::queen, activePiece->player));
-			pieces.back()->tablePosition = sf::Vector2i(activePiece->tablePosition.x, activePiece->tablePosition.y);
-
-			std::vector<ChessPiece*>::iterator piece = pieces.begin();
-			for (; piece != pieces.end(); piece++)
-			{
-				if ((*piece) == activePiece)
-				{
-					delete (*piece);
-					pieces.erase(piece);
-					break;
-				}
-			}
-
-			activePiece = pieces.back();
-		}
-
-		if (activePiece->type != ChessPieceType::pawn)
-		{
-			enPassantPosition[0] = -12;
-			enPassantPosition[1] = -12;
-		}
-
-		SetOnTable(activePiece, _squareToMove);
-		ClearActivePiece();
-		return true;
 	}
 	else
 	{
