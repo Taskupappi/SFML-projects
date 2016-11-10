@@ -90,7 +90,7 @@ private:
 	std::vector<ChessPiece*> PiecesInCheck;
 
 
-	bool Checkmate[2]; //Checkmate[0] == player 1 && Checkmate[1] == player 2
+	bool check[2]; //check[0] == player 1 && check[1] == player 2
 };
 
 #endif

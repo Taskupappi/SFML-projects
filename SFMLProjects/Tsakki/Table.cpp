@@ -23,8 +23,8 @@ Table::Table()
 	enPassantPosition[0] = -12;
 	enPassantPosition[1] = -12;
 
-	Checkmate[0] = false;
-	Checkmate[1] = false;
+	check[0] = false;
+	check[1] = false;
 }
 
 Table::~Table()
@@ -473,13 +473,72 @@ Table* Table::CopyTable()
 
 bool Table::CheckForCheck(const bool _playerOneTurn, Square* _squareToMove)
 {
+	//Square* tempSquare = nullptr;
+	ChessPiece* tempPiece = nullptr;
+
+	if (_squareToMove->onSquare != nullptr)
+	{
+		if (_squareToMove->onSquare->player != activePiece->player)
+		{
+			for (size_t x = 0; x < 8; x++)
+			{
+				for (size_t y = 0; y < 8; y++)
+				{
+					if (board[x][y]->onSquare == activePiece)
+					{
+						board[x][y]->onSquare = nullptr;
+					}
+				}
+			}
+
+			tempPiece = new ChessPiece(_squareToMove->onSquare->type, _squareToMove->onSquare->player);
+			tempPiece->allMoves = _squareToMove->onSquare->allMoves;
+			tempPiece->checkingMoves = _squareToMove->onSquare->checkingMoves;
+			tempPiece->isChecking = _squareToMove->onSquare->isChecking;
+			tempPiece->lastPosition = _squareToMove->onSquare->lastPosition;
+			tempPiece->player = _squareToMove->onSquare->player;
+			tempPiece->possibleMoves = _squareToMove->onSquare->possibleMoves;
+			tempPiece->tablePosition = _squareToMove->onSquare->tablePosition;
+
+			delete _squareToMove->onSquare;
+
+			//tempPiece = _squareToMove->onSquare;
+			//_squareToMove->onSquare->lastPosition = _squareToMove->tablePosition;
+
+			_squareToMove->onSquare = activePiece;
+			activePiece->tablePosition = _squareToMove->tablePosition;
+		}
+	}
+	else
+	{
+		for (size_t x = 0; x < 8; x++)
+		{
+			for (size_t y = 0; y < 8; y++)
+			{
+				if (board[x][y]->onSquare == activePiece)
+				{
+					board[x][y]->onSquare = nullptr;
+				}
+			}
+		}
+
+		_squareToMove->onSquare = activePiece;
+		activePiece->tablePosition = _squareToMove->tablePosition;		
+	}
+
+
+
+	
+	
+
+
 	//check if player moving active piece causes check
-	Table* tempTable = CopyTable();
+	//Table* tempTable = CopyTable();
 
-	CopyTable
+	//CopyTable
 
-	tempTable->Uninitialize();
-	delete tempTable;
+	//tempTable->Uninitialize();
+	//delete tempTable;
 
 	return true;
 }
