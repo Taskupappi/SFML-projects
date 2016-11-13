@@ -83,6 +83,9 @@
     <ClInclude Include="DataBoard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MainMenu.h">
+      <Filter>Header Files\GameStates</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="ChessPieceSprite.png">

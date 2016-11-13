@@ -89,6 +89,7 @@
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GameStateManager.h" />
     <ClInclude Include="InGame.h" />
+    <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Move.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Square.h" />

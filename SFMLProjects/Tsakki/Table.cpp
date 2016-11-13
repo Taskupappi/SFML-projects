@@ -473,50 +473,168 @@ Table* Table::CopyTable()
 
 bool Table::CheckForCheck(const bool _playerOneTurn, Square* _squareToMove)
 {
-	//Square* tempSquare = nullptr;
-	ChessPiece* tempPiece = nullptr;
-	sf::Vector2i previousPosition;
+	//This is created so we can restore the ActivePiece's current square easily
+	Square* tempSquareActivePiece = nullptr;
+	tempSquareActivePiece = (Square*)malloc(sizeof(Square));
+	
+	for (int x = 0; x < 8; x++)
+	{
+		for (int y = 0; y < 8; y++)
+		{
+			if (board[x][y]->onSquare == activePiece)
+			{
+				memcpy(tempSquareActivePiece, board[x][y], sizeof(Square));
+			}
+		}
+	}
+	
+	//This is created for the square were we might eat a piece during the check
+	Square* tempSquareEatenPiece = nullptr;
 
 	if (_squareToMove->onSquare != nullptr)
 	{
-		if (_squareToMove->onSquare->player != activePiece->player)
+		tempSquareEatenPiece = (Square*)malloc(sizeof(Square));
+
+		for (int x = 0; x < 8; x++)
 		{
-			for (size_t x = 0; x < 8; x++)
+			for (int y = 0; y < 8; y++)
 			{
-				for (size_t y = 0; y < 8; y++)
+				if (board[x][y]->onSquare == activePiece)
 				{
-					if (board[x][y]->onSquare == activePiece)
-					{
-						board[x][y]->onSquare = nullptr;
-					}
+					memcpy(tempSquareEatenPiece, board[x][y], sizeof(Square));
 				}
 			}
-
-			tempPiece = new ChessPiece(_squareToMove->onSquare->type, _squareToMove->onSquare->player);
-			tempPiece->allMoves = _squareToMove->onSquare->allMoves;
-			tempPiece->checkingMoves = _squareToMove->onSquare->checkingMoves;
-			tempPiece->isChecking = _squareToMove->onSquare->isChecking;
-			tempPiece->lastPosition = _squareToMove->onSquare->lastPosition;
-			tempPiece->player = _squareToMove->onSquare->player;
-			tempPiece->possibleMoves = _squareToMove->onSquare->possibleMoves;
-			tempPiece->tablePosition = _squareToMove->onSquare->tablePosition;
-
-			delete _squareToMove->onSquare;
-
-			//tempPiece = _squareToMove->onSquare;
-			//_squareToMove->onSquare->lastPosition = _squareToMove->tablePosition;
-
-			_squareToMove->onSquare = activePiece;
-
-			previousPosition = activePiece->tablePosition;
-			activePiece->tablePosition = _squareToMove->tablePosition;
 		}
 	}
 	else
 	{
-		for (size_t x = 0; x < 8; x++)
+		delete tempSquareEatenPiece;
+	}
+		
+	//We use these tempPieces to revert the pieces to their original states
+	ChessPiece* tempPieceActive = nullptr;
+	ChessPiece* tempPieceEaten = nullptr;
+
+	if (_squareToMove->onSquare == nullptr)
+	{
+		delete tempPieceEaten;
+	}
+	else
+	{
+		tempPieceEaten = (ChessPiece*)malloc(sizeof(ChessPiece));
+		memcpy(tempPieceEaten, _squareToMove->onSquare, sizeof(ChessPiece));
+	}
+
+	tempPieceActive = (ChessPiece*)malloc(sizeof(ChessPiece));
+	memcpy(tempPieceActive, activePiece, sizeof(ChessPiece));
+
+	/*
+	*If there is an enemy piece, we need to create another temp piecce for that as well.
+	*That one will be used if there was a piece on a position  where the active player moved his piece.
+	*Later on this piece can be restored with the temp piece we created.
+	*/
+
+
+	//first we need to make sure that by moving the active player doesn't allow it's king to get checked
+	if (_squareToMove->onSquare != nullptr)
+	{
+		//make the square active player is right now null
+		for (int x = 0; x < 8; x++)
 		{
-			for (size_t y = 0; y < 8; y++)
+			for (int y = 0; y < 8; y++)
+			{
+				if (board[x][y]->onSquare == activePiece)
+				{
+					board[x][y]->onSquare = nullptr;					
+				}
+			}
+		}
+
+		//remove the piece that was on _squareToMove
+		EatPiece(_squareToMove->onSquare);
+		_squareToMove->onSquare = nullptr;
+
+		//next move the activePiece
+		_squareToMove->onSquare = activePiece;
+		activePiece->tablePosition = _squareToMove->tablePosition;
+		
+		//check if the active player is now being checked
+		CalculatePieceMovement();
+		
+		//we need to push this piece into the pieces since we deleted the original one
+		pieces.push_back(tempPieceEaten);		
+
+		//revert all movement
+		bool found = false;
+
+		//first we set the current activePiece's position as the position of the original piece
+		for (int x = 0; x < 8; x++)
+		{
+			if (found)
+			{
+				break;
+			}
+
+			for (int y = 0; y < 8; y++)
+			{
+				if (found)
+				{
+					break;
+				}
+
+				if (board[x][y]->onSquare == activePiece)
+				{
+					board[x][y]->onSquare = tempPieceEaten;
+					found = true;
+				}
+			}
+		}
+
+		//move the active piece back into its original position		
+		for (int x = 0; x < 8; x++)
+		{
+			if (found)
+			{
+				break;
+			}
+
+			for (int y = 0; y < 8; y++)
+			{
+				if (found)
+				{
+					break;
+				}
+
+				if (board[x][y]->tablePosition == tempSquareActivePiece->tablePosition)
+				{
+					board[x][y]->onSquare = activePiece;
+					activePiece->tablePosition = board[x][y]->tablePosition;
+					found = true;
+				}
+			}
+		}
+
+		//if the active player is being checked, don't allow the move
+		if ((_playerOneTurn && check[0]) || !_playerOneTurn && check[1])
+		{
+			return false;
+		}
+		//otherwise allow the move
+		else
+		{
+			return true;
+		}
+	}
+
+	else
+	{
+		//since there was no need for the temp piece for eaten piece we can delete the pointer
+		delete tempPieceEaten;
+
+		//make the square active player is right now null
+		for (int x = 0; x < 8; x++)
+		{
+			for (int y = 0; y < 8; y++)
 			{
 				if (board[x][y]->onSquare == activePiece)
 				{
@@ -525,86 +643,216 @@ bool Table::CheckForCheck(const bool _playerOneTurn, Square* _squareToMove)
 			}
 		}
 
+		//next move the activePiece
 		_squareToMove->onSquare = activePiece;
-		previousPosition = activePiece->tablePosition;
-		activePiece->tablePosition = _squareToMove->tablePosition;		
-	}
+		activePiece->tablePosition = _squareToMove->tablePosition;
 
+		//check if the active player is now being checked
+		CalculatePieceMovement();
 
-	CalculatePieceMovement();
-	
-	//check whethere active player would be in check afterwards 	
-	if ((_playerOneTurn && check[0]) || (!_playerOneTurn && check[1])) //player would be in check, thus the move is not legal. Revert back to earlier state
-	{
-		if (tempPiece != nullptr)
+		//revert all movement
+		bool found = false;
+
+		//first we set the current activePiece's position as the position of the original piece
+		for (int x = 0; x < 8; x++)
 		{
-			pieces.push_back(tempPiece);
-
-			
-			/*
-			tempPiece = new ChessPiece(_squareToMove->onSquare->type, _squareToMove->onSquare->player);
-			tempPiece->allMoves = _squareToMove->onSquare->allMoves;
-			tempPiece->checkingMoves = _squareToMove->onSquare->checkingMoves;
-			tempPiece->isChecking = _squareToMove->onSquare->isChecking;
-			tempPiece->lastPosition = _squareToMove->onSquare->lastPosition;
-			tempPiece->player = _squareToMove->onSquare->player;
-			tempPiece->possibleMoves = _squareToMove->onSquare->possibleMoves;
-			tempPiece->tablePosition = _squareToMove->onSquare->tablePosition;
-			*/
-
-			//set temp as the _onSquare piece
-			_squareToMove->onSquare = tempPiece;
-
-			//set active piece back to its original position
-			activePiece->tablePosition = previousPosition;
-
-			for (int x = 0; x < 8; x++)
+			if (found)
 			{
-				for (int y = 0; y < 8; y++)
-				{
-					if (board[x][y]->tablePosition == activePiece->tablePosition)
-					{
-						board[x][y]->onSquare = activePiece;
-						activePiece->tablePosition = board[x][y]->tablePosition;
-					}
-				}
+				break;
 			}
 
+			for (int y = 0; y < 8; y++)
+			{
+				if (found)
+				{
+					break;
+				}
 
-		
-
+				if (board[x][y]->onSquare == activePiece)
+				{
+					board[x][y]->onSquare = tempPieceEaten;
+					found = true;
+				}
+			}
 		}
+
+		found = false;
+
+		//move the active piece back into its original position		
+		for (int x = 0; x < 8; x++)
+		{
+			if (found)
+			{
+				break;
+			}
+
+			for (int y = 0; y < 8; y++)
+			{
+				if (found)
+				{
+					break;
+				}
+
+				if (board[x][y]->tablePosition == tempSquareActivePiece->tablePosition)
+				{
+					board[x][y]->onSquare = activePiece;
+					activePiece->tablePosition = board[x][y]->tablePosition;
+					found = true;
+				}
+			}
+		}
+
+		//if the active player is being checked, don't allow the move
+		if ((_playerOneTurn && check[0]) || !_playerOneTurn && check[1])
+		{
+			//calculate the moves once more so that the game doesn't show wrong possible moves
+			CalculatePieceMovement();
+			return false;
+		}
+		//otherwise allow the move
 		else
 		{
-			delete tempPiece;
+			//calculate the moves once more so that the game doesn't show wrong possible moves
+			CalculatePieceMovement();
+			return true;
 		}
-		CalculatePieceMovement();
-		return true;
 	}
-	else //player is not in check afterwards so the move is legal
-	{
-		if (tempPiece != nullptr)
-		{
-			pieces.push_back(tempPiece);
-		}
-		else
-		{
-			delete tempPiece;
-		}
-
-		return false;
-	}
-	
 
 
+
+	//////////if (_squareToMove->onSquare != nullptr)
+	//////////{
+	//////////	if (_squareToMove->onSquare->player != activePiece->player)
+	//////////	{
+	//////////		for (size_t x = 0; x < 8; x++)
+	//////////		{
+	//////////			for (size_t y = 0; y < 8; y++)
+	//////////			{
+	//////////				if (board[x][y]->onSquare == activePiece)
+	//////////				{
+	//////////					board[x][y]->onSquare = nullptr;
+	//////////				}
+	//////////			}
+	//////////		}
+	//////////
+	//////////		tempPiece = (ChessPiece*)malloc(sizeof(ChessPiece));
+	//////////		memcpy(tempPiece, activePiece, sizeof(ChessPiece));
+	//////////
+	///////////*		tempPiece = new ChessPiece(_squareToMove->onSquare->type, _squareToMove->onSquare->player);
+	//////////		tempPiece->allMoves = _squareToMove->onSquare->allMoves;
+	//////////		tempPiece->checkingMoves = _squareToMove->onSquare->checkingMoves;
+	//////////		tempPiece->isChecking = _squareToMove->onSquare->isChecking;
+	//////////		tempPiece->lastPosition = _squareToMove->onSquare->lastPosition;
+	//////////		tempPiece->player = _squareToMove->onSquare->player;
+	//////////		tempPiece->possibleMoves = _squareToMove->onSquare->possibleMoves;
+	//////////		tempPiece->tablePosition = _squareToMove->onSquare->tablePosition;*/
+	//////////
+	//////////		delete _squareToMove->onSquare;
+	//////////
+	//////////		//tempPiece = _squareToMove->onSquare;
+	//////////		//_squareToMove->onSquare->lastPosition = _squareToMove->tablePosition;
+	//////////
+	//////////		_squareToMove->onSquare = activePiece;
+	//////////
+	//////////		previousPosition = activePiece->tablePosition;
+	//////////		activePiece->tablePosition = _squareToMove->tablePosition;
+	//////////	}
+	//////////}
+	//////////else
+	//////////{
+	//////////	for (size_t x = 0; x < 8; x++)
+	//////////	{
+	//////////		for (size_t y = 0; y < 8; y++)
+	//////////		{
+	//////////			if (board[x][y]->onSquare == activePiece)
+	//////////			{
+	//////////				board[x][y]->onSquare = nullptr;
+	//////////			}
+	//////////		}
+	//////////	}
+	//////////
+	//////////	_squareToMove->onSquare = activePiece;
+	//////////	previousPosition = activePiece->tablePosition;
+	//////////	activePiece->tablePosition = _squareToMove->tablePosition;		
+	//////////}
+	//////////
+	//////////
+	//////////CalculatePieceMovement();
+	//////////
+	////////////check whethere active player would be in check afterwards 	
+	//////////if ((_playerOneTurn && check[0]) || (!_playerOneTurn && check[1])) //player would be in check, thus the move is not legal. Revert back to earlier state
+	//////////{
+	//////////	if (tempPiece != nullptr)
+	//////////	{
+	//////////		pieces.push_back(tempPiece);
+	//////////
+	//////////		
+	//////////		/*
+	//////////		tempPiece = new ChessPiece(_squareToMove->onSquare->type, _squareToMove->onSquare->player);
+	//////////		tempPiece->allMoves = _squareToMove->onSquare->allMoves;
+	//////////		tempPiece->checkingMoves = _squareToMove->onSquare->checkingMoves;
+	//////////		tempPiece->isChecking = _squareToMove->onSquare->isChecking;
+	//////////		tempPiece->lastPosition = _squareToMove->onSquare->lastPosition;
+	//////////		tempPiece->player = _squareToMove->onSquare->player;
+	//////////		tempPiece->possibleMoves = _squareToMove->onSquare->possibleMoves;
+	//////////		tempPiece->tablePosition = _squareToMove->onSquare->tablePosition;
+	//////////		*/
+	//////////
+	//////////		//set temp as the _onSquare piece
+	//////////		_squareToMove->onSquare = tempPiece;
+	//////////
+	//////////		//set active piece back to its original position
+	//////////		activePiece->tablePosition = previousPosition;
+	//////////
+	//////////		for (int x = 0; x < 8; x++)
+	//////////		{
+	//////////			for (int y = 0; y < 8; y++)
+	//////////			{
+	//////////				if (board[x][y]->tablePosition == activePiece->tablePosition)
+	//////////				{
+	//////////					board[x][y]->onSquare = activePiece;
+	//////////					activePiece->tablePosition = board[x][y]->tablePosition;
+	//////////				}
+	//////////			}
+	//////////		}
+	//////////
+	//////////
+	//////////	
+	//////////
+	//////////	}
+	//////////	else
+	//////////	{
+	//////////		delete tempPiece;
+	//////////	}
+	//////////	CalculatePieceMovement();
+	//////////	delete tempSquare;
+	//////////	return true;
+	//////////}
+	//////////else //player is not in check afterwards so the move is legal
+	//////////{
+	//////////	if (tempPiece != nullptr)
+	//////////	{
+	//////////		//pieces.push_back(tempPiece);
+	//////////	}
+	//////////	else
+	//////////	{
+	//////////		delete tempPiece;
+	//////////	}
+	//////////
+	//////////	delete tempSquare;
+	//////////	return false;
+	//////////}
+	//////////
+	//////////
+	//////////
 	//check if player moving active piece causes check
 	//Table* tempTable = CopyTable();
-
+	//////////
 	//CopyTable
-
+	//////////
 	//tempTable->Uninitialize();
 	//delete tempTable;
-
+	//////////
 	//return true;
 }
 
@@ -1195,7 +1443,7 @@ bool Table::CalculatePieceMovement()
 						if (board[i][(*piece)->tablePosition.y]->onSquare->type == ChessPieceType::king)
 						{
 							(*piece)->isChecking = true;
-							check[board[i][(*piece)->tablePosition.y]->onSquare->player] - 1] = true;
+							check[board[i][(*piece)->tablePosition.y]->onSquare->player - 1] = true;
 						}
 
 						(*piece)->possibleMoves.push_back(sf::Vector2i(i, (*piece)->tablePosition.y));
@@ -1220,7 +1468,7 @@ bool Table::CalculatePieceMovement()
 						if (board[i][(*piece)->tablePosition.y]->onSquare->type == ChessPieceType::king)
 						{
 							(*piece)->isChecking = true;
-							check[board[i][(*piece)->tablePosition.y]->onSquare->player] - 1] = true;
+							check[board[i][(*piece)->tablePosition.y]->onSquare->player - 1] = true;
 						}
 
 						(*piece)->possibleMoves.push_back(sf::Vector2i(i, (*piece)->tablePosition.y));
@@ -1454,7 +1702,7 @@ bool Table::CalculatePieceMovement()
 						if (board[i][(*piece)->tablePosition.y]->onSquare->type == ChessPieceType::king)
 						{
 							(*piece)->isChecking = true;
-							check[board[i][(*piece)->tablePosition.y]->onSquare->player] - 1] = true;
+							check[board[i][(*piece)->tablePosition.y]->onSquare->player - 1] = true;
 						}
 
 						(*piece)->possibleMoves.push_back(sf::Vector2i(i, (*piece)->tablePosition.y));
@@ -1479,7 +1727,7 @@ bool Table::CalculatePieceMovement()
 						if (board[i][(*piece)->tablePosition.y]->onSquare->type == ChessPieceType::king)
 						{
 							(*piece)->isChecking = true;
-							check[board[i][(*piece)->tablePosition.y]->onSquare->player] - 1] = true;
+							check[board[i][(*piece)->tablePosition.y]->onSquare->player - 1] = true;
 						}
 
 						(*piece)->possibleMoves.push_back(sf::Vector2i(i, (*piece)->tablePosition.y));
