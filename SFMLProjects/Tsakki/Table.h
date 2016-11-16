@@ -21,9 +21,9 @@ public:
 	void Initialize();
 	void Uninitialize();
 
-	//calculates movement for every piece in the beginning of the turn
+	//calculates movement for a piece in the beginning of the turn
 	//done only once each turn!
-	bool CalculatePieceMovement();
+	bool CalculatePieceMovement(std::vector<ChessPiece*>::iterator piece);
 
 	//set active piece's accessible squares to the "ToBeHighlighted" -vector
 	void SetSquaresForHighlighting();
@@ -70,6 +70,8 @@ public:
 	void Deselect();
 
 	void DebugStuff();
+
+	std::vector<ChessPiece*> GetPieces() { return pieces; };
 private:
 	std::vector<Square*> highlightedSquares;
 	std::vector<Square*> squaresToBeHighlighted;

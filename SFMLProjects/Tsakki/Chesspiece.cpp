@@ -113,7 +113,9 @@ ChessPiece::ChessPiece(ChessPieceType const _type, int const _player)
 
 ChessPiece::~ChessPiece()
 {
-
+	allMoves.clear();
+	checkingMoves.clear();
+	possibleMoves.clear();
 }
 
 
