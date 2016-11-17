@@ -97,6 +97,8 @@ void InGame::Draw(sf::RenderWindow* _window, TextManager* _textManager)
 
 void InGame::EndTurn()
 {
+	board.CalculatePieceMovementForEachPiece();
+
 	board.ClearActivePiece();
 	board.ClearHighlights();
 
