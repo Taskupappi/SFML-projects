@@ -9,12 +9,8 @@ void InGame::Initialize()
 void InGame::BeginTurn(sf::RenderWindow* _window)
 {
 	//Do this only once per turn
-	std::vector<ChessPiece*>::iterator piece = board.GetPieces().begin();
+	board.CalculatePieceMovementForEachPiece();
 
-	for (; piece != board.GetPieces().end(); piece++)
-	{
-		board.CalculatePieceMovement(piece);
-	}
 	beginTurnStep = false;
 }
 

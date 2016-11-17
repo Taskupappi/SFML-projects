@@ -23,7 +23,8 @@ public:
 
 	//calculates movement for a piece in the beginning of the turn
 	//done only once each turn!
-	bool CalculatePieceMovement(std::vector<ChessPiece*>::iterator piece);
+	bool CalculatePieceMovement(ChessPiece* piece);
+	void CalculatePieceMovementForEachPiece();
 
 	//set active piece's accessible squares to the "ToBeHighlighted" -vector
 	void SetSquaresForHighlighting();
