@@ -964,8 +964,6 @@ bool Table::CalculatePieceMovement(ChessPiece* piece)
 						if (board[piece->tablePosition.x - 1][piece->tablePosition.y - 1]->onSquare->type == ChessPieceType::king)
 						{
 							pieceIsChecking = true;
-				/*			check[1] = true;
-							piece->isChecking = true;*/
 						}
 					}
 				}
@@ -983,8 +981,6 @@ bool Table::CalculatePieceMovement(ChessPiece* piece)
 						if (board[piece->tablePosition.x + 1][piece->tablePosition.y - 1]->onSquare->type == ChessPieceType::king)
 						{
 							pieceIsChecking = true;
-						/*	check[1] = true;
-							piece->isChecking = true;*/
 						}
 					}
 				}
@@ -1111,7 +1107,7 @@ bool Table::CalculatePieceMovement(ChessPiece* piece)
 
 		if (pieceIsChecking)
 		{
-			check[board[piece->tablePosition.x][piece->tablePosition.y]->onSquare->player == 1] ? check[0] = true : check[1] = true;
+			piece->player == 1 ? check[1] = true : check[0] = true;
 			piece->isChecking = true;			
 		}
 		else
@@ -1135,11 +1131,8 @@ bool Table::CalculatePieceMovement(ChessPiece* piece)
 				if (board[piece->tablePosition.x - 1][piece->tablePosition.y - 2]->onSquare->type == ChessPieceType::king)
 				{
 					pieceIsChecking = true;
-					//piece->isChecking = true;
-					//check[board[piece->tablePosition.x - 1][piece->tablePosition.y - 2]->onSquare->player - 1] = true;
 				}
 			}
-			//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y - 2]);
 		}
 
 		if (piece->tablePosition.x + 1 < 8 && piece->tablePosition.y - 2 > -1)
@@ -1154,11 +1147,8 @@ bool Table::CalculatePieceMovement(ChessPiece* piece)
 				if (board[piece->tablePosition.x + 1][piece->tablePosition.y - 2]->onSquare->type == ChessPieceType::king)
 				{
 					pieceIsChecking = true;
-					//piece->isChecking = true;
-					//check[board[piece->tablePosition.x + 1][piece->tablePosition.y - 2]->onSquare->player - 1] = true;
 				}
 			}
-			//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y - 2]);
 		}
 
 		if (piece->tablePosition.x - 1 > -1 && piece->tablePosition.y + 2 < 8)
@@ -1173,11 +1163,8 @@ bool Table::CalculatePieceMovement(ChessPiece* piece)
 				if (board[piece->tablePosition.x - 1][piece->tablePosition.y + 2]->onSquare->type == ChessPieceType::king)
 				{
 					pieceIsChecking = true;
-					//piece->isChecking = true;
-					//check[board[piece->tablePosition.x - 1][piece->tablePosition.y + 2]->onSquare->player - 1] = true;
 				}
 			}
-			//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y + 2]);
 		}
 
 		if (piece->tablePosition.x + 1 < 8 && piece->tablePosition.y + 2 < 8)
@@ -1192,12 +1179,8 @@ bool Table::CalculatePieceMovement(ChessPiece* piece)
 				if (board[piece->tablePosition.x + 1][piece->tablePosition.y + 2]->onSquare->type == ChessPieceType::king)
 				{
 					pieceIsChecking = true;
-					//piece->isChecking = true;
-					//check[board[piece->tablePosition.x + 1][piece->tablePosition.y + 2]->onSquare->player - 1] = true;
 				}
 			}
-
-			//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y + 2]);
 		}
 
 		if (piece->tablePosition.x + 2 < 8 && piece->tablePosition.y - 1 > -1)
@@ -1212,12 +1195,8 @@ bool Table::CalculatePieceMovement(ChessPiece* piece)
 				if (board[piece->tablePosition.x + 2][piece->tablePosition.y - 1]->onSquare->type == ChessPieceType::king)
 				{
 					pieceIsChecking = true;
-					//piece->isChecking = true;
-					//check[board[piece->tablePosition.x + 2][piece->tablePosition.y - 1]->onSquare->player - 1] = true;
 				}
 			}
-
-			//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + 2][activePiece->tablePosition.y - 1]);
 		}
 
 		if (piece->tablePosition.x + 2 < 8 && piece->tablePosition.y + 1 < 8)
@@ -1232,12 +1211,8 @@ bool Table::CalculatePieceMovement(ChessPiece* piece)
 				if (board[piece->tablePosition.x + 2][piece->tablePosition.y + 1]->onSquare->type == ChessPieceType::king)
 				{
 					pieceIsChecking = true;
-					//piece->isChecking = true;
-					//check[board[piece->tablePosition.x + 2][piece->tablePosition.y + 1]->onSquare->player - 1] = true;
 				}
 			}
-
-			//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + 2][activePiece->tablePosition.y + 1]);
 		}
 
 		if (piece->tablePosition.x - 2 > -1 && piece->tablePosition.y - 1 > -1)
@@ -1252,12 +1227,8 @@ bool Table::CalculatePieceMovement(ChessPiece* piece)
 				if (board[piece->tablePosition.x - 2][piece->tablePosition.y - 1]->onSquare->type == ChessPieceType::king)
 				{
 					pieceIsChecking = true;
-					//piece->isChecking = true;
-					//check[board[piece->tablePosition.x - 2][piece->tablePosition.y - 1]->onSquare->player - 1] = true;
 				}
 			}
-
-			//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - 2][activePiece->tablePosition.y - 1]);
 		}
 
 		if (piece->tablePosition.x - 2 > -1 && piece->tablePosition.y + 1 < 8)
@@ -1272,15 +1243,14 @@ bool Table::CalculatePieceMovement(ChessPiece* piece)
 				if (board[piece->tablePosition.x - 2][piece->tablePosition.y + 1]->onSquare->type == ChessPieceType::king)
 				{
 					pieceIsChecking = true;
-					//piece->isChecking = true;
-					//check[board[piece->tablePosition.x - 2][piece->tablePosition.y + 1]->onSquare->player - 1] = true;
 				}
 			}
 		}
 
 		if (pieceIsChecking)
-		{
-			check[board[piece->tablePosition.x][piece->tablePosition.y]->onSquare->player == 1] ? check[0] = true : check[1] = true;
+		{			
+			piece->player == 1 ? check[1] = true : check[0] = true;
+			
 			piece->isChecking = true;			
 		}
 		else
@@ -1297,7 +1267,6 @@ bool Table::CalculatePieceMovement(ChessPiece* piece)
 			if (board[piece->tablePosition.x][i]->onSquare == nullptr)
 			{
 				piece->possibleMoves.push_back(sf::Vector2i(piece->tablePosition.x, i));
-				//squaresToBeHighlighted.push_back(board[piece->tablePosition.x][i]);
 			}
 			else
 			{
@@ -1306,12 +1275,9 @@ bool Table::CalculatePieceMovement(ChessPiece* piece)
 					if (board[piece->tablePosition.x][i]->onSquare->type == ChessPieceType::king)
 					{
 						pieceIsChecking = true;
-						//piece->isChecking = true;
-						//check[board[piece->tablePosition.x][i]->onSquare->player - 1] = true;
 					}
 
 					piece->possibleMoves.push_back(sf::Vector2i(piece->tablePosition.x, i));
-					//squaresToBeHighlighted.push_back(board[piece->tablePosition.x][i]);
 				}
 				break;
 			}
@@ -1397,7 +1363,7 @@ bool Table::CalculatePieceMovement(ChessPiece* piece)
 
 		if (pieceIsChecking)
 		{
-			check[board[piece->tablePosition.x - 2][piece->tablePosition.y + 1]->onSquare->player - 1] = true;
+			piece->player == 1 ? check[1] = true : check[0] = true;
 			piece->isChecking = true;
 		}
 		else
@@ -1568,7 +1534,7 @@ bool Table::CalculatePieceMovement(ChessPiece* piece)
 		
 		if (pieceIsChecking)
 		{
-			check[board[piece->tablePosition.x][piece->tablePosition.y]->onSquare->player == 1] ? check[0] = true : check[1] = true;
+			piece->player == 1 ? check[1] = true : check[0] = true;
 			piece->isChecking = true;
 		}
 		else
@@ -1838,7 +1804,7 @@ bool Table::CalculatePieceMovement(ChessPiece* piece)
 
 		if (pieceIsChecking)
 		{
-			check[board[piece->tablePosition.x][piece->tablePosition.y]->onSquare->player == 1] ? check[0] = true : check[1] = true;
+			piece->player == 1 ? check[1] = true : check[0] = true;
 			piece->isChecking = true;
 		}
 		else
@@ -1855,14 +1821,12 @@ bool Table::CalculatePieceMovement(ChessPiece* piece)
 			if (board[piece->tablePosition.x][piece->tablePosition.y - 1]->onSquare == nullptr)
 			{
 				piece->possibleMoves.push_back(sf::Vector2i(piece->tablePosition.x, piece->tablePosition.y - 1));
-				//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][activePiece->tablePosition.y - 1]);
 			}
 			else
 			{
 				if (board[piece->tablePosition.x][piece->tablePosition.y - 1]->onSquare->player != piece->player)
 				{
 					piece->possibleMoves.push_back(sf::Vector2i(piece->tablePosition.x, piece->tablePosition.y - 1));
-					//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][activePiece->tablePosition.y - 1]);
 				}
 			}
 		}
@@ -1873,14 +1837,12 @@ bool Table::CalculatePieceMovement(ChessPiece* piece)
 			if (board[piece->tablePosition.x][piece->tablePosition.y + 1]->onSquare == nullptr)
 			{
 				piece->possibleMoves.push_back(sf::Vector2i(piece->tablePosition.x, piece->tablePosition.y + 1));
-				//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][activePiece->tablePosition.y + 1]);
 			}
 			else
 			{
 				if (board[piece->tablePosition.x][piece->tablePosition.y + 1]->onSquare->player != piece->player)
 				{
 					piece->possibleMoves.push_back(sf::Vector2i(piece->tablePosition.x, piece->tablePosition.y + 1));
-					//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x][activePiece->tablePosition.y + 1]);
 				}
 			}
 		}
@@ -1891,14 +1853,12 @@ bool Table::CalculatePieceMovement(ChessPiece* piece)
 			if (board[piece->tablePosition.x - 1][piece->tablePosition.y]->onSquare == nullptr)
 			{
 				piece->possibleMoves.push_back(sf::Vector2i(piece->tablePosition.x - 1, piece->tablePosition.y));
-				//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y]);
 			}
 			else
 			{
 				if (board[piece->tablePosition.x - 1][piece->tablePosition.y]->onSquare->player != piece->player)
 				{
 					piece->possibleMoves.push_back(sf::Vector2i(piece->tablePosition.x - 1, piece->tablePosition.y));
-					//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y]);
 				}
 			}
 		}
@@ -1909,14 +1869,12 @@ bool Table::CalculatePieceMovement(ChessPiece* piece)
 			if (board[piece->tablePosition.x + 1][piece->tablePosition.y]->onSquare == nullptr)
 			{
 				piece->possibleMoves.push_back(sf::Vector2i(piece->tablePosition.x + 1, piece->tablePosition.y));
-				//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y]);
 			}
 			else
 			{
 				if (board[piece->tablePosition.x + 1][piece->tablePosition.y]->onSquare->player != piece->player)
 				{
 					piece->possibleMoves.push_back(sf::Vector2i(piece->tablePosition.x + 1, piece->tablePosition.y));
-					//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y]);
 				}
 			}
 		}
@@ -1927,14 +1885,12 @@ bool Table::CalculatePieceMovement(ChessPiece* piece)
 			if (board[piece->tablePosition.x - 1][piece->tablePosition.y - 1]->onSquare == nullptr)
 			{
 				piece->possibleMoves.push_back(sf::Vector2i(piece->tablePosition.x - 1, piece->tablePosition.y - 1));
-				//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y - 1]);
 			}
 			else
 			{
 				if (board[piece->tablePosition.x - 1][piece->tablePosition.y - 1]->onSquare->player != piece->player)
 				{
 					piece->possibleMoves.push_back(sf::Vector2i(piece->tablePosition.x - 1, piece->tablePosition.y - 1));
-					//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y - 1]);
 				}
 			}
 		}
@@ -1945,14 +1901,12 @@ bool Table::CalculatePieceMovement(ChessPiece* piece)
 			if (board[piece->tablePosition.x + 1][piece->tablePosition.y - 1]->onSquare == nullptr)
 			{
 				piece->possibleMoves.push_back(sf::Vector2i(piece->tablePosition.x + 1, piece->tablePosition.y - 1));
-				//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y - 1]);
 			}
 			else
 			{
 				if (board[piece->tablePosition.x + 1][piece->tablePosition.y - 1]->onSquare->player != piece->player)
 				{
 					piece->possibleMoves.push_back(sf::Vector2i(piece->tablePosition.x + 1, piece->tablePosition.y - 1));
-					//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y - 1]);
 				}
 			}
 		}
@@ -1963,14 +1917,12 @@ bool Table::CalculatePieceMovement(ChessPiece* piece)
 			if (board[piece->tablePosition.x + 1][piece->tablePosition.y + 1]->onSquare == nullptr)
 			{
 				piece->possibleMoves.push_back(sf::Vector2i(piece->tablePosition.x + 1, piece->tablePosition.y + 1));
-				//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y + 1]);
 			}
 			else
 			{
 				if (board[piece->tablePosition.x + 1][piece->tablePosition.y + 1]->onSquare->player != piece->player)
 				{
 					piece->possibleMoves.push_back(sf::Vector2i(piece->tablePosition.x + 1, piece->tablePosition.y + 1));
-					//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x + 1][activePiece->tablePosition.y + 1]);
 				}
 			}
 		}
@@ -1981,14 +1933,12 @@ bool Table::CalculatePieceMovement(ChessPiece* piece)
 			if (board[piece->tablePosition.x - 1][piece->tablePosition.y + 1]->onSquare == nullptr)
 			{
 				piece->possibleMoves.push_back(sf::Vector2i(piece->tablePosition.x - 1, piece->tablePosition.y + 1));
-				//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y + 1]);
 			}
 			else
 			{
 				if (board[piece->tablePosition.x - 1][piece->tablePosition.y + 1]->onSquare->player != piece->player)
 				{
 					piece->possibleMoves.push_back(sf::Vector2i(piece->tablePosition.x - 1, piece->tablePosition.y + 1));
-					//squaresToBeHighlighted.push_back(board[activePiece->tablePosition.x - 1][activePiece->tablePosition.y + 1]);
 				}
 			}
 		}
@@ -1997,10 +1947,29 @@ bool Table::CalculatePieceMovement(ChessPiece* piece)
 	}
 	default:
 		break;
-	}	
+	}
 	return true;
 }
 
+void Table::UpdateCheckBoolStatus()
+{
+	bool tempCheck[2] {false, false};
+
+	for each (ChessPiece* piece in pieces)
+	{
+		if (piece->player == 1 && piece->isChecking)
+		{
+			tempCheck[1] = true;
+		}
+		else if (piece->player == 2 && piece->isChecking)
+		{
+			tempCheck[0] = true;
+		}
+	}
+
+	check[0] = tempCheck[0];
+	check[1] = tempCheck[1];
+}
 
 void Table::CalculatePieceMovementForEachPiece()
 {

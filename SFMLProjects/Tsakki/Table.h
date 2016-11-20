@@ -46,6 +46,9 @@ public:
 	void CheckMovement(const bool playerOneTurn, const sf::Vector2f mousePosition);
 	
 	//
+	void UpdateCheckBoolStatus();
+
+	//
 	bool MoveActivePiece(const bool playerOneTurn, Square* squareToMove);
 	
 	void EatPiece(ChessPiece* pieceToDelete);
