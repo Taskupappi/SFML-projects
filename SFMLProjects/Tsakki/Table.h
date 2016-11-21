@@ -66,6 +66,7 @@ public:
 	
 	std::vector<Square*> GetHighlightedSquares(){ return highlightedSquares; };
 	Square* GetSquareToMove(){ return squareToMove; };
+	void SetSquareToMove(){ squareToMove = nullptr; };
 
 	bool CheckForCheck(const bool _playerOneTurn, Square* _squareToMove);
 

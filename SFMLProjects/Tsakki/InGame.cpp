@@ -11,6 +11,8 @@ void InGame::BeginTurn(sf::RenderWindow* _window)
 	//Do this only once per turn
 	board.CalculatePieceMovementForEachPiece();
 
+	board.UpdateCheckBoolStatus();
+
 	beginTurnStep = false;
 }
 
@@ -78,7 +80,7 @@ bool InGame::Move()
 {
 	if (board.GetSquareToMove())
 	{
-		return board.MoveActivePiece(playerOneTurn, board.GetSquareToMove());		
+		return board.MoveActivePiece(playerOneTurn, board.GetSquareToMove());	
 	}
 	else
 	{
@@ -98,6 +100,8 @@ void InGame::Draw(sf::RenderWindow* _window, TextManager* _textManager)
 void InGame::EndTurn()
 {
 	board.CalculatePieceMovementForEachPiece();
+
+	board.UpdateCheckBoolStatus();
 
 	board.ClearActivePiece();
 	board.ClearHighlights();
