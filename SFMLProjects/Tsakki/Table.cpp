@@ -25,6 +25,9 @@ Table::Table()
 
 	check[0] = false;
 	check[1] = false;
+
+	checkmate[0] = false;
+	checkmate[1] = false;
 }
 
 Table::~Table()
@@ -1895,6 +1898,32 @@ void Table::Deselect()
 {
 	ClearHighlights();
 	ClearActivePiece();
+}
+
+bool Table::Checkmate(const bool _playerOneTurn)
+{
+	for each (ChessPiece* piece in pieces)
+	{
+		if (piece->player == 1 && check[0])
+		{
+			if (!piece->possibleMoves.empty())
+			{
+				std::vector<sf::Vector2i>::reverse_iterator move = piece->possibleMoves.rbegin();
+				for (; move != piece->possibleMoves.rend(); move++)
+				{					
+					if (!CheckForCheck(_playerOneTurn, board[move->x][move->y]))
+					{
+						piece->possibleMoves.erase(move);
+
+					}
+				}
+			}
+		}
+		else if (piece->player == 2 && check[1])
+		{
+
+		}
+	}
 }
 
 void Table::DebugStuff()

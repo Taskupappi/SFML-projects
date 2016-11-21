@@ -70,6 +70,8 @@ public:
 
 	bool CheckForCheck(const bool _playerOneTurn, Square* _squareToMove);
 
+	bool Checkmate(const bool _playerOneTurn);
+
 	Table* CopyTable();
 	//Input stuff
 	void Deselect();
@@ -98,6 +100,6 @@ private:
 
 
 	bool check[2]; //check[0] == player 1 && check[1] == player 2
+	bool checkmate[2]; //checkmate[0] == player 1 && check[1] == player 2
 };
-
 #endif
