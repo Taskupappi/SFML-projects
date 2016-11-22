@@ -1,29 +1,5 @@
-#include <SFML/Graphics.hpp>
-#include <SFML/Network.hpp>
 
-//#include "Game.h"
-//
-//int main()
-//{
-//	Game game;
-//	
-//	game.Initialize();
-//	game.Loop();
-//	//game.Uninitialize();
-//		
-//	return 0;
-//}
-//
-
-
-
-
-
-
-
-
-
-
+#include "SFML\Network.hpp"
 #include <iostream>
 
 //network
@@ -31,6 +7,9 @@ __int32 PackMove(char move[4]);
 
 //not a host
 void AskForPacket(sf::UdpSocket socket);
+
+//init
+void Initialize(sf::TcpSocket socket);
 
 //ui
 
@@ -110,52 +89,48 @@ int main()
 
 	switch (host)
 	{
-	case 1:
-	{//host
-		if (listener.listen(port) != sf::Socket::Done)
-		{
-			return -1;
-		}
-		else
-		{
-			printf("someone connected");
-		}
+		case 1:
+		{//host
+			socketStatus = tcpSocket.connect(hostIP, port);
+			if (socketStatus != sf::Socket::Done)
+			{
+				return 0;
+			}
 
-		if (listener.accept(client) != sf::Socket::Done)
-		{
-			return -1;
-		}
+			if (listener.listen(port) != sf::Socket::Done)
+			{
 
-		socketStatus = tcpSocket.connect(client.getRemoteAddress(), client.getRemotePort());
-		if (socketStatus != sf::Socket::Done)
-		{
-			return -1;
-		}
+			}
 
-		break;
+			if (listener.accept(client) != sf::Socket::Done)
+			{
+
+			}
+
+			break;
+		}
+		case 2:
+		{//not a host
+			std::cout << "give hosts ip" << std::endl;
+			std::cin >> hostIP;
+
+			std::cout << "give hosts port" << std::endl;
+			std::cin >> port;
+
+			socketStatus = tcpSocket.connect(hostIP, port);
+			if (socketStatus != sf::Socket::Done)
+			{
+				return 0;
+			}
+
+
+
+			break;
+		}
+		default:
+			break;
 	}
-	case 2:
-	{//not a host
-		std::cout << "give hosts ip" << std::endl;
-		std::cin >> hostIP;
-
-		std::cout << "give hosts port" << std::endl;
-		std::cin >> port;
-
-		socketStatus = tcpSocket.connect(hostIP, port);
-		if (socketStatus != sf::Socket::Done)
-		{
-			return 0;
-		}
-
-
-
-		break;
-	}
-	default:
-		break;
-	}
-
+		
 
 	while (!quit)
 	{
@@ -202,14 +177,14 @@ int main()
 			break;
 		}
 	}
-
+			
 }
 
 __int32 PackMove(char move[4])
-{
+{		
 	//turn char formatted move into an integer
 	__int32 tempPacket = 0;
-	for (int i = 0; i != 4; ++i)
+	for (int i = 0; i != 4; ++i) 
 	{
 		tempPacket += move[i] << (24 - i * 8);
 	}

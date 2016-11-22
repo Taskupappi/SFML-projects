@@ -1913,7 +1913,7 @@ bool Table::Checkmate(const bool _playerOneTurn)
 				{					
 					if (!CheckForCheck(_playerOneTurn, board[move->x][move->y]))
 					{
-						piece->possibleMoves.erase(move);
+						//piece->possibleMoves.erase(move);
 
 					}
 				}
@@ -1924,6 +1924,8 @@ bool Table::Checkmate(const bool _playerOneTurn)
 
 		}
 	}
+
+	return true;
 }
 
 void Table::DebugStuff()
