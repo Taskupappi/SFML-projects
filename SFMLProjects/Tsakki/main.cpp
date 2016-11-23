@@ -1,229 +1,166 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Network.hpp>
 
-//#include "Game.h"
-//
-//int main()
-//{
-//	Game game;
-//	
-//	game.Initialize();
-//	game.Loop();
-//	//game.Uninitialize();
-//		
-//	return 0;
-//}
-//
+#include <thread>
+#include <mutex>
 
-
-
-
-
-
-
-
-
-
-#include <iostream>
-
-//network
-__int32 PackMove(char move[4]);
-
-//not a host
-void AskForPacket(sf::UdpSocket socket);
-
-//ui
-
-sf::IpAddress hostIP = "172.31.16.55";
-unsigned short port = 35795;
-int host = -1;
-bool quit = false;
-
-
-//int main()
-//{
-//	//sf::TcpSocket tcpSocket; 
-//	//sf::Socket::Status status;
-//
-//	//Initialize(tcpSocket);
-//
-//	// = tcpSocket.connect(hostIP, port);
-//	//if (status != sf::Socket::Done)
-//	//{
-//
-//	//}
-//
-//	//bool quit = false;
-//	//while (!quit)
-//	//{ 
-//	//	switch (host)
-//	//	{
-//	//	case 0:
-//	//	{//is not host
-//
-//	//		char packetToSend[4];
-//	//		__int32 packet = 0;
-//
-//	//		std::cout << "Give a packet to send" << std::endl;
-//	//		std::cin >> packetToSend;
-//
-//	//		packet = PackMove(packetToSend);
-//
-//	//		//send the packet
-//	//		//if (tcpSocket.send(&packet, sizeof(__int32), hostIP, port) != sf::Socket::Done)
-//	//		//{
-//	//		//}
-//	//		break;
-//	//	}	
-//	//	case 1:
-//	//	{//is host
-//	//		
-//	//		break;
-//	//	}
-//	//	default:
-//	//		break;
-//	//	}
-//
-//	//}
-//
-//	//char move1[4];
-//	//move1[0] = 'a';
-//	//move1[1] = '1';
-//	//move1[2] = 'a';
-//	//move1[3] = '2';
-//	//int packedMove;
-//	//packedMove = PackMove(move1);
-//
-//	return 0;
-//}
+#include "Game.h"
 
 int main()
 {
-	sf::TcpSocket tcpSocket;
-	sf::Socket::Status socketStatus;
-	//for server only
-	sf::TcpListener listener;
-	sf::TcpSocket client;
-
-	std::cout << "are you host? 1 = yes, 2 = no" << std::endl;
-	std::cin >> host;
-
-	switch (host)
-	{
-	case 1:
-	{//host
-		if (listener.listen(port) != sf::Socket::Done)
-		{
-			return -1;
-		}
-		else
-		{
-			printf("someone connected");
-		}
-
-		if (listener.accept(client) != sf::Socket::Done)
-		{
-			return -1;
-		}
-
-		socketStatus = tcpSocket.connect(client.getRemoteAddress(), client.getRemotePort());
-		if (socketStatus != sf::Socket::Done)
-		{
-			return -1;
-		}
-
-		break;
-	}
-	case 2:
-	{//not a host
-		std::cout << "give hosts ip" << std::endl;
-		std::cin >> hostIP;
-
-		std::cout << "give hosts port" << std::endl;
-		std::cin >> port;
-
-		socketStatus = tcpSocket.connect(hostIP, port);
-		if (socketStatus != sf::Socket::Done)
-		{
-			return 0;
-		}
-
-
-
-		break;
-	}
-	default:
-		break;
-	}
-
-
-	while (!quit)
-	{
-		switch (host)
-		{
-		case 1:
-		{//host
-			//wait for data
-			__int32 receivedMove;
-			size_t received;
-
-			if (tcpSocket.receive(&receivedMove, sizeof(__int32), received) == sf::Socket::Done)
-			{
-
-			}
-
-			std::cout << "Received " << received << " bytes" << std::endl;
-
-			//__int32* move;
-
-			//move = Decrypt(receivedMove);
-
-			break;
-		}
-		case 2:
-		{//not a host
-			//ask data to send
-			char move[4];
-			__int32 moveInt;
-
-			std::cout << "give move" << std::endl;
-			std::cin >> move;
-
-			moveInt = PackMove(move);
-
-			if (tcpSocket.send(&moveInt, sizeof(__int32)))
-			{
-				return 0;
-			}
-
-			break;
-		}
-		default:
-			break;
-		}
-	}
-
+	Game game;
+	
+	game.Initialize();
+	game.Loop();
+	game.Uninitialize();
+		
+	return 0;
 }
 
-__int32 PackMove(char move[4])
-{
-	//turn char formatted move into an integer
-	__int32 tempPacket = 0;
-	for (int i = 0; i != 4; ++i)
-	{
-		tempPacket += move[i] << (24 - i * 8);
-	}
 
-	//turn bits
-	tempPacket = ~tempPacket;
 
-	return tempPacket;
-}
 
-char* Decrypt(__int32 toBeDecryptedMove)
-{
-	char* move = new char[4];
 
-	return nullptr;
-}
 
+
+
+
+
+//
+//#include <iostream>
+//
+////network
+//char* Decrypt(__int32 toBeDecryptedMove);
+//__int32 PackMove(const char move[]);
+//
+////not a host
+//void AskForPacket(sf::UdpSocket socket);
+//
+////ui
+//sf::IpAddress hostIP = "172.31.16.55";
+//unsigned short port = 35795;
+//int host = -1;
+//bool quit = false;
+//
+//char textBuffer[100];
+//__int32 buffer;
+//std::size_t received;
+//
+//sf::TcpSocket tcpSocket;
+//
+//std::thread receiverThread;
+//std::thread senderThread;
+//std::thread mainThread;
+//
+//
+//
+//int main()
+//{
+//	
+//
+//
+//	hostIP = sf::IpAddress::getLocalAddress();
+//	std::string text = "connected to ";
+//	char connectionType, mode;
+//
+//	char testMove[4];
+//	testMove[0] = 'e';
+//	testMove[1] = '4';
+//	testMove[2] = 'e';
+//	testMove[3] = '5';
+//
+//	__int32 moveTestInt = PackMove(testMove);
+//
+//	std::cout << "Enter (s) for server or (c) for client" << std::endl;
+//	std::cin >> connectionType;
+//
+//	if (connectionType == 's')
+//	{
+//		sf::TcpListener listener;
+//		listener.listen(port);
+//		listener.accept(tcpSocket);
+//		text += "server";
+//		mode = 's';
+//	}
+//	else if (connectionType == 'c')
+//	{
+//		std::string tempIP = "";
+//		std::cout << "Give server address" << std::endl;
+//		std::cin >> tempIP;
+//		
+//		sf::Time time;
+//
+//		time.asSeconds();
+//
+//		tcpSocket.connect(tempIP, port);
+//		
+//
+//		text += "client";
+//		mode = 'r';
+//	}
+//	else
+//	{
+//		return 0;
+//	}
+//
+//	text = "rum8";
+//
+//	tcpSocket.send(text.c_str(), text.length() + 1);
+//
+//	tcpSocket.receive(&buffer, sizeof(buffer), received);
+//
+//	std::cout << buffer << std::endl;
+//
+//	bool done = false;
+//
+//	while (!done)
+//	{ 
+//		if (mode == 's') //send
+//		{
+//			std::getline(std::cin, text);
+//			__int32 move = PackMove(text.c_str());
+//			//std::cout << "move: " << &move << std::endl;
+//			tcpSocket.send(&move, sizeof(move));
+//			
+//			
+//			//tcpSocket.send(text.c_str(), text.length() + 1);
+//			mode = 'r';
+//		}
+//		else if (mode == 'r') //receive
+//		{
+//			tcpSocket.receive(&buffer, sizeof(buffer), received);
+//			//tcpSocket.receive(textBuffer, sizeof(textBuffer), received);			
+//			if (received > 0)
+//			{
+//				//std::cout << "Received: " << textBuffer << std::endl;
+//				std::cout << "Received: " << ~buffer << std::endl;
+//				mode = 's';
+//			}		
+//		}
+//	}
+//}
+//
+//char* Decrypt(__int32 toBeDecryptedMove)
+//{
+//	toBeDecryptedMove = ~toBeDecryptedMove;
+//
+//	char move[4];
+//	move[0] = (toBeDecryptedMove >> 24);
+//	move[1] = (toBeDecryptedMove >> 16);
+//	move[2] = (toBeDecryptedMove >> 8);
+//	move[3] = (toBeDecryptedMove >> 0);
+//
+//	return move;
+//}
+//
+//__int32 PackMove(const char move[])
+//{
+//	//turn char formatted move into an integer
+//	__int32 tempPacket = 0;
+//
+//	tempPacket = (move[0] << 24) + (move[1] << 16) + (move[2] << 8) + (move[3]);
+//
+//	tempPacket = ~tempPacket;
+//
+//	return tempPacket;
+//}

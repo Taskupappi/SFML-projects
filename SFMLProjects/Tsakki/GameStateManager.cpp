@@ -1,8 +1,9 @@
 #include "GameStateManager.h"
+#include "MainMenu.h"
 
 GameStateManager::GameStateManager()
 {
-	states.push_back((GameState*)(new InGame()));
+	states.push_back((GameState*)(new MainMenu()));
 }
 
 GameStateManager::~GameStateManager()

@@ -1,4 +1,4 @@
-﻿Build started 22.11.2016 17:57:08.
+﻿Build started 23.11.2016 15:33:59.
      1>Project "C:\Users\aleksiluo1\Desktop\SFML-projects\SFMLProjects\Tsakki\Tsakki.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Users\aleksiluo1\Desktop\SFML-projects\SFMLProjects\Dependencies\include" /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D SFML_STATIC /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp
@@ -63,16 +63,9 @@
      1>sfml-system-s-d.lib(MutexImpl.cpp.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'sfml-system-s-d.lib(MutexImpl.cpp.obj)' or at 'C:\Users\aleksiluo1\Desktop\SFML-projects\SFMLProjects\Debug\vc120.pdb'; linking object as if no debug info
      1>sfml-system-s-d.lib(SleepImpl.cpp.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'sfml-system-s-d.lib(SleepImpl.cpp.obj)' or at 'C:\Users\aleksiluo1\Desktop\SFML-projects\SFMLProjects\Debug\vc120.pdb'; linking object as if no debug info
      1>sfml-system-s-d.lib(ThreadLocalImpl.cpp.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'sfml-system-s-d.lib(ThreadLocalImpl.cpp.obj)' or at 'C:\Users\aleksiluo1\Desktop\SFML-projects\SFMLProjects\Debug\vc120.pdb'; linking object as if no debug info
-     1>sfml-network-s-d.lib(Http.cpp.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'sfml-network-s-d.lib(Http.cpp.obj)' or at 'C:\Users\aleksiluo1\Desktop\SFML-projects\SFMLProjects\Debug\vc120.pdb'; linking object as if no debug info
-     1>sfml-network-s-d.lib(IpAddress.cpp.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'sfml-network-s-d.lib(IpAddress.cpp.obj)' or at 'C:\Users\aleksiluo1\Desktop\SFML-projects\SFMLProjects\Debug\vc120.pdb'; linking object as if no debug info
-     1>sfml-network-s-d.lib(Packet.cpp.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'sfml-network-s-d.lib(Packet.cpp.obj)' or at 'C:\Users\aleksiluo1\Desktop\SFML-projects\SFMLProjects\Debug\vc120.pdb'; linking object as if no debug info
-     1>sfml-network-s-d.lib(Socket.cpp.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'sfml-network-s-d.lib(Socket.cpp.obj)' or at 'C:\Users\aleksiluo1\Desktop\SFML-projects\SFMLProjects\Debug\vc120.pdb'; linking object as if no debug info
-     1>sfml-network-s-d.lib(TcpListener.cpp.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'sfml-network-s-d.lib(TcpListener.cpp.obj)' or at 'C:\Users\aleksiluo1\Desktop\SFML-projects\SFMLProjects\Debug\vc120.pdb'; linking object as if no debug info
-     1>sfml-network-s-d.lib(TcpSocket.cpp.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'sfml-network-s-d.lib(TcpSocket.cpp.obj)' or at 'C:\Users\aleksiluo1\Desktop\SFML-projects\SFMLProjects\Debug\vc120.pdb'; linking object as if no debug info
-     1>sfml-network-s-d.lib(SocketImpl.cpp.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'sfml-network-s-d.lib(SocketImpl.cpp.obj)' or at 'C:\Users\aleksiluo1\Desktop\SFML-projects\SFMLProjects\Debug\vc120.pdb'; linking object as if no debug info
          Tsakki.vcxproj -> C:\Users\aleksiluo1\Desktop\SFML-projects\SFMLProjects\Debug\Tsakki.exe
      1>Done Building Project "C:\Users\aleksiluo1\Desktop\SFML-projects\SFMLProjects\Tsakki\Tsakki.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:03.56
+Time Elapsed 00:00:03.29
