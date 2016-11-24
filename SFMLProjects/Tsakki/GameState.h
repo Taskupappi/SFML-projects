@@ -3,12 +3,15 @@
 
 #include "SFML\Graphics.hpp"
 #include "TextManager.h"
+#include "GameStateManager.h"
 
 class GameState
 {
 public:
 	GameState(){};
 	~GameState(){};
+
+	GameStateManager* stateManager;
 
 	//GameState core
 	virtual void Initialize(){};

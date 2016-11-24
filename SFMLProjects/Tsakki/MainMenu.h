@@ -7,7 +7,7 @@
 class MainMenu : public GameState
 {
 public:
-	MainMenu();
+	MainMenu(GameStateManager* stateManager);
 	~MainMenu();
 
 	//InGame state core
@@ -16,9 +16,8 @@ public:
 	void Uninitialize();
 	void Draw(sf::RenderWindow* window, TextManager* textManager);
 	void HandleInput(const sf::Event inputEvent, const sf::Vector2f mousePosition);
-
-
 private:
+
 };
 
 #endif

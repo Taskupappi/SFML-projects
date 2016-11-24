@@ -3,7 +3,7 @@
 
 GameStateManager::GameStateManager()
 {
-	states.push_back((GameState*)(new MainMenu()));
+	states.push_back((GameState*)(new MainMenu((this))));
 }
 
 GameStateManager::~GameStateManager()
@@ -21,6 +21,7 @@ GameStateManager::~GameStateManager()
 void GameStateManager::AddState(GameState* _state)
 {
 	states.push_back(_state);
+	states.back()->Initialize();
 }
 
 void GameStateManager::PopState()

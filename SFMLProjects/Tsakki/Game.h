@@ -2,7 +2,10 @@
 #define GAME_H
 
 #include "GameStateManager.h"
+#include "GameState.h"
 #include "TextManager.h"
+
+#include <array>
 
 class Game
 {

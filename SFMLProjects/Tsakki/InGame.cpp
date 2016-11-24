@@ -1,9 +1,48 @@
 #include "InGame.h"
 
+InGame::InGame(GameStateManager* _stateManager, GAMETYPE _type)
+{
+	type = _type;
+	 stateManager = _stateManager;
+}
+
 void InGame::Initialize()
 {
-	board.Initialize();
-	playerOneTurn = true;
+	switch (type)
+	{
+		case HOST:
+		{		
+			SetupHost();
+			board.Initialize();
+			playerOneTurn = true;
+			break;
+		}	
+		case JOIN:
+		{
+			break;
+		}
+	
+		case HOTSEAT:
+		{
+			board.Initialize();
+			playerOneTurn = true;
+			break;
+		}
+
+		case AI:
+		{
+			break;
+		}
+	default:
+		break;
+	}
+
+	
+}
+
+void InGame::SetupHost()
+{
+
 }
 
 void InGame::BeginTurn(sf::RenderWindow* _window)

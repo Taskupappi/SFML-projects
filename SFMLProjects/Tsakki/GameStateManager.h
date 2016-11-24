@@ -2,8 +2,9 @@
 #define GAMESTATEMANAGER_H
 
 #include <list>
-#include "InGame.h"
+//#include "InGame.h"
 
+class GameState;
 
 class GameStateManager
 {

@@ -1,15 +1,26 @@
 #ifndef INGAME_H
 #define INGAME_H
 
+#include "GameStateManager.h"
 #include "GameState.h"
 #include "Table.h"
 #include "ChessPiece.h"
 #include "TextManager.h"
 
+
+enum GAMETYPE
+{
+	HOST,
+	JOIN,
+	HOTSEAT,
+	AI
+
+};
+
 class InGame : public GameState
 {
 public:
-	InGame(){};
+	InGame(GameStateManager* _stateManager, GAMETYPE type);
 	~InGame(){};
 
 	//InGame state core
@@ -32,6 +43,9 @@ public:
 	//text stuff
 	void SetPlayerTurnText(TextManager* textManager);
 
+	//networking
+	void SetupHost();
+
 private:
 	bool beginTurnStep = true;
 	bool endTurn = false;
@@ -39,6 +53,7 @@ private:
 	bool playerOneTurn = true;
 	std::array<int, 2> mouseToBoardPosition;
 	//bool checkmate[2] {false, false};
+	GAMETYPE type;
 };
 #endif
 
