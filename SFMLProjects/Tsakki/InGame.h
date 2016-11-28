@@ -6,6 +6,7 @@
 #include "Table.h"
 #include "ChessPiece.h"
 #include "TextManager.h"
+#include "Network.h"
 
 
 enum GAMETYPE
@@ -44,7 +45,7 @@ public:
 	void SetPlayerTurnText(TextManager* textManager);
 
 	//networking
-	void SetupHost();
+	void SetupHost(const bool isHost);
 
 private:
 	bool beginTurnStep = true;
@@ -54,6 +55,10 @@ private:
 	std::array<int, 2> mouseToBoardPosition;
 	//bool checkmate[2] {false, false};
 	GAMETYPE type;
+
+	//network
+	bool isHost = false;
+	Network *network;
 };
 #endif
 

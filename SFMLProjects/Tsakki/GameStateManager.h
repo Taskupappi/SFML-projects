@@ -14,7 +14,7 @@ public:
 
 	void AddState(GameState* state);
 	void PopState();
-	GameState* GetState(){ return states.front(); };
+	GameState* GetStateFront(){ return states.front(); };
 	
 	void Initialize();
 	void Uninitialize();

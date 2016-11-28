@@ -39,7 +39,7 @@ void Game::Loop()
 		HandleInput();
 
 		//run state main loop
-		stateManager.GetState()->Loop(window, mousePosition, textManager);
+		stateManager.GetStateFront()->Loop(window, mousePosition, textManager);
 	}
 }
 
@@ -47,15 +47,28 @@ void Game::HandleInput()
 {
 	sf::Event event;
 
+	bool update = true;
+
 	while (window->pollEvent(event))
 	{	
 		if (event.type == sf::Event::Closed)
 		{
 			window->close();
 		}
+		else if (event.type == sf::Event::GainedFocus)
+		{
+			update = true;
+		}
+		else if (event.type == sf::Event::LostFocus)
+		{
+			update = false;
+		}
 		else
 		{
-			stateManager.GetState()->HandleInput(event, mousePosition);
+			if (update)
+			{
+				stateManager.GetStateFront()->HandleInput(event, mousePosition);
+			}
 		}
 	}
 }
