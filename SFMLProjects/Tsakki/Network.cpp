@@ -77,8 +77,7 @@ void Network::SendHostColor(const bool _isWhite)
 sf::Uint32 Network::PackMove(const char _move[])
 {
 	//turn char formatted move into an integer
-	sf::Uint32 packedMove;
-
+	sf::Uint32 packedMove = 0;
 	packedMove << (_move[0] << 24) + (_move[0] << 16) + (_move[0] << 8) + (_move[0]);
 
 	packedMove = ~packedMove;

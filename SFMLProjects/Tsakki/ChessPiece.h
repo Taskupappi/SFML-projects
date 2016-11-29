@@ -7,6 +7,8 @@
 #include <vector>
 #include <string>
 
+#include "Player.h"
+
 enum ChessPieceType
 {
 	pawn,
@@ -20,14 +22,14 @@ enum ChessPieceType
 class ChessPiece
 {
 public:
-	ChessPiece(ChessPieceType const type, int const player);
+	ChessPiece(ChessPieceType const type, Player const player);
 	~ChessPiece();
 
 	const char* GetChessPieceType();
 
 	sf::Sprite& GetSprite(){ return sprite; };
 
-	int player;
+	Player player;
 	ChessPieceType type;
 	sf::Vector2i tablePosition;
 	sf::Vector2i lastPosition;

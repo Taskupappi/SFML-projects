@@ -1,6 +1,5 @@
-#include "MainMenu.h"
-
 #include "InGame.h"
+#include "MainMenu.h"
 #include <iostream>
 
 
@@ -11,7 +10,6 @@ MainMenu::MainMenu(GameStateManager* _stateManager)
 
 void MainMenu::Initialize()
 {
-
 }
 
 void MainMenu::Loop(sf::RenderWindow* window, const sf::Vector2f mousePosition, TextManager* textManager)
@@ -49,7 +47,7 @@ void MainMenu::Loop(sf::RenderWindow* window, const sf::Vector2f mousePosition, 
 		}
 		case 4:
 		{
-			stateManager->AddState((GameState*)(new InGame(stateManager, GAMETYPE::AI)));
+			stateManager->AddState((GameState*)(new InGame(stateManager, GAMETYPE::AGAINSTAI)));
 			stateManager->PopState();
 			stateManager->GetStateFront()->Initialize();
 			break;

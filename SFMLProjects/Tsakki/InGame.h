@@ -1,21 +1,20 @@
 #ifndef INGAME_H
 #define INGAME_H
 
+#include "Network.h"
 #include "GameStateManager.h"
 #include "GameState.h"
 #include "Table.h"
 #include "ChessPiece.h"
 #include "TextManager.h"
-#include "Network.h"
+#include "Player.h"
 
-
-enum GAMETYPE
+enum class GAMETYPE
 {
 	HOST,
 	JOIN,
 	HOTSEAT,
-	AI
-
+	AGAINSTAI
 };
 
 class InGame : public GameState
@@ -30,6 +29,8 @@ public:
 	void Uninitialize();
 	void Draw(sf::RenderWindow* window, TextManager* textManager);
 	void HandleInput(const sf::Event inputEvent, const sf::Vector2f mousePosition);
+
+	void DecideColor();
 
 	//bool Move(const int player, const sf::Vector2f mousePosition);
 
@@ -59,6 +60,8 @@ private:
 	//network
 	bool isHost = false;
 	Network *network;
+	Player players[2]; //player 0 is this player, player 1 is the opponent. 1 == white, 2 == black
+
 };
 #endif
 

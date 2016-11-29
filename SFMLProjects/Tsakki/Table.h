@@ -7,8 +7,6 @@
 #include "Square.h"
 #include "ChessPiece.h"
 
-//#include "Player.h"
-
 
 class Table
 {
@@ -18,11 +16,11 @@ public:
 
 	void Draw(sf::RenderWindow* window);
 
-	void Initialize();
+
+	void Initialize(Player players[2]);
 	void Uninitialize();
 
-	//calculates movement for a piece in the beginning of the turn
-	//done only once each turn!
+	//used to update where pieces can move whenever the state of the talbe would change
 	bool CalculatePieceMovement(ChessPiece* piece);
 	void CalculatePieceMovementForEachPiece();
 

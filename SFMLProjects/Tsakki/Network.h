@@ -1,5 +1,5 @@
-#ifndef NETWORK_H
-#define NETWORK_H
+#ifndef CHESSNETWORK_H
+#define CHESSNETWORK_H
 
 #include "SFML\Network.hpp"
 
@@ -18,7 +18,6 @@
 *
 */
 
-
 enum PACKETTYPE
 {
 	HOSTCOLOR,
@@ -31,9 +30,9 @@ enum PACKETTYPE
 struct NetworkPacket
 {
 	sf::Uint8 packetType;
+	sf::Uint8 confirmationData;
 	sf::Uint32 moveData;
 	std::string message;
-	sf::Uint8 confirmationData;
 };
 
 class Network
@@ -42,26 +41,23 @@ public:
 	Network(const bool isHost);
 	~Network();
 
+	void Initialize(); // done
+
 	//void HandlePackage(); - what is the purpose for this?
-	void ListenForPackets(); // not done
+	void ListenForPackets(){}; // not done
 	void HandleReceivedPackets(); // not done
-
-
+	
 	void AskIfOkay(const PACKETTYPE typeOfConfirmation); //used to confirm that other player has received vital information //done
 	void SendConfirmation(const PACKETTYPE typeOfConfirmation, const sf::Uint32 move = 0); // done 
 	void SendHostColor(const bool isWhite); //done
 	void Encrypt(); // not done
 	std::string Decrypt(sf::Int32 toBeDecryptedMove); //not done
 	sf::Uint32 PackMove(const char move[]); // done
-
-	void Initialize(); // done
-
+	
 	void setHostIP(const std::string hostIP); // done
 	void setPort(const unsigned short port); // done
 	void SavePacket(const NetworkPacket receivedPackage); //done
-
-
-
+	
 private:
 	sf::IpAddress hostIP;
 	unsigned short port;
@@ -77,14 +73,17 @@ private:
 	std::vector <NetworkPacket> savedPackets;
 };
 
+inline sf::Packet& operator <<(sf::Packet& packet, const NetworkPacket& networkPacket);
+inline sf::Packet& operator >>(sf::Packet& packet, NetworkPacket& networkPacket);
+
 sf::Packet& operator <<(sf::Packet& packet, const NetworkPacket& networkPacket)
 {
-	return packet << networkPacket.packetType << networkPacket.moveData << networkPacket.message;
+	return packet << networkPacket.packetType << networkPacket.confirmationData  << networkPacket.moveData << networkPacket.message;
 }
 
 sf::Packet& operator >>(sf::Packet& packet, NetworkPacket& networkPacket)
 {
-	return packet >> networkPacket.packetType >> networkPacket.moveData >> networkPacket.message;
+	return packet >> networkPacket.packetType >> networkPacket.confirmationData >> networkPacket.moveData >> networkPacket.message;
 }
 #endif
  

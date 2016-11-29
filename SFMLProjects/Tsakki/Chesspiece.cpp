@@ -1,6 +1,6 @@
 #include "ChessPiece.h"
 
-ChessPiece::ChessPiece(ChessPieceType const _type, int const _player)
+ChessPiece::ChessPiece(ChessPieceType const _type, Player const _player)
 {
 	//Sprite stuff
 	//texture.loadFromFile("ChessPieceSprite.png");
@@ -14,11 +14,10 @@ ChessPiece::ChessPiece(ChessPieceType const _type, int const _player)
 	{
 		case pawn:
 		{
-			if (player == 1)
+			if (player.color == COLOR::WHITE)
 			{
 				sprite.setTextureRect(sf::IntRect(225, 0, 45, 45));
-				//sprite.setTextureRect(sf::IntRect(1667, 667, 333, 333));
-				
+				//sprite.setTextureRect(sf::IntRect(1667, 667, 333, 333));				
 			}
 			else
 			{
@@ -29,7 +28,7 @@ ChessPiece::ChessPiece(ChessPieceType const _type, int const _player)
 		}			
 		case knight:
 		{
-			if (player == 1)
+			if (player.color == COLOR::WHITE)
 			{
 				sprite.setTextureRect(sf::IntRect(135, 0, 45, 45));
 				//sprite.setTextureRect(sf::IntRect(1000, 667, 333, 333));
@@ -43,7 +42,7 @@ ChessPiece::ChessPiece(ChessPieceType const _type, int const _player)
 		}
 		case rook:	
 		{
-			if (player == 1)
+			if (player.color == COLOR::WHITE)
 			{
 				sprite.setTextureRect(sf::IntRect(180, 0, 45, 45));
 				//sprite.setTextureRect(sf::IntRect(1333, 667, 333, 333));
@@ -57,7 +56,7 @@ ChessPiece::ChessPiece(ChessPieceType const _type, int const _player)
 		}
 		case bishop:
 		{
-			if (player == 1)
+			if (player.color == COLOR::WHITE)
 			{
 				sprite.setTextureRect(sf::IntRect(90, 0, 45, 45));
 				//sprite.setTextureRect(sf::IntRect(667, 667, 333, 333));
@@ -71,7 +70,7 @@ ChessPiece::ChessPiece(ChessPieceType const _type, int const _player)
 		}
 		case queen:
 		{
-			if (player == 1)
+			if (player.color == COLOR::WHITE)
 			{
 				sprite.setTextureRect(sf::IntRect(45, 0, 45, 45));
 				//sprite.setTextureRect(sf::IntRect(333, 667, 333, 333));
@@ -85,7 +84,7 @@ ChessPiece::ChessPiece(ChessPieceType const _type, int const _player)
 		}
 		case king:
 		{
-			if (player == 1)
+			if (player.color == COLOR::WHITE)
 			{
 				sprite.setTextureRect(sf::IntRect(0, 0, 45, 45));
 				//sprite.setTextureRect(sf::IntRect(0, 667, 333, 333));
