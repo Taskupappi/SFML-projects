@@ -21,17 +21,18 @@
 enum PACKETTYPE
 {
 	HOSTCOLOR,
-	MOVE,	
+	MOVE,
 	CONNECTION,
+	CONNECTED,
 	CONFIRMATION,
 	MESSAGE,
 };
 
 struct NetworkPacket
 {
-	sf::Uint8 packetType;
-	sf::Uint8 confirmationData;
-	sf::Uint32 moveData;
+	sf::Uint8 packetType; // the purpose is to identify what kind of an action we want to achieve
+	sf::Uint8 confirmationData; // if we send confirmation 
+	sf::Uint32 moveData; //
 	std::string message;
 };
 
@@ -44,10 +45,11 @@ public:
 	void Initialize(); // done
 
 	//void HandlePackage(); - what is the purpose for this?
-	void ListenForPackets(){}; // not done
-	void HandleReceivedPackets(); // not done
+	void ListenForPackets(); // not done
+	void HandleReceivedPackets(sf::Packet packet); // not done
 	
-	void AskIfOkay(const PACKETTYPE typeOfConfirmation); //used to confirm that other player has received vital information //done
+	//used to confirm that other player has received vital information
+	void AskIfOkay(const PACKETTYPE typeOfConfirmation); //done
 	void SendConfirmation(const PACKETTYPE typeOfConfirmation, const sf::Uint32 move = 0); // done 
 	void SendHostColor(const bool isWhite); //done
 	void Encrypt(); // not done
@@ -57,15 +59,23 @@ public:
 	void setHostIP(const std::string hostIP); // done
 	void setPort(const unsigned short port); // done
 	void SavePacket(const NetworkPacket receivedPackage); //done
-	
+
+	sf::Packet PackPacket(NetworkPacket packet); //pack the packet ready for sending
+	NetworkPacket UnPackPacket(sf::Packet packet);
+
 private:
 	sf::IpAddress hostIP;
 	unsigned short port;
 	sf::TcpSocket tcpSocket;
 	sf::TcpListener listener;
 
-	//char textBuffer[2048];
-	//sf::Uint32 moveBuffer;
+	//data buffers
+
+	char dataBuffer[4096];
+
+	char textBuffer[2048];
+	sf::Uint32 moveBuffer;	
+	
 	std::size_t received;
 	bool isHost = false;
 

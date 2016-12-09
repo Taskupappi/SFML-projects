@@ -28,13 +28,11 @@ void MainMenu::Loop(sf::RenderWindow* window, const sf::Vector2f mousePosition, 
 		{
 			stateManager->AddState((GameState*)(new InGame(stateManager, GAMETYPE::HOST)));
 			stateManager->PopState();
-			stateManager->GetStateFront()->Initialize();
 			break;
 		}
 		case 2:
 			stateManager->AddState((GameState*)(new InGame(stateManager, GAMETYPE::JOIN)));
 			stateManager->PopState();
-			stateManager->GetStateFront()->Initialize();
 		{
 			break;
 		}
@@ -42,14 +40,12 @@ void MainMenu::Loop(sf::RenderWindow* window, const sf::Vector2f mousePosition, 
 		{
 			stateManager->AddState((GameState*)(new InGame(stateManager, GAMETYPE::HOTSEAT)));			
 			stateManager->PopState();
-			stateManager->GetStateFront()->Initialize();
 			break;
 		}
 		case 4:
 		{
 			stateManager->AddState((GameState*)(new InGame(stateManager, GAMETYPE::AGAINSTAI)));
 			stateManager->PopState();
-			stateManager->GetStateFront()->Initialize();
 			break;
 		}
 	default:

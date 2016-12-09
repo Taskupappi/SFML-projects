@@ -407,10 +407,10 @@ Table* Table::CopyTable()
 	return copyTable;
 }
 
-bool Table::CheckForCheck(const bool _playerOneTurn, Square* _squareToMove)
+bool Table::CheckForCheck(const bool _bottomPlayer, Square* _squareToMove)
 {
 	bool tempCheck = false;
-	if (_playerOneTurn)
+	if (_bottomPlayer)
 	{
 		tempCheck = check[0];
 	}
@@ -574,7 +574,7 @@ bool Table::CheckForCheck(const bool _playerOneTurn, Square* _squareToMove)
 		pieces.push_back(tempPieceEaten);
 
 		//if the active player is being checked, don't allow the move
-		if ((_playerOneTurn && check[0]) || !_playerOneTurn && check[1])
+		if ((_bottomPlayer && check[0]) || !_bottomPlayer && check[1])
 		{
 			return true;
 		}
@@ -664,7 +664,7 @@ bool Table::CheckForCheck(const bool _playerOneTurn, Square* _squareToMove)
 		}
 
 		//if the active player is being checked, don't allow the move
-		if ((_playerOneTurn && check[0]) || !_playerOneTurn && check[1])
+		if ((_bottomPlayer && check[0]) || !_bottomPlayer && check[1])
 		{
 			//calculate the moves once more so that the game doesn't show wrong possible moves
 			std::vector<ChessPiece*>::iterator piece = pieces.begin();
@@ -675,7 +675,7 @@ bool Table::CheckForCheck(const bool _playerOneTurn, Square* _squareToMove)
 			}
 
 			//revert the check back to not being in check
-			if (_playerOneTurn)
+			if (_bottomPlayer)
 			{
 				check[0] = tempCheck;
 
@@ -700,7 +700,7 @@ bool Table::CheckForCheck(const bool _playerOneTurn, Square* _squareToMove)
 			}
 
 			//revert the check back to not being in check
-			if (_playerOneTurn)
+			if (_bottomPlayer)
 			{
 				check[0] = tempCheck;
 
@@ -1930,24 +1930,7 @@ bool Table::Checkmate(const bool _playerOneTurn)
 
 void Table::DebugStuff()
 {
-	//int debug[8][8] = {0};
-
-	//for (int i = 0; i < 8; i++)
-	//{
-	//	for (int j = 0; j < 8; j++)
-	//	{
-	//		if (board[i][j]->onSquare != nullptr)
-	//		{
-	//			debug[i][j] = 1;
-	//		}
-	//		else
-	//		{
-	//			debug[i][j] = 2;
-	//		}				
-	//	}
-	//}
-
-	system("cls");
+	/*system("cls");
 
 	for (int i = 0; i < 8; i++)
 	{
@@ -2017,4 +2000,5 @@ void Table::DebugStuff()
 
 	printf("\nCheck Status:\n");
 	printf("player 1: %d\nplayer 2: %d", check[0], check[1]);
+	*/
 }

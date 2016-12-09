@@ -39,15 +39,24 @@ void InGame::Initialize()
 	{
 	case GAMETYPE::HOST:
 		{
-			//setup network
-			SetupHost(isHost);
-
-			//Host decides the color first
-			DecideColor();
-
+			players[0].position = POSITION::DOWN;
+			players[1].position = POSITION::UP;
+			
 			//set player types
 			players[0].type = PLAYERTYPE::LOCAL;
 			players[1].type = PLAYERTYPE::INTERNET;
+
+			//Let host decide it's color
+			DecideColor();
+
+			//setup network
+			isHost = true;
+			SetupHost(isHost);		
+
+			if (players[0].color == COLOR::WHITE)
+				network->SendHostColor(true);
+			else
+				network->SendHostColor(false);
 
 			//set board ready
 			board.Initialize(players);
@@ -55,6 +64,9 @@ void InGame::Initialize()
 		}	
 		case GAMETYPE::JOIN:
 		{
+			players[0].position = POSITION::DOWN;
+			players[1].position = POSITION::UP;
+
 			//setup network stuff ready
 			SetupHost(isHost);
 

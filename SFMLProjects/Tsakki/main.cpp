@@ -42,8 +42,8 @@ int main()
 //int host = -1;
 //bool quit = false;
 //
-//char textBuffer[100];
-//__int32 buffer;
+//char buffer[100];
+////__int32 buffer;
 //std::size_t received;
 //
 //sf::TcpSocket tcpSocket;
@@ -52,6 +52,11 @@ int main()
 //std::thread senderThread;
 //std::thread mainThread;
 //
+//
+//struct TEST
+//{
+//	std::string KisseCount;
+//};
 //
 //
 //int main()
@@ -84,6 +89,8 @@ int main()
 //	}
 //	else if (connectionType == 'c')
 //	{
+//		//std::string tempIP = (std::string)sf::IpAddress::getLocalAddress();
+//
 //		std::string tempIP = "";
 //		std::cout << "Give server address" << std::endl;
 //		std::cin >> tempIP;
@@ -115,25 +122,35 @@ int main()
 //
 //	while (!done)
 //	{ 
+//		sf::Packet _packet;
+//
 //		if (mode == 's') //send
 //		{
-//			std::getline(std::cin, text);
-//			__int32 move = PackMove(text.c_str());
+//
+//			TEST test;
+//
+//			std::getline(std::cin, test.KisseCount);
+//			//__int32 move = PackMove(text.c_str());
 //			//std::cout << "move: " << &move << std::endl;
-//			tcpSocket.send(&move, sizeof(move));
-//			
+//			//tcpSocket.send(&move, sizeof(move));
+//		
+//			_packet << test.KisseCount;
+//
+//			tcpSocket.send(_packet);
 //			
 //			//tcpSocket.send(text.c_str(), text.length() + 1);
 //			mode = 'r';
 //		}
 //		else if (mode == 'r') //receive
 //		{
-//			tcpSocket.receive(&buffer, sizeof(buffer), received);
-//			//tcpSocket.receive(textBuffer, sizeof(textBuffer), received);			
-//			if (received > 0)
+//			TEST answer;
+//			
+//			//tcpSocket.receive(textBuffer, sizeof(textBuffer), received);	
+//			tcpSocket.receive(_packet);
+//			if (_packet >> answer.KisseCount)
 //			{
 //				//std::cout << "Received: " << textBuffer << std::endl;
-//				std::cout << "Received: " << ~buffer << std::endl;
+//				std::cout << "Received: " << answer.KisseCount << std::endl;
 //				mode = 's';
 //			}		
 //		}
