@@ -28,10 +28,10 @@ enum PACKETTYPE
 	MESSAGE,
 };
 
-struct NetworkPacket
+struct PacketData
 {
 	sf::Uint8 packetType; // the purpose is to identify what kind of an action we want to achieve
-	sf::Uint8 confirmationData; // if we send confirmation 
+	sf::Uint8 confirmationData; // if we send confirmation - not necessary
 	sf::Uint32 moveData; //
 	std::string message;
 };
@@ -45,31 +45,29 @@ public:
 	void Initialize(); // done
 
 	//void HandlePackage(); - what is the purpose for this?
-	void ListenForPackets(); // not done
-	void HandleReceivedPackets(sf::Packet packet); // not done
+			
+	PacketData* ListenForPackets(); // not done
+	PacketData* HandleReceivedPackets(sf::Packet packet); // not done
 	
 	//used to confirm that other player has received vital information
 	void AskIfOkay(const PACKETTYPE typeOfConfirmation); //done
 	void SendConfirmation(const PACKETTYPE typeOfConfirmation, const sf::Uint32 move = 0); // done 
 	void SendHostColor(const bool isWhite); //done
-	void Encrypt(); // not done
-	std::string Decrypt(sf::Int32 toBeDecryptedMove); //not done
+	void EncryptMove(); // not done
+	std::string DecryptMove(sf::Int32 toBeDecryptedMove); //not done
 	sf::Uint32 PackMove(const char move[]); // done
 	
-	void setHostIP(const std::string hostIP); // done
-	void setPort(const unsigned short port); // done
-	void SavePacket(const NetworkPacket receivedPackage); //done
+	void SetHostIP(const std::string hostIP);
+	void SetPort(const unsigned short port);
+	void SavePacket(PacketData* receivedPacket);
 
-	sf::Packet PackPacket(NetworkPacket packet); //pack the packet ready for sending
-	NetworkPacket UnPackPacket(sf::Packet packet);
+	void SetBlocking(bool isBlocking);
 
-private:
-	sf::IpAddress hostIP;
-	unsigned short port;
-	sf::TcpSocket tcpSocket;
-	sf::TcpListener listener;
-
+	sf::Packet PackPacket(PacketData data);
+	PacketData* UnPackPacket(sf::Packet unpack);
 	//data buffers
+
+	unsigned short port;
 
 	char dataBuffer[4096];
 
@@ -80,18 +78,22 @@ private:
 	bool isHost = false;
 
 	//std::map
-	std::vector <NetworkPacket> savedPackets;
+	std::vector <PacketData*> savedPackets;
+
+	std::string hostIP;
+	sf::TcpListener listener;
+	sf::TcpSocket tcpSocket;
 };
 
-inline sf::Packet& operator <<(sf::Packet& packet, const NetworkPacket& networkPacket);
-inline sf::Packet& operator >>(sf::Packet& packet, NetworkPacket& networkPacket);
+inline sf::Packet& operator <<(sf::Packet& packet, const PacketData& networkPacket);
+inline sf::Packet& operator >>(sf::Packet& packet, PacketData& networkPacket);
 
-sf::Packet& operator <<(sf::Packet& packet, const NetworkPacket& networkPacket)
+sf::Packet& operator <<(sf::Packet& packet, const PacketData& networkPacket)
 {
 	return packet << networkPacket.packetType << networkPacket.confirmationData  << networkPacket.moveData << networkPacket.message;
 }
 
-sf::Packet& operator >>(sf::Packet& packet, NetworkPacket& networkPacket)
+sf::Packet& operator >>(sf::Packet& packet, PacketData& networkPacket)
 {
 	return packet >> networkPacket.packetType >> networkPacket.confirmationData >> networkPacket.moveData >> networkPacket.message;
 }

@@ -3,10 +3,10 @@
 
 InGame::InGame(GameStateManager* _stateManager, GAMETYPE _type)
 {
-	type = _type;
+	gameType = _type;
 	 stateManager = _stateManager;
 	 network = nullptr;
-	 playerOneTurn = true;
+	 whitePlayerTurn = true;
 }
 
 void InGame::DecideColor()
@@ -35,7 +35,7 @@ void InGame::DecideColor()
 
 void InGame::Initialize()
 {
-	switch (type)
+	switch (gameType)
 	{
 	case GAMETYPE::HOST:
 		{
@@ -60,6 +60,8 @@ void InGame::Initialize()
 
 			//set board ready
 			board.Initialize(players);
+
+			network->SetBlocking(false);
 			break;
 		}	
 		case GAMETYPE::JOIN:
@@ -70,8 +72,27 @@ void InGame::Initialize()
 			//setup network stuff ready
 			SetupHost(isHost);
 
-			//ask for host color
-			network->ListenForPackets();
+			PacketData* data = nullptr;
+			bool colorReceived = false;
+
+			while (!colorReceived)
+			{
+				//wait for host color
+				data = network->ListenForPackets();
+
+				if (data->message == "isWhite")
+				{
+					players[0].color = COLOR::BLACK;
+					players[1].color = COLOR::WHITE;
+					colorReceived = true;
+				}
+				else if (data->message == "notWhite")
+				{
+					players[0].color = COLOR::WHITE;
+					players[1].color = COLOR::BLACK;
+					colorReceived = true;
+				}
+			}
 
 			//set player types
 			players[0].type = PLAYERTYPE::LOCAL;
@@ -79,6 +100,8 @@ void InGame::Initialize()
 
 			//set board ready
 			board.Initialize(players);		
+
+			network->SetBlocking(false);
 			break;
 		}
 		case GAMETYPE::HOTSEAT:
@@ -116,14 +139,22 @@ void InGame::SetupHost(const bool isHost)
 
 void InGame::BeginTurn(sf::RenderWindow* _window)
 {
-	switch (type)
+	switch (gameType)
 	{
 		case GAMETYPE::HOST:
 		{
+			//Do this only once per turn
+			board.CalculatePieceMovementForEachPiece();
+			
+			beginTurnStep = false;
 			break;
 		}
 		case GAMETYPE::JOIN:
 		{
+			//Do this only once per turn
+			board.CalculatePieceMovementForEachPiece();			
+			
+			beginTurnStep = false;
 			break;
 		}
 		case GAMETYPE::HOTSEAT:
@@ -148,13 +179,13 @@ void InGame::BeginTurn(sf::RenderWindow* _window)
 
 void InGame::SetPlayerTurnText(TextManager* _textManager)
 {
-	if (playerOneTurn)
+	if (whitePlayerTurn)
 	{
-		_textManager->AddText(TEXTTYPE::PLAYERTURN,"Player 1 Turn");
+		_textManager->AddText(TEXTTYPE::PLAYERTURN,"White's Turn");
 	}
 	else
 	{
-		_textManager->AddText(TEXTTYPE::PLAYERTURN, "Player 2 Turn");
+		_textManager->AddText(TEXTTYPE::PLAYERTURN, "Black's Turn");
 	}
 }
 
@@ -182,35 +213,133 @@ void InGame::Loop(sf::RenderWindow* _window, const sf::Vector2f _mousePosition, 
 
 bool InGame::HandleTurn(sf::RenderWindow* _window, const sf::Vector2f _mousePosition)
 {
-	//board.SelectActivePiece(_mousePosition);
-	
-	board.SetSquaresForHighlighting();
-
-	if (playerOneTurn)
-	{		
-		if (Move())
+	switch (gameType)
+	{
+		case GAMETYPE::HOST:
 		{
-			EndTurn();
-			return true;
+			board.SetSquaresForHighlighting();
+
+			if (whitePlayerTurn && players[0].color == COLOR::WHITE)
+			{
+				if (Move())
+				{
+					EndTurn();
+					return true;
+				}
+			}
+			else if (!whitePlayerTurn && players[1].color == COLOR::BLACK)
+			{
+				if (Move())
+				{
+					EndTurn();
+					return true;
+				}
+			}
+			return false;
+			break;
 		}
+		case GAMETYPE::JOIN:
+		{
+			board.SetSquaresForHighlighting();
+			
+			if (whitePlayerTurn && players[0].color == COLOR::WHITE)
+			{
+				if (Move())
+				{
+					EndTurn();
+					return true;
+				}
+			}
+			else if(!whitePlayerTurn && players[0].color == COLOR::BLACK)
+			{
+				if (Move())
+				{
+					EndTurn();
+					return true;
+				}
+			}
+			else
+			{				
+				return WaitForMoveFromServer();
+			}
+			return false;
+			break;
+		}
+		case GAMETYPE::HOTSEAT:
+		{
+			board.SetSquaresForHighlighting();
+
+			if (whitePlayerTurn)
+			{
+				if (Move())
+				{
+					EndTurn();
+					return true;
+				}
+			}
+			else
+			{
+				if (Move())
+				{
+					EndTurn();
+					return true;
+				}
+			}
+			return false;
+			break;
+		}
+		case GAMETYPE::AGAINSTAI:
+		{
+			break;
+		}
+		default:
+			break;
+	}
+	return false;
+	
+}
+
+bool InGame::WaitForMoveFromServer()
+{
+	PacketData* data = nullptr;
+	bool moveReceived = false;
+
+	/*while (!moveReceived)
+	{*/
+		//wait for host color
+	data = network->ListenForPackets();
+	//}
+
+	if (data != nullptr)
+	{
+		return true;
 	}
 	else
 	{
-		if (Move())
-		{
-			EndTurn();
-			return true;
-		}
+		return false;
 	}
 
-	return false;
 }
 
 bool InGame::Move()
 {
+	//switch (gameType)
+	//{
+	//case GAMETYPE::HOST:
+	//	break;
+	//case GAMETYPE::JOIN:
+	//	break;
+	//case GAMETYPE::HOTSEAT:
+	//	break;
+	//case GAMETYPE::AGAINSTAI:
+	//	break;
+	//default:
+	//	break;
+	//}
+
 	if (board.GetSquareToMove())
 	{
-		return board.MoveActivePiece(playerOneTurn, board.GetSquareToMove());	
+		return board.MoveActivePiece(whitePlayerTurn, board.GetSquareToMove());	
 	}
 	else
 	{
@@ -236,13 +365,13 @@ void InGame::EndTurn()
 	board.ClearActivePiece();
 	board.ClearHighlights();
 
-	if (playerOneTurn)
+	if (whitePlayerTurn)
 	{
-		playerOneTurn = false;
+		whitePlayerTurn = false;
 	}
 	else
 	{
-		playerOneTurn = true;
+		whitePlayerTurn = true;
 	}
 
 	beginTurnStep = true;
@@ -269,7 +398,7 @@ void InGame::HandleInput(const sf::Event _inputEvent, const sf::Vector2f _mouseP
 			{
 				if (board.GetActivePiece())
 				{
-					board.CheckMovement(playerOneTurn, _mousePosition);
+					board.CheckMovement(whitePlayerTurn, _mousePosition);
 				}
 				else
 				{
@@ -337,7 +466,7 @@ bool InGame::Move(const int _player, const sf::Vector2f _mousePosition)
 //			sf::Event event;
 //			while (window->pollEvent(event))
 //			{
-//				if (event.type == sf::Event::Closed)
+//				if (event.gameType == sf::Event::Closed)
 //					window->close();
 //
 //				movementDone = HandleInput();

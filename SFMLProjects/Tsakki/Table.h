@@ -41,13 +41,13 @@ public:
 	std::array<int, 2> MousePositionToTablePosition(sf::Vector2f mousePosition);
 
 	//presets player movement before the buttons are selected
-	void CheckMovement(const bool playerOneTurn, const sf::Vector2f mousePosition);
+	void CheckMovement(const bool whitePlayerTurn, const sf::Vector2f mousePosition);
 	
 	//
 	void UpdateCheckBoolStatus();
 
 	//
-	bool MoveActivePiece(const bool playerOneTurn, Square* squareToMove);
+	bool MoveActivePiece(const bool whitePlayerTurn, Square* squareToMove);
 	
 	void EatPiece(ChessPiece* pieceToDelete);
 

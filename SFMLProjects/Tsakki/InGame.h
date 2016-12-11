@@ -20,7 +20,7 @@ enum class GAMETYPE
 class InGame : public GameState
 {
 public:
-	InGame(GameStateManager* _stateManager, GAMETYPE type);
+	InGame(GameStateManager* _stateManager, GAMETYPE gameType);
 	~InGame(){};
 
 	//InGame state core
@@ -48,14 +48,16 @@ public:
 	//networking
 	void SetupHost(const bool isHost);
 
+	bool WaitForMoveFromServer();
+
 private:
 	bool beginTurnStep = true;
 	bool endTurn = false;
 	Table board;
-	bool playerOneTurn = true;
+	bool whitePlayerTurn = true;
 	std::array<int, 2> mouseToBoardPosition;
 	//bool checkmate[2] {false, false};
-	GAMETYPE type;
+	GAMETYPE gameType;
 
 	//network
 	bool isHost = false;

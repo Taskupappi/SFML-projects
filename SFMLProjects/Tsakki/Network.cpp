@@ -18,7 +18,7 @@ void Network::Initialize()
 	if (isHost)
 	{	
 
-		hostIP = sf::IpAddress::getLocalAddress();
+		hostIP = sf::IpAddress::getLocalAddress().toString();
 		listener.listen(port);
 
 		std::cout << "waiting for other player to join the game" << std::endl;
@@ -27,20 +27,17 @@ void Network::Initialize()
 		{
 			std::cout << "client connected!" << std::endl;
 		}
-
-		//ListenForPackets();
 	}
 	else
 	{
 		std::string serverIP;
 		std::cout << "Give IP address to connect" << std::endl;
-		//std::cin >> serverIP;
 
 		serverIP = sf::IpAddress::getLocalAddress().toString();
 
 		std::cout << "IP set to: " << serverIP << std::endl;
 
-		setHostIP(serverIP);
+		SetHostIP(serverIP);
 		
 		//sf::Time connectionTimeoutTime = sf::seconds(4.0f);
 
@@ -50,40 +47,39 @@ void Network::Initialize()
 
 			//Initialize();
 		}
-
-		//send message to confirm the established connection
-		//SendConfirmation(PACKETTYPE::CONNECTED);
 	}
 }
 
-void Network::ListenForPackets()
+PacketData* Network::ListenForPackets()
 {
 	std::cout << "listening for a message" << std::endl;
 
 	sf::Packet packet;
 
-	while (received <= 0)
-	{
+	//while (received <= 0)
+	//{
 		if (tcpSocket.receive(packet) == sf::Socket::Done)
 		{
 			std::cout << "message received!" << std::endl;
 
-			HandleReceivedPackets(packet);
+			return HandleReceivedPackets(packet);
 		}
-	}
+//	}
+
+	return nullptr;
 }
 
-void Network::setHostIP(const std::string _hostIP)
+void Network::SetHostIP(const std::string _hostIP)
 {
 	hostIP = _hostIP;
-}
+} 
 
-void Network::setPort(const unsigned short _port)
+void Network::SetPort(const unsigned short _port)
 {
 	port = _port;
 }
 
-void Network::SavePacket(const NetworkPacket _receivedPacket)
+void Network::SavePacket(PacketData* _receivedPacket)
 {
 	savedPackets.push_back(_receivedPacket);
 }
@@ -92,7 +88,7 @@ void Network::SendHostColor(const bool _isWhite)
 {
 	sf::Packet packetToSend;
 
-	NetworkPacket data;
+	PacketData data;
 	data.packetType = PACKETTYPE::HOSTCOLOR;
 	data.confirmationData = 0;
 	data.moveData = 0;
@@ -105,8 +101,6 @@ void Network::SendHostColor(const bool _isWhite)
 	{
 		data.message = "notWhite";
 	}
-
-	//packetToSend << (data.packetType << sizeof(NetworkPacket));
 
 	std::cout << "sent color: " << data.message << std::endl;
 
@@ -133,22 +127,13 @@ std::string Decrypt(sf::Int32 _toBeEncryptedMove)
 	decryptedMove = (_toBeEncryptedMove >> 16);
 	decryptedMove = (_toBeEncryptedMove >> 8);
 	decryptedMove = (_toBeEncryptedMove >> 0);
-
-
-	//char move[4];
-	//move[0] = (_toBeEncryptedMove >> 24);
-	//move[1] = (_toBeEncryptedMove >> 16);
-	//move[2] = (_toBeEncryptedMove >> 8);
-	//move[3] = (_toBeEncryptedMove >> 0);
 	
 	return decryptedMove;	
 }
 
 void Network::AskIfOkay(const PACKETTYPE _typeOfConfirmation)
 {
-	//sf::Packet packetToSend;
-
-	NetworkPacket data;
+	PacketData data;
 	data.packetType = PACKETTYPE::MESSAGE;
 	data.confirmationData = 0;
 	data.moveData = 0;
@@ -174,17 +159,12 @@ void Network::AskIfOkay(const PACKETTYPE _typeOfConfirmation)
 			break;
 	}
 
-	//set data
-	//packetToSend << data;
-
-	//send the packet to other player
-	//tcpSocket.send(packetToSend);
 	tcpSocket.send(PackPacket(data));
 }
 
 void Network::SendConfirmation(const PACKETTYPE _typeOfConfimation, const sf::Uint32 _move)
 {
-	NetworkPacket data;
+	PacketData data;
 	data.packetType = PACKETTYPE::CONFIRMATION;
 	data.confirmationData = 0;
 	data.moveData = _move;
@@ -214,118 +194,87 @@ void Network::SendConfirmation(const PACKETTYPE _typeOfConfimation, const sf::Ui
 			break;
 	}
 
-	//fill our packet
-	//packetToSend << data;
-
-
-	//send the packet to other player
-	//tcpSocket.send(packetToSend);
 	tcpSocket.send(PackPacket(data));
 }
 
-void Network::HandleReceivedPackets(sf::Packet _packet)
+PacketData* Network::HandleReceivedPackets(sf::Packet _packet)
 {
 	std::cout << "handling package" << std::endl;
 
-	NetworkPacket data;
+	PacketData* data = nullptr; // = new PacketData();
 	data = UnPackPacket(_packet);
 
-	switch (data.packetType)
+	switch (data->packetType)
 	{
 		case PACKETTYPE::HOSTCOLOR:
 		{
 			std::cout << "packet type: HOSTCOLOR " << std::endl;
-			std::cout << "Confirmation data: " << data.confirmationData << std::endl;
-			std::cout << "Packet type: " << data.packetType << std::endl;
-			std::cout << "Move data: " << data.moveData << std::endl;
-			std::cout << "Message: " << data.message << std::endl;
+			std::cout << "Confirmation data: " << data->confirmationData << std::endl;
+			std::cout << "Packet type: " << data->packetType << std::endl;
+			std::cout << "Move data: " << data->moveData << std::endl;
+			std::cout << "Message: " << data->message << std::endl;
 			break;
 		}
 		case PACKETTYPE::MOVE:
 		{	
+			
+
 			std::cout << "packet type: MOVE " << std::endl;
-			std::cout << "Confirmation data: " << data.confirmationData << std::endl;
-			std::cout << "Packet type: " << data.packetType << std::endl;
-			std::cout << "Move data: " << data.moveData << std::endl;
-			std::cout << "Message: " << data.message << std::endl;
+			std::cout << "Confirmation data: " << data->confirmationData << std::endl;
+			std::cout << "Packet type: " << data->packetType << std::endl;
+			std::cout << "Move data: " << data->moveData << std::endl;
+			std::cout << "Message: " << data->message << std::endl;
 			break;
 		}
 		case PACKETTYPE:: CONNECTION:
 		{
 			std::cout << "packet type: CONNECTION " << std::endl;
-			std::cout << "Confirmation data: " << data.confirmationData << std::endl;
-			std::cout << "Packet type: " << data.packetType << std::endl;
-			std::cout << "Move data: " << data.moveData << std::endl;
-			std::cout << "Message: " << data.message << std::endl;
+			std::cout << "Confirmation data: " << data->confirmationData << std::endl;
+			std::cout << "Packet type: " << data->packetType << std::endl;
+			std::cout << "Move data: " << data->moveData << std::endl;
+			std::cout << "Message: " << data->message << std::endl;
 			break;
 		}
 		case PACKETTYPE::CONNECTED:
 		{
 			std::cout << "packet type: CONNECTED " << std::endl;
-			std::cout << "Confirmation data: " << data.confirmationData << std::endl;
-			std::cout << "Packet type: " << data.packetType << std::endl;
-			std::cout << "Move data: " << data.moveData << std::endl;
-			std::cout << "Message: " << data.message << std::endl;
+			std::cout << "Confirmation data: " << data->confirmationData << std::endl;
+			std::cout << "Packet type: " << data->packetType << std::endl;
+			std::cout << "Move data: " << data->moveData << std::endl;
+			std::cout << "Message: " << data->message << std::endl;
 			break;
 		}
 		case PACKETTYPE::CONFIRMATION:
 		{
 			std::cout << "packet type: CONFIRMATION " << std::endl;
-			std::cout << "Confirmation data: " << data.confirmationData << std::endl;
-			std::cout << "Packet type: " << data.packetType << std::endl;
-			std::cout << "Move data: " << data.moveData << std::endl;
-			std::cout << "Message: " << data.message << std::endl;
+			std::cout << "Confirmation data: " << data->confirmationData << std::endl;
+			std::cout << "Packet type: " << data->packetType << std::endl;
+			std::cout << "Move data: " << data->moveData << std::endl;
+			std::cout << "Message: " << data->message << std::endl;
 			break;
 		}
 		case PACKETTYPE::MESSAGE:
 		{
 			std::cout << "packet type: MESSAGE " << std::endl;
-			std::cout << "Confirmation data: " << data.confirmationData << std::endl;
-			std::cout << "Packet type: " << data.packetType << std::endl;
-			std::cout << "Move data: " << data.moveData << std::endl;
-			std::cout << "Message: " << data.message << std::endl;
+			std::cout << "Confirmation data: " << data->confirmationData << std::endl;
+			std::cout << "Packet type: " << data->packetType << std::endl;
+			std::cout << "Move data: " << data->moveData << std::endl;
+			std::cout << "Message: " << data->message << std::endl;
 			break;
 		}
 		default:
 			break;
 	}
 
-	/*for each (NetworkPacket packet in savedPackets)
-	{
-		switch (packet.packetType)
-		{
-		case HOSTCOLOR:
-		{
-
-		}
-			break;
-		case MOVE:
-		{
-
-		}
-			break;
-		case CONNECTION:
-		{
-
-		}
-			break;
-		case CONFIRMATION:
-		{
-
-		}
-			break;
-		case MESSAGE:
-		{
-
-		}
-			break;
-		default:
-			break;
-		}
-	}*/
+	return data;
 }
 
-sf::Packet Network::PackPacket(NetworkPacket _data)
+void Network::SetBlocking(bool _isBlocking)
+{
+	tcpSocket.setBlocking(_isBlocking);
+}
+
+sf::Packet Network::PackPacket(PacketData _data)
 {
 	sf::Packet packet;
 
@@ -334,11 +283,12 @@ sf::Packet Network::PackPacket(NetworkPacket _data)
 	return packet;
 }
 
-NetworkPacket Network::UnPackPacket(sf::Packet _unpack)
+PacketData* Network::UnPackPacket(sf::Packet _unpack)
 {
-	NetworkPacket data;
+	PacketData* data = new PacketData();
 
-	_unpack >> data.packetType >> data.confirmationData >> data.moveData >> data.message;
+	_unpack >> data->packetType >> data->confirmationData >> data->moveData >> data->message;
 
 	return data;
 }
+

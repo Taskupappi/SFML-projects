@@ -19,10 +19,10 @@ Map::Map(const unsigned int _width, const unsigned int _height)
 	//set hexes on correct positions
 }
 
-void Map::InsertHexToMap(Hex* _mapHex, const unsigned int _positionX, const unsigned int _positionY)
-{
-	hexes[_positionX][_positionY] = _mapHex;
-}
+//void Map::InsertHexToMap(Hex* _mapHex, const unsigned int _positionX, const unsigned int _positionY)
+//{
+//	hexes[_positionX][_positionY] = _mapHex;
+//}
 
 Hex* Map::GetHex(const int x, const int y)
 {

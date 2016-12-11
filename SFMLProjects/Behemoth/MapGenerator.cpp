@@ -15,6 +15,6 @@ void MapGenerator::GenerateNewMap(const unsigned int _width, const unsigned int 
 	std::srand(std::time(0));
 	int random = std::rand();
 
-	Map* map = new Map();
-	maps.push_back(map);
+	//Map* map = new Map();
+	//maps.push_back(map);
 }
