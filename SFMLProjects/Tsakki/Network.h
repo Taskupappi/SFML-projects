@@ -46,6 +46,9 @@ public:
 
 	//void HandlePackage(); - what is the purpose for this?
 			
+	void SendMove(std::string move);
+
+
 	PacketData* ListenForPackets(); // not done
 	PacketData* HandleReceivedPackets(sf::Packet packet); // not done
 	
@@ -54,7 +57,7 @@ public:
 	void SendConfirmation(const PACKETTYPE typeOfConfirmation, const sf::Uint32 move = 0); // done 
 	void SendHostColor(const bool isWhite); //done
 	void EncryptMove(); // not done
-	std::string DecryptMove(sf::Int32 toBeDecryptedMove); //not done
+	std::string UnPackMove(sf::Int32 toBeDecryptedMove); //not done
 	sf::Uint32 PackMove(const char move[]); // done
 	
 	void SetHostIP(const std::string hostIP);

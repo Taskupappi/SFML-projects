@@ -1,6 +1,7 @@
 #ifndef INGAME_H
 #define INGAME_H
 
+#include "MoveConventer.h"
 #include "Network.h"
 #include "GameStateManager.h"
 #include "GameState.h"
@@ -8,6 +9,7 @@
 #include "ChessPiece.h"
 #include "TextManager.h"
 #include "Player.h"
+
 
 enum class GAMETYPE
 {
@@ -40,6 +42,7 @@ public:
 	void EndTurn();
 
 	//bool HandleInput();
+
 	bool Move();
 
 	//text stuff
@@ -48,7 +51,12 @@ public:
 	//networking
 	void SetupHost(const bool isHost);
 
-	bool WaitForMoveFromServer();
+	bool WaitForMoveFromOpponent();
+
+	std::string ConvertToString(std::pair<sf::Vector2i, sf::Vector2i> pair);
+	std::pair<sf::Vector2i, sf::Vector2i> ConvertToVec(std::string move);
+	std::pair<sf::Vector2i, sf::Vector2i> ConvertIntIntoPair(int _toBeConverter);
+
 
 private:
 	bool beginTurnStep = true;
@@ -63,7 +71,8 @@ private:
 	bool isHost = false;
 	Network *network;
 	Player players[2]; //player 0 is this player, player 1 is the opponent. 1 == white, 2 == black
-
+	std::string lastMove;
+	std::string currentMove;
 };
 #endif
 

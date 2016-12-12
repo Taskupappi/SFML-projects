@@ -33,6 +33,8 @@ public:
 	bool SelectActivePiece(const sf::Vector2f mousePosition);
 	//when you want to update using an existing piece
 	bool SelectActivePiece(ChessPiece* piece);
+	//for network
+	bool SelectActivePiece(sf::Vector2i piecePosition);
 	
 	ChessPiece* GetActivePiece(){ return activePiece; };
 
@@ -45,6 +47,8 @@ public:
 	
 	//
 	void UpdateCheckBoolStatus();
+
+	bool MoveOpponent(const bool whitePlayerTurn, std::pair<sf::Vector2i, sf::Vector2i> modeData);
 
 	//
 	bool MoveActivePiece(const bool whitePlayerTurn, Square* squareToMove);
@@ -64,7 +68,9 @@ public:
 	
 	std::vector<Square*> GetHighlightedSquares(){ return highlightedSquares; };
 	Square* GetSquareToMove(){ return squareToMove; };
-	void SetSquareToMove(){ squareToMove = nullptr; };
+	void SetSquareToMove();
+	void ClearSquareToMove(){ squareToMove = nullptr; };
+	void SetSquareToMove(sf::Vector2i position);
 
 	bool CheckForCheck(const bool _playerOneTurn, Square* _squareToMove);
 
@@ -75,6 +81,8 @@ public:
 	void Deselect();
 
 	void DebugStuff();
+
+	std::vector<std::pair<sf::Vector2i, sf::Vector2i>> GetAllMoves() { return allMoves; };
 
 	std::vector<ChessPiece*> GetPieces() { return pieces; };
 private:
@@ -87,7 +95,7 @@ private:
 	std::vector<ChessPiece*> pieces;
 	//ChessPiece* pieces[2][16];
 
-	std::vector<int[1][1]> allMoves;
+	std::vector<std::pair<sf::Vector2i, sf::Vector2i>> allMoves;
 	std::array<int, 2> mouseToTablePosition;
 
 	Square* squareToMove;

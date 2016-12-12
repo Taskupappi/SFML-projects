@@ -78,6 +78,7 @@
     <ClCompile Include="InGame.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainMenu.cpp" />
+    <ClCompile Include="MoveConverter.cpp" />
     <ClCompile Include="Network.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Square.cpp" />
@@ -93,6 +94,7 @@
     <ClInclude Include="InGame.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Move.h" />
+    <ClInclude Include="MoveConventer.h" />
     <ClInclude Include="Network.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Square.h" />
