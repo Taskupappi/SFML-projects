@@ -35,7 +35,6 @@ public:
 	void DecideColor();
 
 	//bool Move(const int player, const sf::Vector2f mousePosition);
-
 	//
 	void BeginTurn(sf::RenderWindow* window);
 	bool HandleTurn(sf::RenderWindow* window, const sf::Vector2f mousePosition);

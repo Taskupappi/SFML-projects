@@ -99,7 +99,7 @@ private:
 	std::array<int, 2> mouseToTablePosition;
 
 	Square* squareToMove;
-	int enPassantPosition[2];
+	int enPassantPosition[3];
 
 	//Checkmate
 	std::vector<ChessPiece*> PiecesInCheck;

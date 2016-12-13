@@ -789,6 +789,8 @@ bool Table::MoveOpponent(const bool _whitePlayerTurn, std::pair<sf::Vector2i, sf
 		//update where active piece has moved so far
 		activePiece->allMoves.push_back(std::make_pair(activePiece->tablePosition, squareToMove->tablePosition));
 
+		allMoves.push_back(std::make_pair(activePiece->tablePosition, squareToMove->tablePosition));
+
 		//update en passant position
 		if (activePiece->type == ChessPieceType::pawn)
 		{
@@ -803,6 +805,7 @@ bool Table::MoveOpponent(const bool _whitePlayerTurn, std::pair<sf::Vector2i, sf
 						board[squareToMove->tablePosition.x][squareToMove->tablePosition.y + 1]->onSquare = nullptr;
 						enPassantPosition[0] = -12;
 						enPassantPosition[1] = -12;
+						enPassantPosition[2] = -12;
 					}
 				}
 				else if (activePiece->player.position == POSITION::UP)
@@ -813,6 +816,7 @@ bool Table::MoveOpponent(const bool _whitePlayerTurn, std::pair<sf::Vector2i, sf
 						board[squareToMove->tablePosition.x][squareToMove->tablePosition.y - 1]->onSquare = nullptr;
 						enPassantPosition[0] = -12;
 						enPassantPosition[1] = -12;
+						enPassantPosition[2] = -12;
 					}
 				}
 			}
@@ -822,11 +826,13 @@ bool Table::MoveOpponent(const bool _whitePlayerTurn, std::pair<sf::Vector2i, sf
 			{
 				enPassantPosition[0] = squareToMove->tablePosition.x;
 				enPassantPosition[1] = squareToMove->tablePosition.y + 1;
+				enPassantPosition[2] = 1;
 			}
 			else if (activePiece->tablePosition.y - squareToMove->tablePosition.y == -2)
 			{
 				enPassantPosition[0] = squareToMove->tablePosition.x;
 				enPassantPosition[1] = squareToMove->tablePosition.y - 1;
+				enPassantPosition[2] = 2;
 			}
 			else
 			{
@@ -834,6 +840,7 @@ bool Table::MoveOpponent(const bool _whitePlayerTurn, std::pair<sf::Vector2i, sf
 				{
 					enPassantPosition[0] = -12;
 					enPassantPosition[1] = -12;
+					enPassantPosition[2] = -12;
 				}
 			}
 		}
@@ -862,6 +869,7 @@ bool Table::MoveOpponent(const bool _whitePlayerTurn, std::pair<sf::Vector2i, sf
 		{
 			enPassantPosition[0] = -12;
 			enPassantPosition[1] = -12;
+			enPassantPosition[2] = -12;
 		}
 
 		SetOnTable(activePiece, squareToMove);
@@ -888,9 +896,7 @@ bool Table::MoveActivePiece(const bool _playerOneTurn, Square* _squareToMove)
 			sf::Vector2i startingPosition = sf::Vector2i(activePiece->tablePosition.x, activePiece->tablePosition.y);
 			sf::Vector2i endingPosition = sf::Vector2i(_squareToMove->tablePosition.x, _squareToMove->tablePosition.y);
 
-			//std::pair<sf::Vector2i, sf::Vector2i> pair;
-			//pair = std::make_pair(startingPosition, endingPosition);
-
+			activePiece->allMoves.push_back(std::make_pair(startingPosition, endingPosition));
 			allMoves.push_back(std::make_pair(startingPosition, endingPosition));//.push_back(pair);
 
 			//update en passant position
@@ -907,6 +913,7 @@ bool Table::MoveActivePiece(const bool _playerOneTurn, Square* _squareToMove)
 							board[_squareToMove->tablePosition.x][_squareToMove->tablePosition.y + 1]->onSquare = nullptr;
 							enPassantPosition[0] = -12;
 							enPassantPosition[1] = -12;
+							enPassantPosition[2] = -12;
 						}
 					}
 					else if (activePiece->player.position == POSITION::UP)
@@ -917,6 +924,7 @@ bool Table::MoveActivePiece(const bool _playerOneTurn, Square* _squareToMove)
 							board[_squareToMove->tablePosition.x][_squareToMove->tablePosition.y - 1]->onSquare = nullptr;
 							enPassantPosition[0] = -12;
 							enPassantPosition[1] = -12;
+							enPassantPosition[2] = -12;
 						}
 					}
 				}
@@ -926,11 +934,13 @@ bool Table::MoveActivePiece(const bool _playerOneTurn, Square* _squareToMove)
 				{
 					enPassantPosition[0] = _squareToMove->tablePosition.x;
 					enPassantPosition[1] = _squareToMove->tablePosition.y + 1;
+					enPassantPosition[2] = 1;
 				}
 				else if (activePiece->tablePosition.y - _squareToMove->tablePosition.y == -2)
 				{
 					enPassantPosition[0] = _squareToMove->tablePosition.x;
 					enPassantPosition[1] = _squareToMove->tablePosition.y - 1;
+					enPassantPosition[2] = 2;
 				}
 				else
 				{
@@ -938,6 +948,7 @@ bool Table::MoveActivePiece(const bool _playerOneTurn, Square* _squareToMove)
 					{
 						enPassantPosition[0] = -12;
 						enPassantPosition[1] = -12;
+						enPassantPosition[2] = -12;
 					}
 				}
 			}
@@ -966,6 +977,7 @@ bool Table::MoveActivePiece(const bool _playerOneTurn, Square* _squareToMove)
 			{
 				enPassantPosition[0] = -12;
 				enPassantPosition[1] = -12;
+				enPassantPosition[2] = -12;
 			}
 
 			SetOnTable(activePiece, _squareToMove);		
@@ -1126,7 +1138,7 @@ bool Table::CalculatePieceMovement(ChessPiece* piece)
 			//Check En passant maneuver left
 			if (enPassantPosition[0] > -1 && enPassantPosition[1] > -1)
 			{
-				if (enPassantPosition[0] == piece->tablePosition.x - 1 && piece->tablePosition.y - 1 == enPassantPosition[1])
+				if (enPassantPosition[0] == piece->tablePosition.x - 1 && piece->tablePosition.y - 1 == enPassantPosition[1] && enPassantPosition[2] == 2 )
 				{
 					piece->possibleMoves.push_back(sf::Vector2i(piece->tablePosition.x - 1, piece->tablePosition.y - 1));
 				}
@@ -1135,7 +1147,7 @@ bool Table::CalculatePieceMovement(ChessPiece* piece)
 			//Check En passant maneuver right
 			if (enPassantPosition[0] > +1 && enPassantPosition[1] > -1)
 			{
-				if (enPassantPosition[0] == piece->tablePosition.x + 1 && piece->tablePosition.y - 1 == enPassantPosition[1])
+				if (enPassantPosition[0] == piece->tablePosition.x + 1 && piece->tablePosition.y - 1 == enPassantPosition[1] && enPassantPosition[2] == 2)
 				{
 					piece->possibleMoves.push_back(sf::Vector2i(piece->tablePosition.x + 1, piece->tablePosition.y - 1));
 				}
@@ -1216,7 +1228,7 @@ bool Table::CalculatePieceMovement(ChessPiece* piece)
 			//Check En passant maneuver left
 			if (enPassantPosition[0] > -1 && enPassantPosition[1] > +1)
 			{
-				if (enPassantPosition[0] == piece->tablePosition.x - 1 && piece->tablePosition.y + 1 == enPassantPosition[1])
+				if (enPassantPosition[0] == piece->tablePosition.x - 1 && piece->tablePosition.y + 1 == enPassantPosition[1] && enPassantPosition[2] == 1)
 				{
 					piece->possibleMoves.push_back(sf::Vector2i(piece->tablePosition.x - 1, piece->tablePosition.y + 1));
 				}
@@ -1225,7 +1237,7 @@ bool Table::CalculatePieceMovement(ChessPiece* piece)
 			//Check En passant maneuver right
 			if (enPassantPosition[0] > +1 && enPassantPosition[1] > +1)
 			{
-				if (enPassantPosition[0] == piece->tablePosition.x + 1 && piece->tablePosition.y + 1 == enPassantPosition[1])
+				if (enPassantPosition[0] == piece->tablePosition.x + 1 && piece->tablePosition.y + 1 == enPassantPosition[1] && enPassantPosition[2] == 1)
 				{
 					piece->possibleMoves.push_back(sf::Vector2i(piece->tablePosition.x + 1, piece->tablePosition.y + 1));
 				}
@@ -1234,7 +1246,7 @@ bool Table::CalculatePieceMovement(ChessPiece* piece)
 
 		if (pieceIsChecking)
 		{
-			piece->player.position == POSITION::DOWN ? check[1] = true : check[0] = true;
+			piece->player.color == COLOR::WHITE ? check[1] = true : check[0] = true;
 			piece->isChecking = true;			
 		}
 		else
@@ -1375,8 +1387,9 @@ bool Table::CalculatePieceMovement(ChessPiece* piece)
 		}
 
 		if (pieceIsChecking)
-		{			
-			piece->player.position == POSITION::DOWN ? check[1] = true : check[0] = true;
+		{	
+			//piece->player.color == COLOR::WHITE ? check[1] = true : check[0] = true;
+			piece->player.color == COLOR::WHITE ? check[1] = true : check[0] = true;
 			
 			piece->isChecking = true;			
 		}
@@ -1478,7 +1491,7 @@ bool Table::CalculatePieceMovement(ChessPiece* piece)
 
 		if (pieceIsChecking)
 		{
-			piece->player.position == POSITION::DOWN ? check[1] = true : check[0] = true;
+			piece->player.color == COLOR::WHITE ? check[1] = true : check[0] = true;
 			piece->isChecking = true;
 		}
 		else
@@ -1632,7 +1645,7 @@ bool Table::CalculatePieceMovement(ChessPiece* piece)
 		
 		if (pieceIsChecking)
 		{
-			piece->player.position == POSITION::DOWN ? check[1] = true : check[0] = true;
+			piece->player.color == COLOR::WHITE ? check[1] = true : check[0] = true;
 			piece->isChecking = true;
 		}
 		else
@@ -2024,11 +2037,11 @@ void Table::UpdateCheckBoolStatus()
 
 	for each (ChessPiece* piece in pieces)
 	{
-		if (piece->player.position == POSITION::DOWN && piece->isChecking)
+		if (piece->player.color == COLOR::WHITE && piece->isChecking)
 		{
 			tempCheck[1] = true;
 		}
-		else if (piece->player.position == POSITION::UP && piece->isChecking)
+		else if (piece->player.color == COLOR::BLACK && piece->isChecking)
 		{
 			tempCheck[0] = true;
 		}
