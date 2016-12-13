@@ -371,7 +371,7 @@ bool InGame::Move()
 
 void InGame::Draw(sf::RenderWindow* _window, TextManager* _textManager)
 {
-	_window->clear(sf::Color(0, 0, 150, 255));
+	_window->clear(sf::Color(0, 0, 0, 255));
 
 	board.Draw(_window);
 	
