@@ -2172,11 +2172,15 @@ void Table::DebugStuff()
 		printf("\n ActivePiece Position \n x: %d  y: %d \n", activePiece->tablePosition.x, activePiece->tablePosition.x);
 	else
 		printf("\n No ActivePiece \n");
+		*/
 
+	system("cls");
 	printf("\nEn passant position \n");
 	printf("x: %d\n y: %d\n", enPassantPosition[0], enPassantPosition[1]);
 
 	printf("\nCheck Status:\n");
 	printf("player 1: %d\nplayer 2: %d", check[0], check[1]);
-	*/
+	
+	printf("\nCheckmate Status:\n");
+	printf("player 1: %d\nplayer 2: %d", checkmate[0], checkmate[1]);
 }

@@ -85,6 +85,8 @@ public:
 	std::vector<std::pair<sf::Vector2i, sf::Vector2i>> GetAllMoves() { return allMoves; };
 
 	std::vector<ChessPiece*> GetPieces() { return pieces; };
+
+	std::array<bool, 2> GetCheckmate(){ return checkmate; };
 private:
 	std::vector<Square*> highlightedSquares;
 	std::vector<Square*> squaresToBeHighlighted;
@@ -93,7 +95,6 @@ private:
 	ChessPiece* lastActivePiece;
 	Square* board[8][8];
 	std::vector<ChessPiece*> pieces;
-	//ChessPiece* pieces[2][16];
 
 	std::vector<std::pair<sf::Vector2i, sf::Vector2i>> allMoves;
 	std::array<int, 2> mouseToTablePosition;
@@ -106,6 +107,6 @@ private:
 
 
 	bool check[2]; //check[0] == player 1 && check[1] == player 2
-	bool checkmate[2]; //checkmate[0] == player 1 && check[1] == player 2
+	std::array<bool, 2> checkmate; //checkmate[0] == player 1 && check[1] == player 2
 };
 #endif

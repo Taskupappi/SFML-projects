@@ -173,8 +173,22 @@ void InGame::BeginTurn(sf::RenderWindow* _window)
 		}
 	}
 
+	ConfirmCheckmate();
 
+}
 
+void InGame::ConfirmCheckmate()
+{
+	std::array<bool, 2> checkmates = board.GetCheckmate();
+
+	if (checkmates[0] > 0)
+	{
+
+	}
+	else if (checkmates[1] > 0)
+	{
+
+	}
 }
 
 void InGame::SetPlayerTurnText(TextManager* _textManager)
@@ -438,15 +452,6 @@ void InGame::HandleInput(const sf::Event _inputEvent, const sf::Vector2f _mouseP
 			break;
 	}
 }
-
-
-
-
-
-
-
-
-
 
 std::string InGame::ConvertToString(std::pair<sf::Vector2i, sf::Vector2i> _pair)
 {

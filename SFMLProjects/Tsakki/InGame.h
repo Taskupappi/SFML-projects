@@ -56,6 +56,7 @@ public:
 	std::pair<sf::Vector2i, sf::Vector2i> ConvertToVec(std::string move);
 	std::pair<sf::Vector2i, sf::Vector2i> ConvertIntIntoPair(int _toBeConverter);
 
+	void ConfirmCheckmate();
 
 private:
 	bool beginTurnStep = true;
